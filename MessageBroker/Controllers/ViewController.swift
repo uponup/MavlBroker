@@ -98,6 +98,7 @@ extension ViewController: MavlMessageDelegate {
     func joinedChatRoom(groupId gid: String) {
         TRACE("新加入的是:\(gid)")
         let session = ChatSession(gid: gid)
+        sessions.removeAll()
         sessions.append(session)
         tableView.reloadData()
     }

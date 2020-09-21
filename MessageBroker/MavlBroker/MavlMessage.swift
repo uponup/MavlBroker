@@ -100,7 +100,7 @@ class MavlMessage {
 extension MavlMessage: MavlMessageClient {
     
     func createAGroup(withUsers users: [String]) {
-        let payload = users.joined(separator: ",")
+        let payload = users.map{ "\(config.appid)_\($0.lowercased())" }.joined(separator: ",")
         
         createGroup(mesg: payload)
     }
