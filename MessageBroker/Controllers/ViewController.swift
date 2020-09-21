@@ -56,7 +56,9 @@ class ViewController: UIViewController {
         }
         alert.addAction(actionAddFriend)
         let actionCreateGroup = UIAlertAction(title: "Create a group chat", style: .default) { _ in
+            guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
             
+            self.present(friendListVc, animated: true, completion: nil)
         }
         alert.addAction(actionCreateGroup)
         let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
