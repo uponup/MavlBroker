@@ -200,8 +200,6 @@ extension MavlMessage: CocoaMQTTDelegate {
             
             delegate?.joinedChatRoom(groupId: self.gid!)
         }else {
-            let topic = "\(message.topic)/\(config.username)"
-            
             delegate?.mavlDidReceived(message: message.string, topic: topic)
         }
     }

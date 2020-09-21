@@ -49,6 +49,8 @@ class ChatViewController: UIViewController {
         messageTextViewHeightConstraint.constant = messageTextView.contentSize.height
         messageTextView.layoutIfNeeded()
         view.endEditing(true)
+        
+        
     }
     
     @IBAction func disconnect() {
@@ -65,8 +67,7 @@ class ChatViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50
         
-        let name = NSNotification.Name(rawValue: "MQTTMessageNotification")
-        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedMessage(notification:)), name: name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedMessage(notification:)), name: .didReceiveMesg, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.keyboardChanged(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
         
@@ -97,16 +98,13 @@ class ChatViewController: UIViewController {
     }
     
     @objc func receivedMessage(notification: NSNotification) {
-        let userInfo = notification.userInfo as! [String: AnyObject]
-        let content = userInfo["message"] as! String
-        let topic = userInfo["topic"] as! String
+        let object = notification.object as! [String: String]
+        let content = object["message"].value
+        let topic = object["topic"].value
         
-        let sender = NSString(string: topic).components(separatedBy: "/56_")[1] 
-        let toUser = NSString(string: topic).components(separatedBy: "/56_").last ?? ""
-        if toUser == username.value {
-            let chatMessage = ChatMessage(sender: sender.capitalized, content: content)
-            messages.append(chatMessage)
-        }
+        let sender = topic.components(separatedBy: "/56_")[1]
+        let chatMessage = ChatMessage(sender: sender.capitalized, content: content)
+        messages.append(chatMessage)
         
         scrollToBottom()
     }

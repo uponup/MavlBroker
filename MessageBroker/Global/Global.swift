@@ -14,5 +14,6 @@ enum GlobalConfig {
 }
 
 extension Notification.Name {
-    static let selectedContacts = NSNotification.Name("selectedContacts")
+    static let selectedContacts = Notification.Name("selectedContacts")
+    static let didReceiveMesg = Notification.Name(rawValue: "didReceiveMesg")
 }
