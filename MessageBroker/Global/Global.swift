@@ -12,3 +12,7 @@ enum GlobalConfig {
     static let xnAppId = "56"
     static let xnAppKey = "c90265a583aaea81"
 }
+
+extension Notification.Name {
+    static let selectedContacts = NSNotification.Name("selectedContacts")
+}

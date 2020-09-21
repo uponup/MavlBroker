@@ -200,7 +200,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Au-GP-1ra">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="764"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contactCell" rowHeight="83" id="UaX-fz-bWm" customClass="ContactCell" customModule="MessageBroker" customModuleProvider="target">
@@ -256,16 +256,36 @@
                                     <outlet property="delegate" destination="6vx-la-7nY" id="Oc8-Yc-CgH"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z9P-bT-sdp">
+                                <rect key="frame" x="0.0" y="816" width="414" height="46"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="46" id="gK4-09-V2P"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Ok" backgroundImage="btn_enable"/>
+                                <state key="disabled" backgroundImage="btn_disable"/>
+                                <state key="selected" backgroundImage="chatfrom_bg_normal"/>
+                                <connections>
+                                    <action selector="btnConfirmAction:" destination="6vx-la-7nY" eventType="touchUpInside" id="v2M-e9-ApT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="Z9P-bT-sdp" firstAttribute="top" secondItem="0Au-GP-1ra" secondAttribute="bottom" constant="8" symbolic="YES" id="7Je-e1-N8X"/>
+                            <constraint firstItem="Z9P-bT-sdp" firstAttribute="leading" secondItem="gLR-lm-uhv" secondAttribute="leading" id="JVc-xv-SYB"/>
                             <constraint firstItem="0Au-GP-1ra" firstAttribute="leading" secondItem="gLR-lm-uhv" secondAttribute="leading" id="Twu-dF-Hnx"/>
+                            <constraint firstItem="gLR-lm-uhv" firstAttribute="bottom" secondItem="Z9P-bT-sdp" secondAttribute="bottom" id="VhK-9X-nVs"/>
                             <constraint firstItem="gLR-lm-uhv" firstAttribute="trailing" secondItem="0Au-GP-1ra" secondAttribute="trailing" id="gFp-Bc-w40"/>
-                            <constraint firstItem="gLR-lm-uhv" firstAttribute="bottom" secondItem="0Au-GP-1ra" secondAttribute="bottom" id="heX-Nf-JG3"/>
+                            <constraint firstItem="gLR-lm-uhv" firstAttribute="trailing" secondItem="Z9P-bT-sdp" secondAttribute="trailing" id="ikU-EH-kYy"/>
                             <constraint firstItem="0Au-GP-1ra" firstAttribute="top" secondItem="gLR-lm-uhv" secondAttribute="top" id="k9E-ic-PEp"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gLR-lm-uhv"/>
                     </view>
+                    <connections>
+                        <outlet property="btnConfirm" destination="Z9P-bT-sdp" id="SSF-Uk-m44"/>
+                        <outlet property="tableView" destination="0Au-GP-1ra" id="Vl2-Qa-oqd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZLX-Ko-tcV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -485,6 +505,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="btn_disable" width="456" height="98"/>
+        <image name="btn_enable" width="420" height="90"/>
         <image name="chatfrom_bg_normal" width="266" height="55"/>
         <image name="chatto_bg_normal" width="266" height="55"/>
         <image name="house" catalog="system" width="64" height="54"/>

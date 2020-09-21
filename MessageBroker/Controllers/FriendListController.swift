@@ -11,6 +11,7 @@ import UIKit
 class FriendListController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var btnConfirm: UIButton!
     
     // 默认的几个好友
     var contacts: [String] = ["Sheep", "Pig", "Horse"] {
@@ -19,11 +20,30 @@ class FriendListController: UIViewController {
         }
     }
     
+    var btnConfirmEnable: Bool {
+        getSelectedContacts().count > 0
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        btnConfirm.isEnabled = btnConfirmEnable
+        tableView.setEditing(true, animated: true)
+    }
 
-        // Do any additional setup after loading the view.
+    @IBAction func btnConfirmAction(_ sender: Any) {
+        let selectedContacts = getSelectedContacts()
+        
+        NotificationCenter.default.post(name: .selectedContacts, object: ["contacts": selectedContacts])
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    private func getSelectedContacts() -> [String] {
+        return contacts.enumerated().filter { index, element -> Bool in
+            let indexPath = IndexPath(row: index, section: 0)
+            let cell = tableView.cellForRow(at: indexPath)
+            return cell?.isSelected ?? false
+        }.map{ $1 }
     }
 }
 
@@ -41,5 +61,17 @@ extension FriendListController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 96.0
+    }
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return UITableViewCell.EditingStyle(rawValue: UITableViewCell.EditingStyle.delete.rawValue | UITableViewCell.EditingStyle.insert.rawValue)!
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.btnConfirm.isEnabled = btnConfirmEnable
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        self.btnConfirm.isEnabled = btnConfirmEnable
     }
 }

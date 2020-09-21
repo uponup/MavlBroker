@@ -21,13 +21,12 @@ class ContactCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        
     }
 
     func updateData(_ contact: String) {
         ivAvatar.image = UIImage(named: contact.capitalized)
         labelName.text = contact
-        labelDetail.text = "我是Horse"   //last msg，default is “”
+        labelDetail.text = ""   //last msg，default is “”
     }
 }

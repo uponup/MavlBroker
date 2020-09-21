@@ -37,6 +37,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         isLogin = false
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didSelectedContacts(noti:)), name: .selectedContacts, object: nil)
+    }
+    
+    @objc func didSelectedContacts(noti: Notification) {
+        guard let object = noti.object else { return }
+        
+        print("选中的联系人是: \(object)")
     }
 
     @IBAction func loginAction(_ sender: Any) {
