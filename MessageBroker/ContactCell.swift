@@ -27,6 +27,6 @@ class ContactCell: UITableViewCell {
     func updateData(_ contact: String) {
         ivAvatar.image = UIImage(named: contact.capitalized)
         labelName.text = contact
-        labelDetail.text = ""   //defail msg, just like signature, online status; default is “”
+        labelDetail.text = ""   //defail msg, just like signature, slogan, online status; default is “”
     }
 }

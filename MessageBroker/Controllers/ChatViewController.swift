@@ -11,23 +11,7 @@ import CocoaMQTT
 
 
 class ChatViewController: UIViewController {
-    var animal: String? {
-        didSet {
-            animalAvatarImageView.image = UIImage(named: animal!)
-            if let animal = animal {
-                switch animal {
-                case "Sheep":
-                    sloganLabel.text = "Four legs good, two legs bad."
-                case "Pig":
-                    sloganLabel.text = "All animals are equal."
-                case "Horse":
-                    sloganLabel.text = "I will work harder."
-                default:
-                    break
-                }
-            }
-        }
-    }
+    var username: String?
     var msgClient: MavlMessage?
     var groupId: String?
     
@@ -75,8 +59,6 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
-        animal = tabBarController?.selectedViewController?.tabBarItem.title
-        automaticallyAdjustsScrollViewInsets = false
         messageTextView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
@@ -88,7 +70,13 @@ class ChatViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.keyboardChanged(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
         
+        animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
         sloganLabel.text = "GroupId: \(self.groupId.value)";
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = false
     }
     
     deinit {
@@ -115,7 +103,7 @@ class ChatViewController: UIViewController {
         
         let sender = NSString(string: topic).components(separatedBy: "/56_")[1] 
         let toUser = NSString(string: topic).components(separatedBy: "/56_").last ?? ""
-        if toUser == animal.value {
+        if toUser == username.value {
             let chatMessage = ChatMessage(sender: sender.capitalized, content: content)
             messages.append(chatMessage)
         }
@@ -143,11 +131,7 @@ extension ChatViewController: UITextViewDelegate {
             }
         }
         
-        if textView.text == "" {
-            sendMessageButton.isEnabled = false
-        } else {
-            sendMessageButton.isEnabled = true
-        }
+        sendMessageButton.isEnabled = textView.text.count > 0
     }
 }
 
@@ -158,15 +142,15 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages[indexPath.row]
-        if message.sender == animal {
+        if message.sender == username.value {
             let cell = tableView.dequeueReusableCell(withIdentifier: "rightMessageCell", for: indexPath) as! ChatRightMessageCell
             cell.contentLabel.text = messages[indexPath.row].content
-            cell.avatarImageView.image = UIImage(named: animal!)
+            cell.avatarImageView.image = #imageLiteral(resourceName: "iv_chat_local")
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "leftMessageCell", for: indexPath) as! ChatLeftMessageCell
             cell.contentLabel.text = messages[indexPath.row].content
-            cell.avatarImageView.image = UIImage(named: message.sender)
+            cell.avatarImageView.image = #imageLiteral(resourceName: "iv_chat_remote")
             return cell
         }
     }

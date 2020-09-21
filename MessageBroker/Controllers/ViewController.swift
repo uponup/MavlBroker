@@ -27,20 +27,25 @@ class ViewController: UIViewController {
                 title = "Online"
                 loginView.isHidden = true
                 itemAdd.isEnabled = true
+                username = tfUserName.text.value
             }else {
                 title = "Offline"
                 tfUserName.text = ""
                 tfPassword.text = "xxxxxx"
                 loginView.isHidden = false
                 itemAdd.isEnabled = false
+                username = ""
             }
         }
     }
-
+    
+    private var username: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         isLogin = false
         tableView.tableFooterView = UIView()
+        view.bringSubviewToFront(loginView)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didSelectedContacts(noti:)), name: .selectedContacts, object: nil)
     }
@@ -124,6 +129,17 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let sessionModel = sessions[indexPath.row]
+        
+        guard let chatVc = storyboard?.instantiateViewController(identifier: "ChatViewController") as? ChatViewController else { return }
+        chatVc.hidesBottomBarWhenPushed = true
+        chatVc.msgClient = mavlMsgClient
+        chatVc.username = username
+        chatVc.groupId = sessionModel.gid
+        navigationController?.pushViewController(chatVc, animated: true)
     }
 }
 
