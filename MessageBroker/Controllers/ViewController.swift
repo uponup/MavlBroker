@@ -14,9 +14,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var tfUserName: UITextField!
     @IBOutlet weak var tfPassword: UITextField!
     @IBOutlet weak var itemAdd: UIBarButtonItem!
-    
+    @IBOutlet weak var tableView: UITableView!
     
     var mavlMsgClient: MavlMessage?
+    lazy var sessions: [ChatSession] = {
+        []
+    }()
     
     private var isLogin: Bool = false {
         didSet {
@@ -37,14 +40,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         isLogin = false
+        tableView.tableFooterView = UIView()
         
         NotificationCenter.default.addObserver(self, selector: #selector(didSelectedContacts(noti:)), name: .selectedContacts, object: nil)
     }
     
     @objc func didSelectedContacts(noti: Notification) {
-        guard let object = noti.object else { return }
+        guard let object = noti.object as? [String: [String]], let contacts = object["contacts"] else { return }
         
-        print("选中的联系人是: \(object)")
+        mavlMsgClient?.createAGroup(withUsers: contacts)
     }
 
     @IBAction func loginAction(_ sender: Any) {
@@ -87,7 +91,10 @@ extension ViewController: MavlMessageDelegate {
     }
     
     func joinedChatRoom(groupId gid: String) {
-        
+        TRACE("新加入的是:\(gid)")
+        let session = ChatSession(gid: gid)
+        sessions.append(session)
+        tableView.reloadData()
     }
     
     func sendMessageSuccess() {
@@ -95,11 +102,28 @@ extension ViewController: MavlMessageDelegate {
     }
     
     func mavlDidReceived(message msg: String?, topic t: String) {
-        
+        TRACE("收到信息msg：\(msg.value), topic: \(t)")
     }
     
     func logoutSuccess() {
         isLogin = false
+    }
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sessions.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "chatSessionCell", for: indexPath) as! ChatSessionCell
+        let sessionModel = sessions[indexPath.row]
+        cell.updateData(session: sessionModel)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
     }
 }
 

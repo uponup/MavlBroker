@@ -1,5 +1,5 @@
 //
-//  ContactCell.swift
+//  ChatSessionCell.swift
 //  MessageBroker
 //
 //  Created by 龙格 on 2020/9/21.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-class ContactCell: UITableViewCell {
+class ChatSessionCell: UITableViewCell {
 
-    @IBOutlet weak var ivAvatar: UIImageView!
+    @IBOutlet weak var ivSessionIcon: UIImageView!
     @IBOutlet weak var labelName: UILabel!
     @IBOutlet weak var labelDetail: UILabel!
     
@@ -21,12 +21,13 @@ class ContactCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
+
+        // Configure the view for the selected state
     }
 
-    func updateData(_ contact: String) {
-        ivAvatar.image = UIImage(named: contact.capitalized)
-        labelName.text = contact
-        labelDetail.text = ""   //defail msg, just like signature, online status; default is “”
+    func updateData(session: ChatSession) {
+        ivSessionIcon.image = #imageLiteral(resourceName: "chatroom_default")
+        labelName.text = session.gid
+        labelDetail.text = "last msg"    // last msg, default is ""
     }
 }
