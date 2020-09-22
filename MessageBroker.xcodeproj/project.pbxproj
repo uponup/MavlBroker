@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39621B712519942D002833F5 /* TopicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39621B702519942D002833F5 /* TopicUtils.swift */; };
 		397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440525187ED1005CB2D3 /* AppDelegate.swift */; };
 		397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440725187ED1005CB2D3 /* SceneDelegate.swift */; };
 		397D440A25187ED1005CB2D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440925187ED1005CB2D3 /* ViewController.swift */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		0F70690A3BDFAC6B1728D662 /* Pods-MessageBroker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageBroker.release.xcconfig"; path = "Target Support Files/Pods-MessageBroker/Pods-MessageBroker.release.xcconfig"; sourceTree = "<group>"; };
 		1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessageBroker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		39621B702519942D002833F5 /* TopicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicUtils.swift; sourceTree = "<group>"; };
 		397D440225187ED1005CB2D3 /* 小牛Mesg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "小牛Mesg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		397D440525187ED1005CB2D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		397D440725187ED1005CB2D3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				397D442E25188EF6005CB2D3 /* Global.swift */,
+				39621B702519942D002833F5 /* TopicUtils.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				397D443225189BC9005CB2D3 /* FriendListController.swift in Sources */,
 				397D442725188687005CB2D3 /* ChatLeftMessageCell.swift in Sources */,
 				397D442F25188EF6005CB2D3 /* Global.swift in Sources */,
+				39621B712519942D002833F5 /* TopicUtils.swift in Sources */,
 				397D442925188687005CB2D3 /* ChatRightMessageCell.swift in Sources */,
 				397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */,
 				397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */,

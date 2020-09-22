@@ -70,17 +70,17 @@ extension FriendListController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if isChat1V1 {
-            for (index, _) in self.contacts.enumerated() {
-                let ip = IndexPath(row: index, section: 0)
-                if index == indexPath.row {
-                    let cell = tableView.cellForRow(at: ip)
-                    cell?.setSelected(true, animated: true)
-                }else {
-                    tableView.deselectRow(at: ip, animated: false)
-                }
-            }
-        }
+//        if isChat1V1 {
+//            for (index, _) in self.contacts.enumerated() {
+//                let ip = IndexPath(row: index, section: 0)
+//                if index == indexPath.row {
+//                    let cell = tableView.cellForRow(at: ip)
+//                    cell?.setSelected(true, animated: true)
+//                }else {
+//                    tableView.deselectRow(at: ip, animated: false)
+//                }
+//            }
+//        }
         self.btnConfirm.isEnabled = btnConfirmEnable
     }
     

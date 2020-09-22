@@ -203,11 +203,16 @@ extension MavlMessage: CocoaMQTTDelegate {
 
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
         TRACE("message receive: \(message.string.value), id: \(id)")
+        
         let topic = message.topic
-        let c = topic.components(separatedBy: "/")
-        if c.count > 3, c[1] == "0" {
-            self.gid = c[3];
-            
+        guard let topicModel = TopicModel(message.topic) else {
+            TRACE("收到的信息Topic不符合规范：\(topic)")
+            return
+        }
+        
+        if topicModel.isGroupMsg && topicModel.operation == 0 {
+            // create a group
+            self.gid = topicModel.to
             delegate?.joinedChatRoom(groupId: self.gid!)
         }else {
             delegate?.mavlDidReceived(message: message.string, topic: topic)

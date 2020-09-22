@@ -94,7 +94,6 @@ class ChatViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    
     @objc func keyboardChanged(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: AnyObject]
         let keyboardValue = userInfo["UIKeyboardFrameEndUserInfoKey"]
@@ -113,7 +112,8 @@ class ChatViewController: UIViewController {
         let content = object["message"].value
         let topic = object["topic"].value
         
-        let sender = topic.components(separatedBy: "/56_")[1]
+        guard let topicModel = TopicModel(topic) else { return }
+        let sender = topicModel.from
         let chatMessage = ChatMessage(sender: sender.capitalized, content: content)
         messages.append(chatMessage)
         
