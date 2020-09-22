@@ -187,7 +187,7 @@
         <!--Setting Controller-->
         <scene sceneID="Cd4-Kp-pQo">
             <objects>
-                <viewController id="CgO-r1-QRe" customClass="SettingController" customModule="小牛Mesg" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingController" id="CgO-r1-QRe" customClass="SettingController" customModule="小牛Mesg" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="D9y-Ba-mvg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

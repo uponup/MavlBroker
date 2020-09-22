@@ -68,6 +68,10 @@ extension MavlMessageClient {
 
 class MavlMessage {
     
+    var currentUserName: String {
+        config.username
+    }
+    
     public weak var delegate: MavlMessageDelegate?
     
     private var config: MavlMessageConfiguration
