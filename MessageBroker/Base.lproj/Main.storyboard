@@ -413,14 +413,38 @@
                                             <action selector="backAction:" destination="0ji-Jd-oPW" eventType="touchUpInside" id="Ivk-Wn-HWB"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gg0-Id-HYn">
+                                        <rect key="frame" x="335" y="24" width="12" height="12"/>
+                                        <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="12" id="Ccc-ut-Hzg"/>
+                                            <constraint firstAttribute="width" constant="12" id="hL7-JC-Txe"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="6"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="online" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IO6-CA-ZSs">
+                                        <rect key="frame" x="355" y="19.5" width="46" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="gg0-Id-HYn" firstAttribute="centerY" secondItem="IO6-CA-ZSs" secondAttribute="centerY" id="5g8-yW-vKn"/>
                                     <constraint firstItem="mRp-YB-Cm4" firstAttribute="centerX" secondItem="mEk-Za-b90" secondAttribute="centerX" id="7VL-3c-gfd"/>
                                     <constraint firstItem="mRp-YB-Cm4" firstAttribute="top" secondItem="AZM-a0-qqu" secondAttribute="bottom" constant="5" id="Dt3-Hv-6li"/>
                                     <constraint firstItem="AZM-a0-qqu" firstAttribute="centerX" secondItem="mEk-Za-b90" secondAttribute="centerX" id="XQS-UW-wEW"/>
                                     <constraint firstAttribute="height" constant="60" id="cii-Kw-zG7"/>
+                                    <constraint firstItem="IO6-CA-ZSs" firstAttribute="centerY" secondItem="mEk-Za-b90" secondAttribute="centerY" id="cye-cj-C14"/>
+                                    <constraint firstItem="IO6-CA-ZSs" firstAttribute="leading" secondItem="gg0-Id-HYn" secondAttribute="trailing" constant="8" id="hdv-x6-BnM"/>
                                     <constraint firstItem="AZM-a0-qqu" firstAttribute="top" secondItem="mEk-Za-b90" secondAttribute="top" id="hjy-of-H9L"/>
+                                    <constraint firstAttribute="trailing" secondItem="IO6-CA-ZSs" secondAttribute="trailing" constant="13" id="xGb-01-bll"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="94" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="JgG-Zb-lBc">
