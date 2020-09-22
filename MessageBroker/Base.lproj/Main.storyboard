@@ -266,7 +266,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Au-GP-1ra">
-                                <rect key="frame" x="0.0" y="44" width="414" height="764"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="754"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contactCell" rowHeight="83" id="UaX-fz-bWm" customClass="ContactCell" customModule="小牛Mesg" customModuleProvider="target">
@@ -322,34 +322,54 @@
                                     <outlet property="delegate" destination="6vx-la-7nY" id="Oc8-Yc-CgH"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z9P-bT-sdp">
-                                <rect key="frame" x="0.0" y="816" width="414" height="46"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U20-6d-RQo">
+                                <rect key="frame" x="0.0" y="798" width="414" height="68"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrg-Ti-Yc8">
+                                        <rect key="frame" x="20" y="20" width="374" height="48"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="Ml3-Bz-BwT"/>
+                                        </constraints>
+                                        <state key="normal" title="OK" backgroundImage="btn_enable">
+                                            <color key="titleColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <state key="disabled" title="sd" backgroundImage="btn_disable">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="btnConfirmAction:" destination="6vx-la-7nY" eventType="touchUpInside" id="IF6-t5-R4j"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="gK4-09-V2P"/>
+                                    <constraint firstAttribute="bottom" secondItem="rrg-Ti-Yc8" secondAttribute="bottom" id="6Ih-1V-Occ"/>
+                                    <constraint firstAttribute="trailing" secondItem="rrg-Ti-Yc8" secondAttribute="trailing" constant="20" symbolic="YES" id="B92-E3-flm"/>
+                                    <constraint firstItem="rrg-Ti-Yc8" firstAttribute="top" secondItem="U20-6d-RQo" secondAttribute="top" constant="20" symbolic="YES" id="agU-Sc-h3B"/>
+                                    <constraint firstItem="rrg-Ti-Yc8" firstAttribute="leading" secondItem="U20-6d-RQo" secondAttribute="leading" constant="20" symbolic="YES" id="gat-Zb-93t"/>
                                 </constraints>
-                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Ok" backgroundImage="btn_enable"/>
-                                <state key="disabled" backgroundImage="btn_disable"/>
-                                <state key="selected" backgroundImage="chatfrom_bg_normal"/>
-                                <connections>
-                                    <action selector="btnConfirmAction:" destination="6vx-la-7nY" eventType="touchUpInside" id="v2M-e9-ApT"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="Z9P-bT-sdp" firstAttribute="top" secondItem="0Au-GP-1ra" secondAttribute="bottom" constant="8" symbolic="YES" id="7Je-e1-N8X"/>
-                            <constraint firstItem="Z9P-bT-sdp" firstAttribute="leading" secondItem="gLR-lm-uhv" secondAttribute="leading" id="JVc-xv-SYB"/>
                             <constraint firstItem="0Au-GP-1ra" firstAttribute="leading" secondItem="gLR-lm-uhv" secondAttribute="leading" id="Twu-dF-Hnx"/>
-                            <constraint firstItem="gLR-lm-uhv" firstAttribute="bottom" secondItem="Z9P-bT-sdp" secondAttribute="bottom" id="VhK-9X-nVs"/>
                             <constraint firstItem="gLR-lm-uhv" firstAttribute="trailing" secondItem="0Au-GP-1ra" secondAttribute="trailing" id="gFp-Bc-w40"/>
-                            <constraint firstItem="gLR-lm-uhv" firstAttribute="trailing" secondItem="Z9P-bT-sdp" secondAttribute="trailing" id="ikU-EH-kYy"/>
+                            <constraint firstItem="U20-6d-RQo" firstAttribute="top" secondItem="0Au-GP-1ra" secondAttribute="bottom" id="hfs-24-RjJ"/>
                             <constraint firstItem="0Au-GP-1ra" firstAttribute="top" secondItem="gLR-lm-uhv" secondAttribute="top" id="k9E-ic-PEp"/>
+                            <constraint firstItem="U20-6d-RQo" firstAttribute="centerX" secondItem="gLR-lm-uhv" secondAttribute="centerX" id="lqi-Ga-rnQ"/>
+                            <constraint firstItem="U20-6d-RQo" firstAttribute="leading" secondItem="gLR-lm-uhv" secondAttribute="leading" id="mUZ-4T-fRN"/>
+                            <constraint firstAttribute="bottom" secondItem="U20-6d-RQo" secondAttribute="bottom" constant="30" id="ohG-S1-BUu"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gLR-lm-uhv"/>
                     </view>
                     <connections>
-                        <outlet property="btnConfirm" destination="Z9P-bT-sdp" id="SSF-Uk-m44"/>
+                        <outlet property="btnConfirm" destination="rrg-Ti-Yc8" id="f4s-QU-boK"/>
                         <outlet property="tableView" destination="0Au-GP-1ra" id="Vl2-Qa-oqd"/>
                     </connections>
                 </viewController>
