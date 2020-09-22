@@ -47,6 +47,7 @@ struct MavlMessageConfiguration {
 public protocol MavlMessageClient {
     func login()
     func createAGroup(withUsers users: [String])
+    func addFriend(withUserName: String)
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String)
     func logout()
 }
@@ -55,9 +56,14 @@ protocol MavlMessageDelegate: class {
     func beginLogin()
     func loginSuccess()
     func joinedChatRoom(groupId gid: String)
+    func addFriendSuccess(friendName name: String)
     func sendMessageSuccess()
     func mavlDidReceived(message msg: String?, topic t: String)
     func logoutSuccess()
+}
+
+extension MavlMessageClient {
+    func addFriendSuccess(friendName name: String) {}
 }
 
 class MavlMessage {
@@ -103,6 +109,10 @@ extension MavlMessage: MavlMessageClient {
         let payload = users.map{ "\(config.appid)_\($0.lowercased())" }.joined(separator: ",")
         
         createGroup(mesg: payload)
+    }
+    
+    func addFriend(withUserName: String) {
+        delegate?.addFriendSuccess(friendName: withUserName)
     }
     
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String) {

@@ -13,6 +13,8 @@ class FriendListController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var btnConfirm: UIButton!
     
+    var isChat1V1 = false
+    
     // 默认的几个好友
     var contacts: [String] = ["Sheep", "Pig", "Horse"] {
         didSet {
@@ -34,7 +36,7 @@ class FriendListController: UIViewController {
     @IBAction func btnConfirmAction(_ sender: Any) {
         let selectedContacts = getSelectedContacts()
         
-        NotificationCenter.default.post(name: .selectedContacts, object: ["contacts": selectedContacts])
+        NotificationCenter.default.post(name: .selectedContacts, object: ["contacts": selectedContacts, "1v1": isChat1V1])
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -68,6 +70,17 @@ extension FriendListController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if isChat1V1 {
+            for (index, _) in self.contacts.enumerated() {
+                let ip = IndexPath(row: index, section: 0)
+                if index == indexPath.row {
+                    let cell = tableView.cellForRow(at: ip)
+                    cell?.setSelected(true, animated: true)
+                }else {
+                    tableView.deselectRow(at: ip, animated: false)
+                }
+            }
+        }
         self.btnConfirm.isEnabled = btnConfirmEnable
     }
     

@@ -10,9 +10,12 @@ import Foundation
 
 struct ChatSession {
     var gid: String = ""
-    var sessionName = ""
+    var sessionName: String
+    var isGroup: Bool
     
-    init(gid: String) {
+    init(gid: String, sessionName: String = "", isGroup: Bool = true) {
         self.gid = gid
+        self.sessionName = sessionName
+        self.isGroup = isGroup
     }
 }

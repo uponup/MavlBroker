@@ -31,7 +31,7 @@
 /* Begin PBXFileReference section */
 		0F70690A3BDFAC6B1728D662 /* Pods-MessageBroker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageBroker.release.xcconfig"; path = "Target Support Files/Pods-MessageBroker/Pods-MessageBroker.release.xcconfig"; sourceTree = "<group>"; };
 		1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessageBroker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		397D440225187ED1005CB2D3 /* MessageBroker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MessageBroker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		397D440225187ED1005CB2D3 /* 小牛Mesg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "小牛Mesg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		397D440525187ED1005CB2D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		397D440725187ED1005CB2D3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		397D440925187ED1005CB2D3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -79,7 +79,7 @@
 		397D440325187ED1005CB2D3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				397D440225187ED1005CB2D3 /* MessageBroker.app */,
+				397D440225187ED1005CB2D3 /* 小牛Mesg.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -196,7 +196,7 @@
 			);
 			name = MessageBroker;
 			productName = MessageBroker;
-			productReference = 397D440225187ED1005CB2D3 /* MessageBroker.app */;
+			productReference = 397D440225187ED1005CB2D3 /* 小牛Mesg.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -452,13 +452,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DCAS2QQQ9F;
 				INFOPLIST_FILE = MessageBroker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tm.MessageBroker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "小牛Mesg";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -470,13 +471,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DCAS2QQQ9F;
 				INFOPLIST_FILE = MessageBroker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tm.MessageBroker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "小牛Mesg";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

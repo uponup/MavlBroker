@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tfUserName: UITextField!
     @IBOutlet weak var tfPassword: UITextField!
     @IBOutlet weak var itemAdd: UIBarButtonItem!
+    @IBOutlet weak var itemClose: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     
     var mavlMsgClient: MavlMessage?
@@ -27,6 +28,7 @@ class ViewController: UIViewController {
                 title = "Online"
                 loginView.isHidden = true
                 itemAdd.isEnabled = true
+                itemClose.isEnabled = true
                 username = tfUserName.text.value
             }else {
                 title = "Offline"
@@ -34,6 +36,7 @@ class ViewController: UIViewController {
                 tfPassword.text = "xxxxxx"
                 loginView.isHidden = false
                 itemAdd.isEnabled = false
+                itemClose.isEnabled = false
                 username = ""
             }
         }
@@ -50,10 +53,19 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didSelectedContacts(noti:)), name: .selectedContacts, object: nil)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     @objc func didSelectedContacts(noti: Notification) {
-        guard let object = noti.object as? [String: [String]], let contacts = object["contacts"] else { return }
+        guard let object = noti.object as? [String: Any], let contacts = object["contacts"] as? [String], let isChat1V1 = object["1v1"] as? Bool else { return }
         
-        mavlMsgClient?.createAGroup(withUsers: contacts)
+        if isChat1V1 {
+            guard let friend = contacts.first else { return }
+            mavlMsgClient?.addFriend(withUserName: friend)
+        }else {
+            mavlMsgClient?.createAGroup(withUsers: contacts)
+        }
     }
 
     @IBAction func loginAction(_ sender: Any) {
@@ -69,7 +81,9 @@ class ViewController: UIViewController {
     @IBAction func addChatSession(_ sender: Any) {
         let alert = UIAlertController(title: "What do you want to do?", message: nil, preferredStyle: .actionSheet)
         let actionAddFriend = UIAlertAction(title: "Add a friend", style: .default) { _  in
-            
+            guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
+            friendListVc.isChat1V1 = true
+            self.present(friendListVc, animated: true, completion: nil)
         }
         alert.addAction(actionAddFriend)
         let actionCreateGroup = UIAlertAction(title: "Create a group chat", style: .default) { _ in
@@ -82,6 +96,10 @@ class ViewController: UIViewController {
         alert.addAction(actionCancel)
         
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func logout(_ sender: Any) {
+        mavlMsgClient?.logout()
     }
 }
 
@@ -99,6 +117,12 @@ extension ViewController: MavlMessageDelegate {
         TRACE("新加入的是:\(gid)")
         let session = ChatSession(gid: gid)
         sessions.removeAll()
+        sessions.append(session)
+        tableView.reloadData()
+    }
+    
+    func addFriendSuccess(friendName name: String) {
+        let session = ChatSession(gid: name, sessionName: name, isGroup: false)
         sessions.append(session)
         tableView.reloadData()
     }
@@ -141,6 +165,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         chatVc.msgClient = mavlMsgClient
         chatVc.username = username
         chatVc.groupId = sessionModel.gid
+        chatVc.isGroup = sessionModel.isGroup
         navigationController?.pushViewController(chatVc, animated: true)
     }
 }

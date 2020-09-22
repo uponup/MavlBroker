@@ -14,11 +14,20 @@ class ChatViewController: UIViewController {
     var username: String?
     var msgClient: MavlMessage?
     var groupId: String?
+    var isGroup: Bool = true
     
     var messages: [ChatMessage] = [] {
         didSet {
             tableView.reloadData()
             scrollToBottom()
+        }
+    }
+    
+    private var slogan: String {
+        if isGroup {
+            return "Gid: \(self.groupId.value)";
+        }else {
+            return "\(self.groupId.value)";
         }
     }
     
@@ -43,19 +52,16 @@ class ChatViewController: UIViewController {
     @IBAction func sendMessage() {
         guard let client = msgClient, let message = messageTextView.text else { return }
         
-        client.sendToChatRoom(message: message, isToGroup: true, toId: groupId ?? "")
+        if isGroup {
+            client.sendToChatRoom(message: message, isToGroup: true, toId: groupId.value)
+        }else {
+            client.sendToChatRoom(message: message, isToGroup: false, toId: "56_\(groupId.value.lowercased())")
+        }
         messageTextView.text = ""
         sendMessageButton.isEnabled = false
         messageTextViewHeightConstraint.constant = messageTextView.contentSize.height
         messageTextView.layoutIfNeeded()
         view.endEditing(true)
-        
-        
-    }
-    
-    @IBAction func disconnect() {
-        msgClient!.logout()
-        _ = navigationController?.popViewController(animated: true)
     }
     
     override func viewDidLoad() {
@@ -72,7 +78,7 @@ class ChatViewController: UIViewController {
         
         
         animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
-        sloganLabel.text = "GroupId: \(self.groupId.value)";
+        sloganLabel.text = slogan
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -83,6 +89,11 @@ class ChatViewController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    @IBAction func backAction(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     
     @objc func keyboardChanged(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: AnyObject]
@@ -140,7 +151,7 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages[indexPath.row]
-        if message.sender == username.value {
+        if message.sender.lowercased() == username.value.lowercased() {
             let cell = tableView.dequeueReusableCell(withIdentifier: "rightMessageCell", for: indexPath) as! ChatRightMessageCell
             cell.contentLabel.text = messages[indexPath.row].content
             cell.avatarImageView.image = #imageLiteral(resourceName: "iv_chat_local")

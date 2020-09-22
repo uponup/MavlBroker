@@ -10,7 +10,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MessageBroker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="小牛Mesg" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aQx-oS-7MH">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -94,7 +94,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="chatSessionCell" rowHeight="58" id="SGy-a3-dmi" customClass="ChatSessionCell" customModule="MessageBroker" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="chatSessionCell" rowHeight="58" id="SGy-a3-dmi" customClass="ChatSessionCell" customModule="小牛Mesg" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="58"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SGy-a3-dmi" id="LHb-GC-8YL">
@@ -160,6 +160,11 @@
                         <viewLayoutGuide key="safeArea" id="jkt-MM-Y8C"/>
                     </view>
                     <navigationItem key="navigationItem" id="Pgy-iz-3E4">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="ehl-TI-dF4">
+                            <connections>
+                                <action selector="logout:" destination="BYZ-38-t0r" id="4so-jb-TgW"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Moz-iU-kJR">
                             <connections>
                                 <action selector="addChatSession:" destination="BYZ-38-t0r" id="pBA-6I-RQ2"/>
@@ -168,6 +173,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="itemAdd" destination="Moz-iU-kJR" id="wLa-xJ-mgy"/>
+                        <outlet property="itemClose" destination="ehl-TI-dF4" id="Bf7-gi-m4a"/>
                         <outlet property="loginView" destination="ouI-Is-zwC" id="H4Z-2z-bYg"/>
                         <outlet property="tableView" destination="AYo-z3-8HM" id="nht-1c-uTy"/>
                         <outlet property="tfPassword" destination="ltd-ax-Afo" id="a8c-mY-t5f"/>
@@ -181,7 +187,7 @@
         <!--Setting Controller-->
         <scene sceneID="Cd4-Kp-pQo">
             <objects>
-                <viewController id="CgO-r1-QRe" customClass="SettingController" customModule="MessageBroker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="CgO-r1-QRe" customClass="SettingController" customModule="小牛Mesg" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="D9y-Ba-mvg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -254,7 +260,7 @@
         <!--Friend List Controller-->
         <scene sceneID="ais-Qm-TUI">
             <objects>
-                <viewController storyboardIdentifier="FriendListController" id="6vx-la-7nY" customClass="FriendListController" customModule="MessageBroker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FriendListController" id="6vx-la-7nY" customClass="FriendListController" customModule="小牛Mesg" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r5S-NL-J4W">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -263,7 +269,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="764"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contactCell" rowHeight="83" id="UaX-fz-bWm" customClass="ContactCell" customModule="MessageBroker" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contactCell" rowHeight="83" id="UaX-fz-bWm" customClass="ContactCell" customModule="小牛Mesg" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="83"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UaX-fz-bWm" id="q3u-W4-rHO">
@@ -354,7 +360,7 @@
         <!--Chat View Controller-->
         <scene sceneID="252-57-ghI">
             <objects>
-                <viewController storyboardIdentifier="ChatViewController" automaticallyAdjustsScrollViewInsets="NO" id="0ji-Jd-oPW" customClass="ChatViewController" customModule="MessageBroker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChatViewController" automaticallyAdjustsScrollViewInsets="NO" id="0ji-Jd-oPW" customClass="ChatViewController" customModule="小牛Mesg" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kDy-Tg-Kop"/>
                         <viewControllerLayoutGuide type="bottom" id="Nq0-nx-PdV"/>
@@ -379,12 +385,12 @@
                                         <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERE-zh-BDb">
-                                        <rect key="frame" x="325" y="16" width="69" height="28"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                        <state key="normal" title="Disconnect"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I8x-nt-kOu">
+                                        <rect key="frame" x="22" y="19" width="21" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="nav_back"/>
                                         <connections>
-                                            <action selector="disconnect" destination="0ji-Jd-oPW" eventType="touchUpInside" id="xI1-9i-UEn"/>
+                                            <action selector="backAction:" destination="0ji-Jd-oPW" eventType="touchUpInside" id="Ivk-Wn-HWB"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -392,18 +398,16 @@
                                 <constraints>
                                     <constraint firstItem="mRp-YB-Cm4" firstAttribute="centerX" secondItem="mEk-Za-b90" secondAttribute="centerX" id="7VL-3c-gfd"/>
                                     <constraint firstItem="mRp-YB-Cm4" firstAttribute="top" secondItem="AZM-a0-qqu" secondAttribute="bottom" constant="5" id="Dt3-Hv-6li"/>
-                                    <constraint firstItem="ERE-zh-BDb" firstAttribute="centerY" secondItem="mEk-Za-b90" secondAttribute="centerY" id="TAE-oJ-136"/>
                                     <constraint firstItem="AZM-a0-qqu" firstAttribute="centerX" secondItem="mEk-Za-b90" secondAttribute="centerX" id="XQS-UW-wEW"/>
                                     <constraint firstAttribute="height" constant="60" id="cii-Kw-zG7"/>
                                     <constraint firstItem="AZM-a0-qqu" firstAttribute="top" secondItem="mEk-Za-b90" secondAttribute="top" id="hjy-of-H9L"/>
-                                    <constraint firstAttribute="trailing" secondItem="ERE-zh-BDb" secondAttribute="trailing" constant="20" id="qRK-p6-KEw"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="94" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="JgG-Zb-lBc">
                                 <rect key="frame" x="0.0" y="104" width="414" height="659"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="leftMessageCell" rowHeight="94" id="syq-co-ote" customClass="ChatLeftMessageCell" customModule="MessageBroker" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="leftMessageCell" rowHeight="94" id="syq-co-ote" customClass="ChatLeftMessageCell" customModule="小牛Mesg" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="syq-co-ote" id="4uE-PT-UQm">
@@ -451,7 +455,7 @@
                                             <outlet property="contentLabel" destination="RFc-Qm-s3P" id="7u6-T9-Idn"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="rightMessageCell" rowHeight="106" id="mnw-nA-Hse" userLabel="rightMessageCell" customClass="ChatRightMessageCell" customModule="MessageBroker" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="rightMessageCell" rowHeight="106" id="mnw-nA-Hse" userLabel="rightMessageCell" customClass="ChatRightMessageCell" customModule="小牛Mesg" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="122" width="414" height="106"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mnw-nA-Hse" id="p9e-TA-rfL">
@@ -460,7 +464,7 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="woy-Se-2oF">
                                                     <rect key="frame" x="344" y="11" width="50" height="50"/>
-                                                    <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="e4n-Bz-E9g"/>
                                                         <constraint firstAttribute="height" constant="50" id="xWy-uX-uga"/>
@@ -547,6 +551,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="mEk-Za-b90" secondAttribute="trailing" constant="-20" id="tGD-fS-ej9"/>
                             <constraint firstAttribute="leadingMargin" secondItem="JgG-Zb-lBc" secondAttribute="leading" constant="20" id="ujw-g4-aZj"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="nyl-0w-dna"/>
                     </view>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -570,6 +575,7 @@
         <image name="chatfrom_bg_normal" width="266" height="55"/>
         <image name="chatto_bg_normal" width="266" height="55"/>
         <image name="house" catalog="system" width="64" height="54"/>
+        <image name="nav_back" width="21" height="21"/>
         <image name="person" catalog="system" width="64" height="58"/>
     </resources>
 </document>
