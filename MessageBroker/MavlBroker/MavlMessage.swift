@@ -44,12 +44,26 @@ struct MavlMessageConfiguration {
     }
 }
 
+/**
+    Message相关功能的协议
+ */
 public protocol MavlMessageClient {
     func login()
     func createAGroup(withUsers users: [String])
     func addFriend(withUserName: String)
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String)
     func logout()
+}
+
+extension MavlMessageClient {
+    func addFriendSuccess(friendName name: String) {}
+}
+
+/**
+    Status相关功能的协议
+ */
+public protocol MavlMessageClientStatus {
+    func checkStatus(withUserName username: String)
 }
 
 protocol MavlMessageDelegate: class {
@@ -60,10 +74,11 @@ protocol MavlMessageDelegate: class {
     func sendMessageSuccess()
     func mavlDidReceived(message msg: String?, topic t: String)
     func logoutSuccess()
+    func friendStatus(_ status: String?, friendId: String)
 }
 
-extension MavlMessageClient {
-    func addFriendSuccess(friendName name: String) {}
+extension MavlMessageDelegate {
+    func friendStatus(_ status: String?, friendId: String) {}
 }
 
 class MavlMessage {
@@ -167,6 +182,14 @@ extension MavlMessage: MavlMessageClient {
     }
 }
 
+extension MavlMessage: MavlMessageClientStatus {
+    func checkStatus(withUserName username: String) {
+        let topic = "\(config.appid)/userstatus/\(config.appid)_\(username)/online"
+        
+        mqtt?.subscribe(topic)
+    }
+}
+
 extension MavlMessage: CocoaMQTTDelegate {
 
     // Optional ssl CocoaMQTTDelegate
@@ -209,17 +232,19 @@ extension MavlMessage: CocoaMQTTDelegate {
         TRACE("message receive: \(message.string.value), id: \(id)")
         
         let topic = message.topic
-        guard let topicModel = TopicModel(message.topic) else {
-            TRACE("收到的信息Topic不符合规范：\(topic)")
-            return
-        }
         
-        if topicModel.isGroupMsg && topicModel.operation == 0 {
-            // create a group
-            self.gid = topicModel.to
-            delegate?.joinedChatRoom(groupId: self.gid!)
+        if let topicModel = StatusTopicModel(topic) {
+            delegate?.friendStatus(message.string, friendId: topicModel.friendId)
+        }else if let topicModel =  TopicModel(message.topic) {
+            if topicModel.isGroupMsg && topicModel.operation == 0 {
+                // create a group
+                self.gid = topicModel.to
+                delegate?.joinedChatRoom(groupId: self.gid!)
+            }else {
+                delegate?.mavlDidReceived(message: message.string, topic: topic)
+            }
         }else {
-            delegate?.mavlDidReceived(message: message.string, topic: topic)
+            TRACE("收到的信息Topic不符合规范：\(topic)")
         }
     }
 

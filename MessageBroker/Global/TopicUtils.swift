@@ -42,8 +42,25 @@ struct TopicModel {
         serverId = segments[4]
         from = segments[5].replacingOccurrences(of: "\(appid)_", with: "")
     }
-    
 }
+
+struct StatusTopicModel {
+    var appid: String
+    var friendId: String
+    
+    init?(_ topic: String) {
+        let segments = topic.components(separatedBy: "/")
+        guard segments.count == 4 else { return nil }
+        
+        let status: String = segments[1]
+        let type: String = segments[3]
+        
+        guard status == "userstatus" && type == "online" else { return nil }
+        self.appid = segments[0]
+        self.friendId = segments[2].replacingOccurrences(of: "\(appid)_", with: "")
+    }
+}
+
 
 extension String {
     subscript (range: CountableRange<Int>) -> String {

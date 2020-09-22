@@ -31,6 +31,22 @@ class ChatViewController: UIViewController {
         }
     }
     
+    // TODO: sessionModel (sessionId, userId, isGroup)
+    
+    private var status: String? {
+        didSet {
+            if status == "online" {
+                statusView.backgroundColor = .green
+                statusLabel.text = "online"
+            }else {
+                statusView.backgroundColor = .darkGray
+                statusLabel.text = "offline"
+            }
+        }
+    }
+    
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var statusView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var messageTextView: UITextView! {
         didSet {
@@ -68,6 +84,7 @@ class ChatViewController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
         messageTextView.delegate = self
+        status = "offline"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
@@ -75,10 +92,12 @@ class ChatViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedMessage(notification:)), name: .didReceiveMesg, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.keyboardChanged(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedStatusChanged(notification:)), name: .friendStatusDidUpdated, object: nil)
         
         animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
         sloganLabel.text = slogan
+        
+        msgClient?.checkStatus(withUserName: "horse")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -118,6 +137,12 @@ class ChatViewController: UIViewController {
         messages.append(chatMessage)
         
         scrollToBottom()
+    }
+    
+    @objc func receivedStatusChanged(notification: NSNotification) {
+        guard let obj = notification.object as? [String: String], let status = obj["horse"] else { return }
+        
+        self.status = status
     }
     
     func scrollToBottom() {

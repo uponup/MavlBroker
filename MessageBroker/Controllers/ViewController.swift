@@ -139,6 +139,11 @@ extension ViewController: MavlMessageDelegate {
     func logoutSuccess() {
         isLogin = false
     }
+    
+    func friendStatus(_ status: String?, friendId: String) {
+        guard let status = status else {  return }
+        NotificationCenter.default.post(name: .friendStatusDidUpdated, object: [friendId: status])
+    }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {

@@ -414,22 +414,22 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gg0-Id-HYn">
-                                        <rect key="frame" x="335" y="24" width="12" height="12"/>
+                                        <rect key="frame" x="334.5" y="25" width="10" height="10"/>
                                         <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="12" id="Ccc-ut-Hzg"/>
-                                            <constraint firstAttribute="width" constant="12" id="hL7-JC-Txe"/>
+                                            <constraint firstAttribute="height" constant="10" id="Ccc-ut-Hzg"/>
+                                            <constraint firstAttribute="width" constant="10" id="hL7-JC-Txe"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="6"/>
+                                                <integer key="value" value="5"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="online" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IO6-CA-ZSs">
-                                        <rect key="frame" x="355" y="19.5" width="46" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="352.5" y="19.5" width="48.5" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -605,6 +605,8 @@
                         <outlet property="messageTextViewHeightConstraint" destination="5ZY-Fq-LDq" id="QpO-fY-Ntg"/>
                         <outlet property="sendMessageButton" destination="Xbx-ng-frh" id="KvN-8Z-vgN"/>
                         <outlet property="sloganLabel" destination="mRp-YB-Cm4" id="mYc-qB-7pZ"/>
+                        <outlet property="statusLabel" destination="IO6-CA-ZSs" id="lYT-uX-ceI"/>
+                        <outlet property="statusView" destination="gg0-Id-HYn" id="GFS-Vq-Dje"/>
                         <outlet property="tableView" destination="JgG-Zb-lBc" id="gE3-a3-J1C"/>
                     </connections>
                 </viewController>
