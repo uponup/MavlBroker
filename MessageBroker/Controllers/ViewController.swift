@@ -143,7 +143,8 @@ class ViewController: UIViewController {
         };
         
         let ok = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
-            self.joinedChatRoom(groupId: self.addGid)
+//            self.mavlMsgClient?.joinGroup(withGroupId: self.addGid)
+            self.mavlMsgClient?.quitGroup(withGroupId: self.addGid)
         }
         alert.addAction(ok)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

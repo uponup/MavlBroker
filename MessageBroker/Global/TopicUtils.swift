@@ -33,10 +33,10 @@ struct TopicModel {
     
     init?(_ topic: String) {
         let segments = topic.components(separatedBy: "/")
-        guard segments.count >= 6 else { return nil }
+        guard segments.count >= 6, let op = Int(segments[1]) else { return nil }
         
         appid = segments[0]
-        operation = Int(segments[1]) ?? 0
+        operation = op
         localId = segments[2]
         to = segments[3].replacingOccurrences(of: "\(appid)_", with: "")
         serverId = segments[4]

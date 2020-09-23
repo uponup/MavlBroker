@@ -278,6 +278,10 @@ extension MavlMessage: CocoaMQTTDelegate {
                 // create a group
                 self.gid = topicModel.to
                 delegate?.joinedChatRoom(groupId: self.gid!)
+            }else if topicModel.operation == 201 {
+                TRACE("加入群成功")
+            }else if topicModel.operation == 202 {
+                TRACE("退出群聊成功")
             }else {
                 delegate?.mavlDidReceived(message: message.string, topic: topic)
             }
