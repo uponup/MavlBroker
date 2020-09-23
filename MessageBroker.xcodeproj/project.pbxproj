@@ -28,6 +28,7 @@
 		397D44382518B676005CB2D3 /* ChatSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D44372518B676005CB2D3 /* ChatSession.swift */; };
 		3998D285251B243600818904 /* MavlMesgUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D284251B243600818904 /* MavlMesgUserDefault.swift */; };
 		3998D287251B409C00818904 /* UserCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D286251B409C00818904 /* UserCenter.swift */; };
+		3998D28B251B8B0D00818904 /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D28A251B8B0D00818904 /* UIScreenExtension.swift */; };
 		ADE6D74A157C5F93B69476CA /* Pods_MessageBroker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 		397D44372518B676005CB2D3 /* ChatSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSession.swift; sourceTree = "<group>"; };
 		3998D284251B243600818904 /* MavlMesgUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MavlMesgUserDefault.swift; sourceTree = "<group>"; };
 		3998D286251B409C00818904 /* UserCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCenter.swift; sourceTree = "<group>"; };
+		3998D28A251B8B0D00818904 /* UIScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtension.swift; sourceTree = "<group>"; };
 		C2C566991AC8E9868E25050C /* Pods-MessageBroker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageBroker.debug.xcconfig"; path = "Target Support Files/Pods-MessageBroker/Pods-MessageBroker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +95,7 @@
 		397D440425187ED1005CB2D3 /* MessageBroker */ = {
 			isa = PBXGroup;
 			children = (
+				3998D289251B8AE300818904 /* MavUIKit */,
 				3998D288251B40C500818904 /* Module */,
 				397D442D25188EE1005CB2D3 /* Global */,
 				397D441925187F92005CB2D3 /* MavlBroker */,
@@ -175,6 +178,14 @@
 				3998D286251B409C00818904 /* UserCenter.swift */,
 			);
 			path = Module;
+			sourceTree = "<group>";
+		};
+		3998D289251B8AE300818904 /* MavUIKit */ = {
+			isa = PBXGroup;
+			children = (
+				3998D28A251B8B0D00818904 /* UIScreenExtension.swift */,
+			);
+			path = MavUIKit;
 			sourceTree = "<group>";
 		};
 		7A65E77A19E20D9B585EC82E /* Pods */ = {
@@ -327,6 +338,7 @@
 				397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */,
 				397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */,
 				397D441D25187FB3005CB2D3 /* Mesg.swift in Sources */,
+				3998D28B251B8B0D00818904 /* UIScreenExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,7 +484,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = DCAS2QQQ9F;
 				INFOPLIST_FILE = MessageBroker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -492,7 +504,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = DCAS2QQQ9F;
 				INFOPLIST_FILE = MessageBroker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -123,7 +123,7 @@ class ChatViewController: UIViewController {
     @objc func keyboardChanged(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: AnyObject]
         let keyboardValue = userInfo["UIKeyboardFrameEndUserInfoKey"]
-        let bottomDistance = UIScreen.main.bounds.size.height - (navigationController?.navigationBar.frame.height)! - keyboardValue!.cgRectValue.origin.y
+        let bottomDistance = UIScreen.main.bounds.size.height - keyboardValue!.cgRectValue.origin.y - UIScreen.bottomEdge
         
         if bottomDistance > 0 {
             inputViewBottomConstraint.constant = bottomDistance
