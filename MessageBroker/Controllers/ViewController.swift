@@ -71,14 +71,6 @@ class ViewController: UIViewController {
             return
         }
         sessions.removeAll()
-        
-        var arr: [ChatSession] = []
-        
-        for item in sessionList {
-            let s = ChatSession(dict: item)
-            arr.append(s)
-        }
-
         let history = sessionList.map{ ChatSession(dict: $0) }
         sessions.append(contentsOf: history)
         
