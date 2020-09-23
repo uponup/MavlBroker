@@ -97,7 +97,12 @@ class ChatViewController: UIViewController {
         animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
         sloganLabel.text = slogan
         
-        msgClient?.checkStatus(withUserName: "horse")
+        if self.isGroup {
+            statusView.isHidden = true
+            statusLabel.isHidden = true
+        }else {
+            msgClient?.checkStatus(withUserName: "horse")
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
