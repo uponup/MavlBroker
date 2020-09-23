@@ -50,6 +50,9 @@ struct MavlMessageConfiguration {
 public protocol MavlMessageClient {
     func login()
     func createAGroup(withUsers users: [String])
+    func joinGroup(withGroupId gid: String)
+    func quitGroup(withGroupId gid: String)
+    
     func addFriend(withUserName: String)
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String)
     func logout()
@@ -138,7 +141,20 @@ extension MavlMessage: MavlMessageClient {
         createGroup(mesg: payload)
     }
     
+    func joinGroup(withGroupId gid: String) {
+        let localId = nextMessageLocalID()
+        let topic = "\(config.appid)/201/\(localId)/\(gid)"
+        mqtt?.publish(topic, withString: "")
+    }
+    
+    func quitGroup(withGroupId gid: String) {
+        let localId = nextMessageLocalID()
+        let topic = "\(config.appid)/202/\(localId)/\(gid)"
+        mqtt?.publish(topic, withString: "")
+    }
+    
     func addFriend(withUserName: String) {
+        // TODO: 目前没有好友管理，addFriend其实是直接向对方发起1v1的聊天
         delegate?.addFriendSuccess(friendName: withUserName)
     }
     

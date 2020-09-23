@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     lazy var sessions: [ChatSession] = {
         []
     }()
+    var addGid: String = ""
     
     private var isLogin: Bool = false {
         didSet {
@@ -120,6 +121,11 @@ class ViewController: UIViewController {
             self.present(friendListVc, animated: true, completion: nil)
         }
         alert.addAction(actionCreateGroup)
+        let actionJoinGroup = UIAlertAction(title: "Join a group chat", style: .default) { [unowned self] _ in
+            self.joinGroupAction()
+        }
+        alert.addAction(actionJoinGroup)
+        
         let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(actionCancel)
         
@@ -128,6 +134,20 @@ class ViewController: UIViewController {
     
     @IBAction func logout(_ sender: Any) {
         mavlMsgClient?.logout()
+    }
+    
+    private func joinGroupAction() {
+        let alert = UIAlertController(title: "Join In", message: "Please input group id you want to join", preferredStyle: .alert)
+        alert.addTextField { [unowned self] tf in
+            self.addGid = tf.text.value
+        };
+        
+        let ok = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
+            self.joinedChatRoom(groupId: self.addGid)
+        }
+        alert.addAction(ok)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
