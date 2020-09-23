@@ -81,7 +81,7 @@ protocol MavlMessageDelegate: class {
     func addFriendSuccess(friendName name: String)
     func sendMessageSuccess()
     func mavlDidReceived(message msg: String?, topic t: String)
-    func logoutSuccess()
+    func logout(withError: Error?)
     func friendStatus(_ status: String?, friendId: String)
 }
 
@@ -288,7 +288,7 @@ extension MavlMessage: CocoaMQTTDelegate {
 
     func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
         TRACE("\(err?.localizedDescription ?? "")")
-        delegate?.logoutSuccess()
+        delegate?.logout(withError: err)
     }
 }
 

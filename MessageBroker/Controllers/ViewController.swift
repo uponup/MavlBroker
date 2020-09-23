@@ -167,8 +167,14 @@ extension ViewController: MavlMessageDelegate {
         NotificationCenter.default.post(name: .didReceiveMesg, object: ["message": msg ?? "", "topic": t])
     }
     
-    func logoutSuccess() {
+    func logout(withError: Error?) {
         isLogin = false
+        
+        guard let err = withError else { return }
+        // 如果有err，说明是异常断开连接
+        let alert = UIAlertController(title: "Warning", message: err.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func friendStatus(_ status: String?, friendId: String) {
