@@ -66,6 +66,14 @@ public protocol MavlMessageClientStatus {
     func checkStatus(withUserName username: String)
 }
 
+/**
+    Config相关功能的协议
+ */
+public protocol MavlMessageClientConfig {
+    func uploadToken()
+}
+
+
 protocol MavlMessageDelegate: class {
     func beginLogin()
     func loginSuccess()
@@ -187,6 +195,20 @@ extension MavlMessage: MavlMessageClientStatus {
         let topic = "\(config.appid)/userstatus/\(config.appid)_\(username)/online"
         
         mqtt?.subscribe(topic)
+    }
+}
+
+extension MavlMessage: MavlMessageClientConfig {
+    func uploadToken() {
+        guard let deviceToken = getDeviceToken() else {
+            TRACE("上传token失败，无法获取token")
+            return
+        }
+        
+        let msgId = nextMessageLocalID()
+        let topic = "\(config.appid)/300/\(msgId)/"
+        
+        mqtt?.publish(topic, withString: deviceToken)
     }
 }
 

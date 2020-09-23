@@ -26,6 +26,7 @@
 		397D443425189E83005CB2D3 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D443325189E83005CB2D3 /* ContactCell.swift */; };
 		397D44362518B3D1005CB2D3 /* ChatSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D44352518B3D1005CB2D3 /* ChatSessionCell.swift */; };
 		397D44382518B676005CB2D3 /* ChatSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D44372518B676005CB2D3 /* ChatSession.swift */; };
+		3998D285251B243600818904 /* MavlMesgUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D284251B243600818904 /* MavlMesgUserDefault.swift */; };
 		ADE6D74A157C5F93B69476CA /* Pods_MessageBroker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		397D443325189E83005CB2D3 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		397D44352518B3D1005CB2D3 /* ChatSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionCell.swift; sourceTree = "<group>"; };
 		397D44372518B676005CB2D3 /* ChatSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSession.swift; sourceTree = "<group>"; };
+		3998D284251B243600818904 /* MavlMesgUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MavlMesgUserDefault.swift; sourceTree = "<group>"; };
 		C2C566991AC8E9868E25050C /* Pods-MessageBroker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageBroker.debug.xcconfig"; path = "Target Support Files/Pods-MessageBroker/Pods-MessageBroker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +104,7 @@
 			children = (
 				397D441A25187FB3005CB2D3 /* MavlMessage.swift */,
 				397D441B25187FB3005CB2D3 /* Mesg.swift */,
+				3998D284251B243600818904 /* MavlMesgUserDefault.swift */,
 			);
 			path = MavlBroker;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3998D285251B243600818904 /* MavlMesgUserDefault.swift in Sources */,
 				397D44362518B3D1005CB2D3 /* ChatSessionCell.swift in Sources */,
 				397D442825188687005CB2D3 /* ChatMessage.swift in Sources */,
 				397D44382518B676005CB2D3 /* ChatSession.swift in Sources */,
