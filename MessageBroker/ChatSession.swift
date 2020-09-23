@@ -18,4 +18,18 @@ struct ChatSession {
         self.sessionName = sessionName
         self.isGroup = isGroup
     }
+    
+    init(dict: [String: Any]) {
+        self.gid = dict["gid"] as! String
+        self.sessionName = dict["session"] as! String
+        self.isGroup = dict["isGroup"] as! Bool
+    }
+    
+    func toDic() -> [String: Any] {
+        return [
+            "gid": gid,
+            "session": sessionName,
+            "isGroup": isGroup
+        ]
+    }
 }

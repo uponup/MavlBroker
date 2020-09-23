@@ -11,10 +11,8 @@ import CocoaMQTT
 
 
 class ChatViewController: UIViewController {
-    var username: String?
     var msgClient: MavlMessage?
-    var groupId: String?
-    var isGroup: Bool = true
+    var session: ChatSession?
     
     var messages: [ChatMessage] = [] {
         didSet {
@@ -24,10 +22,13 @@ class ChatViewController: UIViewController {
     }
     
     private var slogan: String {
-        if isGroup {
-            return "Gid: \(self.groupId.value)";
+        guard let session = session else {
+            return "进入聊天室错误"
+        }
+        if session.isGroup {
+            return "Gid: \(session.gid)";
         }else {
-            return "\(self.groupId.value)";
+            return "\(session.sessionName)";
         }
     }
     
@@ -68,10 +69,11 @@ class ChatViewController: UIViewController {
     @IBAction func sendMessage() {
         guard let client = msgClient, let message = messageTextView.text else { return }
         
-        if isGroup {
-            client.sendToChatRoom(message: message, isToGroup: true, toId: groupId.value)
+        guard let session = session else { return }
+        if session.isGroup {
+            client.sendToChatRoom(message: message, isToGroup: true, toId: session.gid)
         }else {
-            client.sendToChatRoom(message: message, isToGroup: false, toId: "56_\(groupId.value.lowercased())")
+            client.sendToChatRoom(message: message, isToGroup: false, toId: "56_\(session.gid.lowercased())")
         }
         messageTextView.text = ""
         sendMessageButton.isEnabled = false
@@ -97,11 +99,11 @@ class ChatViewController: UIViewController {
         animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
         sloganLabel.text = slogan
         
-        if self.isGroup {
+        if let session = session, !session.isGroup {
+            msgClient?.checkStatus(withUserName: session.sessionName.lowercased())
+        }else {
             statusView.isHidden = true
             statusLabel.isHidden = true
-        }else {
-            msgClient?.checkStatus(withUserName: "horse")
         }
     }
     
@@ -145,7 +147,8 @@ class ChatViewController: UIViewController {
     }
     
     @objc func receivedStatusChanged(notification: NSNotification) {
-        guard let obj = notification.object as? [String: String], let status = obj["horse"] else { return }
+        guard let session = session else { return }
+        guard let obj = notification.object as? [String: String], let status = obj[session.sessionName.lowercased()] else { return }
         
         self.status = status
     }
@@ -181,7 +184,7 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages[indexPath.row]
-        if message.sender.lowercased() == username.value.lowercased() {
+        if message.sender.lowercased() == session?.sessionName.lowercased() {
             let cell = tableView.dequeueReusableCell(withIdentifier: "rightMessageCell", for: indexPath) as! ChatRightMessageCell
             cell.contentLabel.text = messages[indexPath.row].content
             cell.avatarImageView.image = #imageLiteral(resourceName: "iv_chat_local")

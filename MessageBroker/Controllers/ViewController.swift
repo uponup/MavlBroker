@@ -30,6 +30,11 @@ class ViewController: UIViewController {
                 itemAdd.isEnabled = true
                 itemClose.isEnabled = true
                 username = tfUserName.text.value
+                
+                let passport = Passport(tfUserName.text.value, tfPassword.text.value)
+                UserCenter.center.login(passport: passport)
+                
+                loadData()
             }else {
                 title = "Offline"
                 tfUserName.text = ""
@@ -55,6 +60,29 @@ class ViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    
+    // 刷新数据
+    func loadData() {
+        guard let sessionList = UserCenter.center.fetchSessionList() as? [[String: Any]] else {
+            TRACE("获取缓存信息失败")
+            return
+        }
+        sessions.removeAll()
+        
+        var arr: [ChatSession] = []
+        
+        for item in sessionList {
+            let s = ChatSession(dict: item)
+            arr.append(s)
+        }
+
+        let history = sessionList.map{ ChatSession(dict: $0) }
+        sessions.append(contentsOf: history)
+        
+        print(sessions)
+        tableView.reloadData()
     }
     
     @objc func didSelectedContacts(noti: Notification) {
@@ -116,15 +144,18 @@ extension ViewController: MavlMessageDelegate {
     func joinedChatRoom(groupId gid: String) {
         TRACE("新加入的是:\(gid)")
         let session = ChatSession(gid: gid)
-        sessions.removeAll()
         sessions.append(session)
         tableView.reloadData()
+        
+        UserCenter.center.save(sessionList: sessions.map{$0.toDic()})
     }
     
     func addFriendSuccess(friendName name: String) {
         let session = ChatSession(gid: name, sessionName: name, isGroup: false)
         sessions.append(session)
         tableView.reloadData()
+        
+        UserCenter.center.save(sessionList: sessions.map{$0.toDic()})
     }
     
     func sendMessageSuccess() {
@@ -168,9 +199,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         guard let chatVc = storyboard?.instantiateViewController(identifier: "ChatViewController") as? ChatViewController else { return }
         chatVc.hidesBottomBarWhenPushed = true
         chatVc.msgClient = mavlMsgClient
-        chatVc.username = username
-        chatVc.groupId = sessionModel.gid
-        chatVc.isGroup = sessionModel.isGroup
+        chatVc.session = sessionModel
         navigationController?.pushViewController(chatVc, animated: true)
     }
 }

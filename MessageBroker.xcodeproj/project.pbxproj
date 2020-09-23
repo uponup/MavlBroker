@@ -27,6 +27,7 @@
 		397D44362518B3D1005CB2D3 /* ChatSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D44352518B3D1005CB2D3 /* ChatSessionCell.swift */; };
 		397D44382518B676005CB2D3 /* ChatSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D44372518B676005CB2D3 /* ChatSession.swift */; };
 		3998D285251B243600818904 /* MavlMesgUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D284251B243600818904 /* MavlMesgUserDefault.swift */; };
+		3998D287251B409C00818904 /* UserCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D286251B409C00818904 /* UserCenter.swift */; };
 		ADE6D74A157C5F93B69476CA /* Pods_MessageBroker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		397D44352518B3D1005CB2D3 /* ChatSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionCell.swift; sourceTree = "<group>"; };
 		397D44372518B676005CB2D3 /* ChatSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSession.swift; sourceTree = "<group>"; };
 		3998D284251B243600818904 /* MavlMesgUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MavlMesgUserDefault.swift; sourceTree = "<group>"; };
+		3998D286251B409C00818904 /* UserCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCenter.swift; sourceTree = "<group>"; };
 		C2C566991AC8E9868E25050C /* Pods-MessageBroker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageBroker.debug.xcconfig"; path = "Target Support Files/Pods-MessageBroker/Pods-MessageBroker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,6 +93,7 @@
 		397D440425187ED1005CB2D3 /* MessageBroker */ = {
 			isa = PBXGroup;
 			children = (
+				3998D288251B40C500818904 /* Module */,
 				397D442D25188EE1005CB2D3 /* Global */,
 				397D441925187F92005CB2D3 /* MavlBroker */,
 				397D443025189658005CB2D3 /* Controllers */,
@@ -164,6 +167,14 @@
 				397D442A2518868B005CB2D3 /* Views */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		3998D288251B40C500818904 /* Module */ = {
+			isa = PBXGroup;
+			children = (
+				3998D286251B409C00818904 /* UserCenter.swift */,
+			);
+			path = Module;
 			sourceTree = "<group>";
 		};
 		7A65E77A19E20D9B585EC82E /* Pods */ = {
@@ -303,6 +314,7 @@
 				397D442825188687005CB2D3 /* ChatMessage.swift in Sources */,
 				397D44382518B676005CB2D3 /* ChatSession.swift in Sources */,
 				397D44202518845E005CB2D3 /* SettingController.swift in Sources */,
+				3998D287251B409C00818904 /* UserCenter.swift in Sources */,
 				397D440A25187ED1005CB2D3 /* ViewController.swift in Sources */,
 				397D443425189E83005CB2D3 /* ContactCell.swift in Sources */,
 				397D441C25187FB3005CB2D3 /* MavlMessage.swift in Sources */,
