@@ -19,9 +19,7 @@ class SettingController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        guard let nav = tabBarController?.viewControllers?.first as? UINavigationController,
-            let home = nav.viewControllers.first as? ViewController else { return }
-        self.navigationItem.title = home.mavlMsgClient?.currentUserName
+
+        self.navigationItem.title = MavlMessage.shared.passport?.uid
     }
 }

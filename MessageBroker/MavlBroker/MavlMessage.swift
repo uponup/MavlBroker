@@ -20,27 +20,13 @@ enum MBDomainConfig {
 struct MavlMessageConfiguration {
     
     var appid: String
-    private var appkey: String
-    private var mUUID: String
-    private var mToken: String
+    var appkey: String
     var host: String = MBDomainConfig.awsHost1
     var port: UInt16 = MBDomainConfig.port
        
-    var username: String {
-        "\(appid)_\(mUUID)"
-    }
-    var clientID: String {
-        "\(appid)_\(mUUID)"
-    }
-    var password: String {
-        "\(mToken)_\(appkey)"
-    }
-    
-    init(appid id: String, appkey key: String, uuid mUUID: String, token mToken: String) {
+    init(appid id: String, appkey key: String) {
         appid = id
         appkey = key
-        self.mUUID = mUUID
-        self.mToken = mToken
     }
 }
 
@@ -48,7 +34,7 @@ struct MavlMessageConfiguration {
     Message相关功能的协议
  */
 public protocol MavlMessageClient {
-    func login()
+    func login(userName name: String, password pwd: String)
     func createAGroup(withUsers users: [String])
     func joinGroup(withGroupId gid: String)
     func quitGroup(withGroupId gid: String)
@@ -87,38 +73,55 @@ protocol MavlMessageDelegate: class {
 
 extension MavlMessageDelegate {
     func friendStatus(_ status: String?, friendId: String) {}
-    func quitGroup(gid: String, error: Error? = nil) {
-        
-    }
+    func quitGroup(gid: String, error: Error? = nil) { }
+}
+
+struct MavlPassport {
+    var uid: String
+    var password: String
 }
 
 class MavlMessage {
-    
-    var currentUserName: String {
-        let userName = config.username
-        return userName.replacingOccurrences(of: "\(config.appid)_", with: "")
+    static let shared = MavlMessage()
+    var passport: Passport? {
+        return _passport
+    }
+    private var appid: String {
+        guard let config = config else { return "" }
+        return config.appid
     }
     
     public weak var delegate: MavlMessageDelegate?
     
-    private var config: MavlMessageConfiguration
+    private var config: MavlMessageConfiguration?
+    private var _passport: Passport?
     private var mqtt: CocoaMQTT?
-    private var gid: String?
     
     private var _localMsgId: UInt16 = 0
     
-    init(config: MavlMessageConfiguration) {
+    func initializeSDK(config: MavlMessageConfiguration) {
         self.config = config
-        
-        mqttSetting()
     }
     
     private func mqttSetting() {
-        mqtt = CocoaMQTT(clientID: config.clientID, host: config.host, port: config.port)
+        guard let config = config else {
+            TRACE("请先初始化SDK，然后再登录")
+            return
+        }
         
+        guard let passport = passport else {
+            TRACE("请输入帐号密码")
+            return
+        }
+        
+        let clientId = "\(config.appid)_\(passport.uid)"
+        let mqttUserName = "\(config.appid)_\(passport.uid)"
+        let mqttPassword = "\(passport.pwd)_\(config.appkey)"
+    
+        mqtt = CocoaMQTT(clientID: clientId, host: config.host, port: config.port)
         guard let mqtt = mqtt else { return }
-        mqtt.username = config.username
-        mqtt.password = config.password
+        mqtt.username = mqttUserName
+        mqtt.password = mqttPassword
         mqtt.keepAlive = 6000
         mqtt.delegate = self
         mqtt.enableSSL = true
@@ -136,21 +139,33 @@ class MavlMessage {
 
 extension MavlMessage: MavlMessageClient {
     
+    func login(userName name: String, password pwd: String) {
+        let passport = Passport(name, pwd)
+        _passport = passport
+        
+        mqttSetting()
+        
+        guard let mqtt = mqtt else { return }
+        
+        self.delegate?.beginLogin()
+        _ = mqtt.connect()
+    }
+    
     func createAGroup(withUsers users: [String]) {
-        let payload = users.map{ "\(config.appid)_\($0.lowercased())" }.joined(separator: ",")
+        let payload = users.map{ "\(appid)_\($0.lowercased())" }.joined(separator: ",")
         
         createGroup(mesg: payload)
     }
     
     func joinGroup(withGroupId gid: String) {
         let localId = nextMessageLocalID()
-        let topic = "\(config.appid)/201/\(localId)/\(gid)"
+        let topic = "\(appid)/201/\(localId)/\(gid)"
         mqtt?.publish(topic, withString: "")
     }
 //    05affb5dc604feDS
     func quitGroup(withGroupId gid: String) {
         let localId = nextMessageLocalID()
-        let topic = "\(config.appid)/202/\(localId)/\(gid)"
+        let topic = "\(appid)/202/\(localId)/\(gid)"
         mqtt?.publish(topic, withString: "")
     }
     
@@ -165,13 +180,6 @@ extension MavlMessage: MavlMessageClient {
         }else {
             send(msg: message, to: toId)
         }
-    }
-    
-    func login() {
-        guard let mqtt = mqtt else { return }
-        
-        self.delegate?.beginLogin()
-        _ = mqtt.connect()
     }
     
     func logout() {
@@ -200,7 +208,7 @@ extension MavlMessage: MavlMessageClient {
     }
     
     private func _send(msg: MesgProtocol & MQTTMesgProtocol) {
-        let topic = "\(config.appid)\(msg.sufixTopic)"
+        let topic = "\(appid)\(msg.sufixTopic)"
         
         // 改版思路：直接扩展CocoaMQTTMessage，而不需要自己构建Mesg_1vN消息模型
         mqtt?.publish(topic, withString: msg.text, qos: CocoaMQTTQOS(rawValue: UInt8(msg.qos))!, retained: msg.retained)
@@ -209,7 +217,7 @@ extension MavlMessage: MavlMessageClient {
 
 extension MavlMessage: MavlMessageClientStatus {
     func checkStatus(withUserName username: String) {
-        let topic = "\(config.appid)/userstatus/\(config.appid)_\(username)/online"
+        let topic = "\(appid)/userstatus/\(appid)_\(username)/online"
         
         mqtt?.subscribe(topic)
     }
@@ -223,7 +231,7 @@ extension MavlMessage: MavlMessageClientConfig {
         }
         
         let msgId = nextMessageLocalID()
-        let topic = "\(config.appid)/300/\(msgId)/"
+        let topic = "\(appid)/300/\(msgId)/"
         
         mqtt?.publish(topic, withString: deviceToken)
     }
@@ -277,12 +285,10 @@ extension MavlMessage: CocoaMQTTDelegate {
         }else if let topicModel =  TopicModel(message.topic) {
             if topicModel.isGroupMsg && topicModel.operation == 0 {
                 // create a group
-                self.gid = topicModel.to
-                delegate?.joinedChatRoom(groupId: self.gid!)
+                delegate?.joinedChatRoom(groupId: topicModel.to)
             }else if topicModel.operation == 201 {
                 TRACE("加入群成功")
-                self.gid = topicModel.to
-                delegate?.joinedChatRoom(groupId: self.gid!)
+                delegate?.joinedChatRoom(groupId: topicModel.to)
             }else if topicModel.operation == 202 {
                 TRACE("退出群聊成功")
                 delegate?.quitGroup(gid: topicModel.to, error: nil)

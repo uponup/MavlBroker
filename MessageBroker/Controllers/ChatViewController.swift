@@ -11,7 +11,6 @@ import CocoaMQTT
 
 
 class ChatViewController: UIViewController {
-    var msgClient: MavlMessage?
     var session: ChatSession?
     
     var messages: [ChatMessage] = [] {
@@ -31,9 +30,7 @@ class ChatViewController: UIViewController {
             return "\(session.sessionName)";
         }
     }
-    
-    // TODO: sessionModel (sessionId, userId, isGroup)
-    
+        
     private var status: String? {
         didSet {
             if status == "online" {
@@ -67,13 +64,13 @@ class ChatViewController: UIViewController {
     }
     
     @IBAction func sendMessage() {
-        guard let client = msgClient, let message = messageTextView.text else { return }
+        guard let message = messageTextView.text else { return }
         
         guard let session = session else { return }
         if session.isGroup {
-            client.sendToChatRoom(message: message, isToGroup: true, toId: session.gid)
+            MavlMessage.shared.sendToChatRoom(message: message, isToGroup: true, toId: session.gid)
         }else {
-            client.sendToChatRoom(message: message, isToGroup: false, toId: "56_\(session.gid.lowercased())")
+            MavlMessage.shared.sendToChatRoom(message: message, isToGroup: false, toId: "56_\(session.gid.lowercased())")
         }
         messageTextView.text = ""
         sendMessageButton.isEnabled = false
@@ -100,7 +97,7 @@ class ChatViewController: UIViewController {
         sloganLabel.text = slogan
         
         if let session = session, !session.isGroup {
-            msgClient?.checkStatus(withUserName: session.sessionName.lowercased())
+            MavlMessage.shared.checkStatus(withUserName: session.sessionName.lowercased())
         }else {
             statusView.isHidden = true
             statusLabel.isHidden = true
@@ -184,7 +181,7 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages[indexPath.row]
-        if message.sender.lowercased() == self.msgClient?.currentUserName.lowercased() {
+        if message.sender.lowercased() == MavlMessage.shared.passport?.uid.lowercased() {
             let cell = tableView.dequeueReusableCell(withIdentifier: "rightMessageCell", for: indexPath) as! ChatRightMessageCell
             cell.contentLabel.text = messages[indexPath.row].content
             cell.avatarImageView.image = #imageLiteral(resourceName: "iv_chat_local")

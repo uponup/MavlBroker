@@ -92,11 +92,8 @@ class ViewController: UIViewController {
     @IBAction func loginAction(_ sender: Any) {
         guard let username = tfUserName.text,
             let password = tfPassword.text else { return }
-        
-        let config = MavlMessageConfiguration(appid: GlobalConfig.xnAppId, appkey: GlobalConfig.xnAppKey, uuid: username, token: password)
-        mavlMsgClient = MavlMessage(config: config)
-        mavlMsgClient?.delegate = self
-        mavlMsgClient?.login()
+        MavlMessage.shared.delegate = self
+        MavlMessage.shared.login(userName: username, password: password)
     }
     
     @IBAction func addChatSession(_ sender: Any) {
@@ -237,7 +234,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let chatVc = storyboard?.instantiateViewController(identifier: "ChatViewController") as? ChatViewController else { return }
         chatVc.hidesBottomBarWhenPushed = true
-        chatVc.msgClient = mavlMsgClient
         chatVc.session = sessionModel
         navigationController?.pushViewController(chatVc, animated: true)
     }
