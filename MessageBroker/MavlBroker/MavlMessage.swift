@@ -32,16 +32,20 @@ struct MavlMessageConfiguration {
 
 /**
     Message相关功能的协议
+    TODO: 将方法归类成required和optional
  */
 public protocol MavlMessageClient {
     func login(userName name: String, password pwd: String)
+    func logout()
+    
     func createAGroup(withUsers users: [String])
     func joinGroup(withGroupId gid: String)
     func quitGroup(withGroupId gid: String)
     
     func addFriend(withUserName: String)
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String)
-    func logout()
+    
+    func fetchMessages(msgId: String, from: String, type: String, offset: Int)
 }
 
 /**
@@ -66,7 +70,8 @@ protocol MavlMessageDelegate: class {
     func quitGroup(gid: String, error: Error?)
     func addFriendSuccess(friendName name: String)
     func sendMessageSuccess()
-    func mavlDidReceived(message msg: String?, topic t: String)
+    func mavlDidReceived(message msg: Mesg)
+    func mavlDidReceived(messages msgs: [Mesg])
     func logout(withError: Error?)
     func friendStatus(_ status: String?, friendId: String)
 }
@@ -122,7 +127,7 @@ class MavlMessage {
         guard let mqtt = mqtt else { return }
         mqtt.username = mqttUserName
         mqtt.password = mqttPassword
-        mqtt.keepAlive = 6000
+        mqtt.keepAlive = 60
         mqtt.delegate = self
         mqtt.enableSSL = true
         mqtt.allowUntrustCACertificate = true
@@ -186,6 +191,13 @@ extension MavlMessage: MavlMessageClient {
         guard let mqtt = mqtt else { return }
             
         mqtt.disconnect()
+    }
+    
+    func fetchMessages(msgId: String, from: String, type: String, offset: Int = 20) {
+        //历史信息  appid/401/clientmsgid/from/type/cursor/offset
+        let localId = nextMessageLocalID()
+        let topic = "\(appid)/401/\(localId)/\(from)/\(type)/\(type)/\(offset)"
+        mqtt?.publish(topic, withString: "")
     }
     
     // 1v1
@@ -283,7 +295,7 @@ extension MavlMessage: CocoaMQTTDelegate {
         if let topicModel = StatusTopicModel(topic) {
             delegate?.friendStatus(message.string, friendId: topicModel.friendId)
         }else if let topicModel =  TopicModel(message.topic) {
-            if topicModel.isGroupMsg && topicModel.operation == 0 {
+            if topicModel.operation == 0 {
                 // create a group
                 delegate?.joinedChatRoom(groupId: topicModel.to)
             }else if topicModel.operation == 201 {
@@ -292,8 +304,12 @@ extension MavlMessage: CocoaMQTTDelegate {
             }else if topicModel.operation == 202 {
                 TRACE("退出群聊成功")
                 delegate?.quitGroup(gid: topicModel.to, error: nil)
+            }else if topicModel.operation == 401 {
+                TRACE("获取历史信息")
+                
             }else {
-                delegate?.mavlDidReceived(message: message.string, topic: topic)
+                let msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970)
+                delegate?.mavlDidReceived(message: msg)
             }
         }else {
             TRACE("收到的信息Topic不符合规范：\(topic)")

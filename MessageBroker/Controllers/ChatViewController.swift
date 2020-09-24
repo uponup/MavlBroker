@@ -131,13 +131,12 @@ class ChatViewController: UIViewController {
     }
     
     @objc func receivedMessage(notification: NSNotification) {
-        let object = notification.object as! [String: String]
-        let content = object["message"].value
-        let topic = object["topic"].value
+        let object = notification.object as! [String: Mesg]
+        let message = object["msg"]
         
-        guard let topicModel = TopicModel(topic) else { return }
-        let sender = topicModel.from
-        let chatMessage = ChatMessage(sender: sender.capitalized, content: content)
+        guard let msg = message else { return }
+        let sender = msg.fromUid
+        let chatMessage = ChatMessage(sender: sender.capitalized, content: msg.text)
         messages.append(chatMessage)
         
         scrollToBottom()

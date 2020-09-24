@@ -180,8 +180,16 @@ extension ViewController: MavlMessageDelegate {
     }
     
     func mavlDidReceived(message msg: String?, topic t: String) {
-        TRACE("收到信息msg：\(msg.value), topic: \(t)")
-        NotificationCenter.default.post(name: .didReceiveMesg, object: ["message": msg ?? "", "topic": t])
+        
+    }
+    
+    func mavlDidReceived(message msg: Mesg) {
+        TRACE("收到信息msg：\(msg.text)")
+        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": msg])
+    }
+    
+    func mavlDidReceived(messages msgs: [Mesg]) {
+        
     }
     
     func logout(withError: Error?) {

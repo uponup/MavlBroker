@@ -8,6 +8,38 @@
 
 import Foundation
 
+//Fromuid，Touid，Gid，Servermsgid，Msg，Timestamp
+struct Mesg {
+    var fromUid: String
+    var toUid: String
+    var groupId: String
+    var serverId: String
+    var text: String
+    var timestamp: TimeInterval
+    
+    init?(payload: String) {
+        let segments = payload.components(separatedBy: ",")
+        guard segments.count > 6 else { return nil }
+        fromUid = segments[0]
+        toUid = segments[1]
+        groupId = segments[2]
+        serverId = segments[3]
+        timestamp = TimeInterval(segments.last.value)!
+        let index = segments.count-1
+        text = segments[4..<index].joined(separator: ",")
+    }
+    
+    init(fromUid: String, toUid: String, groupId: String, serverId: String, text: String, timestamp: TimeInterval) {
+        self.fromUid = fromUid
+        self.toUid = toUid
+        self.groupId = groupId
+        self.serverId = serverId
+        self.text = text
+        self.timestamp = timestamp
+    }
+}
+
+// Old 消息模型，TODO：优化
 protocol MesgProtocol {
     var text: String { get set }
     var localId: UInt16 { get set }

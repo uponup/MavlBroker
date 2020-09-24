@@ -27,7 +27,10 @@ struct TopicModel {
     var from: String
     var serverId: String
     var isGroupMsg: Bool {
-        operation != 1
+        operation == 2 || operation == 1
+    }
+    var gid: String {
+        return isGroupMsg ? to : ""
     }
     
     
