@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var itemClose: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     
-    var mavlMsgClient: MavlMessage?
     lazy var sessions: [ChatSession] = {
         []
     }()
@@ -83,9 +82,9 @@ class ViewController: UIViewController {
         
         if isChat1V1 {
             guard let friend = contacts.first else { return }
-            mavlMsgClient?.addFriend(withUserName: friend)
+            MavlMessage.shared.addFriend(withUserName: friend)
         }else {
-            mavlMsgClient?.createAGroup(withUsers: contacts)
+            MavlMessage.shared.createAGroup(withUsers: contacts)
         }
     }
 
@@ -122,7 +121,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func logout(_ sender: Any) {
-        mavlMsgClient?.logout()
+        MavlMessage.shared.logout()
     }
     
     @objc func alertTextFieldDidChanged(noti: Notification) {
@@ -140,7 +139,7 @@ class ViewController: UIViewController {
         };
         
         let ok = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
-            self.mavlMsgClient?.joinGroup(withGroupId: self.addGid)
+            MavlMessage.shared.joinGroup(withGroupId: self.addGid)
 //            self.mavlMsgClient?.quitGroup(withGroupId: self.addGid)
         }
         alert.addAction(ok)
@@ -248,7 +247,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         guard session.isGroup  else { return UISwipeActionsConfiguration(actions: []) }
         
         let actionDelete = UIContextualAction(style: .destructive, title: "Quit") { [unowned self] (action, view, block) in
-            self.mavlMsgClient?.quitGroup(withGroupId: session.gid)
+            MavlMessage.shared.quitGroup(withGroupId: session.gid)
         }
         
         return UISwipeActionsConfiguration(actions: [actionDelete])
