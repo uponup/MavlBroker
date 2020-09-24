@@ -77,6 +77,7 @@ protocol MavlMessageDelegate: class {
     func beginLogin()
     func loginSuccess()
     func joinedChatRoom(groupId gid: String)
+    func quitGroup(gid: String, error: Error?)
     func addFriendSuccess(friendName name: String)
     func sendMessageSuccess()
     func mavlDidReceived(message msg: String?, topic t: String)
@@ -86,12 +87,16 @@ protocol MavlMessageDelegate: class {
 
 extension MavlMessageDelegate {
     func friendStatus(_ status: String?, friendId: String) {}
+    func quitGroup(gid: String, error: Error? = nil) {
+        
+    }
 }
 
 class MavlMessage {
     
     var currentUserName: String {
-        config.username
+        let userName = config.username
+        return userName.replacingOccurrences(of: "\(config.appid)_", with: "")
     }
     
     public weak var delegate: MavlMessageDelegate?
@@ -142,7 +147,7 @@ extension MavlMessage: MavlMessageClient {
         let topic = "\(config.appid)/201/\(localId)/\(gid)"
         mqtt?.publish(topic, withString: "")
     }
-    
+//    05affb5dc604feDS
     func quitGroup(withGroupId gid: String) {
         let localId = nextMessageLocalID()
         let topic = "\(config.appid)/202/\(localId)/\(gid)"
@@ -276,8 +281,11 @@ extension MavlMessage: CocoaMQTTDelegate {
                 delegate?.joinedChatRoom(groupId: self.gid!)
             }else if topicModel.operation == 201 {
                 TRACE("加入群成功")
+                self.gid = topicModel.to
+                delegate?.joinedChatRoom(groupId: self.gid!)
             }else if topicModel.operation == 202 {
                 TRACE("退出群聊成功")
+                delegate?.quitGroup(gid: topicModel.to, error: nil)
             }else {
                 delegate?.mavlDidReceived(message: message.string, topic: topic)
             }

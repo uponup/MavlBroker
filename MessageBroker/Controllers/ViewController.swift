@@ -128,10 +128,18 @@ class ViewController: UIViewController {
         mavlMsgClient?.logout()
     }
     
+    @objc func alertTextFieldDidChanged(noti: Notification) {
+        guard let alert = self.presentedViewController as? UIAlertController,
+        let textfield = alert.textFields?.first,
+        let text = textfield.text else { return }
+        
+         self.addGid = text
+    }
+    
     private func joinGroupAction() {
         let alert = UIAlertController(title: "Join In", message: "Please input group id you want to join", preferredStyle: .alert)
         alert.addTextField { [unowned self] tf in
-            self.addGid = tf.text.value
+            NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldDidChanged(noti:)), name: UITextField.textDidChangeNotification, object: nil)
         };
         
         let ok = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
@@ -157,7 +165,7 @@ extension ViewController: MavlMessageDelegate {
     func joinedChatRoom(groupId gid: String) {
         TRACE("新加入的是:\(gid)")
         let session = ChatSession(gid: gid)
-        sessions.append(session)
+        sessions.insert(session, at: 0)
         tableView.reloadData()
         
         UserCenter.center.save(sessionList: sessions.map{$0.toDic()})
@@ -194,6 +202,16 @@ extension ViewController: MavlMessageDelegate {
         guard let status = status else {  return }
         NotificationCenter.default.post(name: .friendStatusDidUpdated, object: [friendId: status])
     }
+    
+    func quitGroup(gid: String, error: Error? = nil) {
+        if let err = error {
+            TRACE("退出圈子失败: \(err.localizedDescription)")
+            return
+        }
+        
+        sessions = sessions.filter{ $0.gid != gid }
+        tableView.reloadData()
+    }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -220,6 +238,19 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         chatVc.msgClient = mavlMsgClient
         chatVc.session = sessionModel
         navigationController?.pushViewController(chatVc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let session = sessions[indexPath.row]
+        let actionDelete = UIContextualAction(style: .destructive, title: "Quit") { [unowned self] (action, view, block) in
+            self.mavlMsgClient?.quitGroup(withGroupId: session.gid)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [actionDelete])
     }
 }
 

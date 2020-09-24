@@ -184,7 +184,7 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages[indexPath.row]
-        if message.sender.lowercased() == session?.sessionName.lowercased() {
+        if message.sender.lowercased() == self.msgClient?.currentUserName.lowercased() {
             let cell = tableView.dequeueReusableCell(withIdentifier: "rightMessageCell", for: indexPath) as! ChatRightMessageCell
             cell.contentLabel.text = messages[indexPath.row].content
             cell.avatarImageView.image = #imageLiteral(resourceName: "iv_chat_local")
