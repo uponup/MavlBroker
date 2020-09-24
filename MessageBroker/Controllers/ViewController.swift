@@ -211,6 +211,8 @@ extension ViewController: MavlMessageDelegate {
         
         sessions = sessions.filter{ $0.gid != gid }
         tableView.reloadData()
+        
+        UserCenter.center.save(sessionList: sessions.map{ $0.toDic() })
     }
 }
 
