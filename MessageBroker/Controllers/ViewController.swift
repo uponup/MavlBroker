@@ -246,6 +246,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let session = sessions[indexPath.row]
+        
+        guard session.isGroup  else { return UISwipeActionsConfiguration(actions: []) }
+        
         let actionDelete = UIContextualAction(style: .destructive, title: "Quit") { [unowned self] (action, view, block) in
             self.mavlMsgClient?.quitGroup(withGroupId: session.gid)
         }
