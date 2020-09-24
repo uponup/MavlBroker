@@ -306,7 +306,10 @@ extension MavlMessage: CocoaMQTTDelegate {
                 delegate?.quitGroup(gid: topicModel.to, error: nil)
             }else if topicModel.operation == 401 {
                 TRACE("获取历史信息")
-                
+                let msgs = message.string.value.components(separatedBy: "##").compactMap{
+                    Mesg(payload: $0)
+                }
+                delegate?.mavlDidReceived(messages: msgs)
             }else {
                 let msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970)
                 delegate?.mavlDidReceived(message: msg)

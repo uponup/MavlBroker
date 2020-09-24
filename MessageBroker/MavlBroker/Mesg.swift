@@ -24,9 +24,9 @@ struct Mesg {
         toUid = segments[1]
         groupId = segments[2]
         serverId = segments[3]
-        timestamp = TimeInterval(segments.last.value)!
-        let index = segments.count-1
-        text = segments[4..<index].joined(separator: ",")
+        timestamp = TimeInterval(segments[4])!
+        let index = segments.count
+        text = segments[6..<index].joined(separator: ",")
     }
     
     init(fromUid: String, toUid: String, groupId: String, serverId: String, text: String, timestamp: TimeInterval) {

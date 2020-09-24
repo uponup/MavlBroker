@@ -8,7 +8,7 @@
 
 import UIKit
 import CocoaMQTT
-
+import ESPullToRefresh
 
 class ChatViewController: UIViewController {
     var session: ChatSession?
@@ -88,10 +88,9 @@ class ChatViewController: UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedMessage(notification:)), name: .didReceiveMesg, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.keyboardChanged(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedStatusChanged(notification:)), name: .friendStatusDidUpdated, object: nil)
+        tableView.es.addPullToRefresh { [weak self] in
+            MavlMessage.shared.fetchMessages(msgId: "", from: (self?.session!.gid)!, type: "2")
+        }
         
         animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
         sloganLabel.text = slogan
@@ -102,6 +101,10 @@ class ChatViewController: UIViewController {
             statusView.isHidden = true
             statusLabel.isHidden = true
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedMessage(notification:)), name: .didReceiveMesg, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.keyboardChanged(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedStatusChanged(notification:)), name: .friendStatusDidUpdated, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -163,10 +163,12 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/ESPullToRefresh/ESPullToRefresh.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/ESPullToRefresh/ESPullToRefresh.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

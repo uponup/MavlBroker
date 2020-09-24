@@ -6,5 +6,7 @@ target 'MessageBroker' do
   use_frameworks!
 
   # Pods for MessageBroker
-  pod 'CocoaMQTT' 
+  pod 'CocoaMQTT'
+  pod "ESPullToRefresh"
+  
 end
