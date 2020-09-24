@@ -466,11 +466,11 @@
                                                     </constraints>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgs-B8-MG5" userLabel="Content Button">
-                                                    <rect key="frame" x="75" y="11" width="266" height="55"/>
+                                                    <rect key="frame" x="75" y="11" width="64.5" height="55"/>
                                                     <state key="normal" backgroundImage="chatfrom_bg_normal"/>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RFc-Qm-s3P">
-                                                    <rect key="frame" x="94" y="19" width="237" height="39"/>
+                                                    <rect key="frame" x="94" y="19" width="35.5" height="39"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="250" constant="36" id="v6C-U6-WJJ"/>
                                                     </constraints>
@@ -499,11 +499,11 @@
                                             <outlet property="contentLabel" destination="RFc-Qm-s3P" id="7u6-T9-Idn"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="rightMessageCell" rowHeight="106" id="mnw-nA-Hse" userLabel="rightMessageCell" customClass="ChatRightMessageCell" customModule="小牛Mesg" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="122" width="414" height="106"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="rightMessageCell" rowHeight="98" id="mnw-nA-Hse" userLabel="rightMessageCell" customClass="ChatRightMessageCell" customModule="小牛Mesg" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="122" width="414" height="98"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mnw-nA-Hse" id="p9e-TA-rfL">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="106"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="98"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="woy-Se-2oF">
@@ -515,11 +515,11 @@
                                                     </constraints>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AFG-6d-AuJ" userLabel="Content Button">
-                                                    <rect key="frame" x="73" y="11" width="266" height="55"/>
+                                                    <rect key="frame" x="274.5" y="11" width="64.5" height="55"/>
                                                     <state key="normal" backgroundImage="chatto_bg_normal"/>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HCB-Zu-ewj">
-                                                    <rect key="frame" x="83" y="19" width="237" height="39"/>
+                                                    <rect key="frame" x="284.5" y="19" width="35.5" height="39"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="gSV-cr-Gqx"/>
                                                     </constraints>
@@ -618,8 +618,8 @@
     <resources>
         <image name="btn_disable" width="456" height="98"/>
         <image name="btn_enable" width="420" height="90"/>
-        <image name="chatfrom_bg_normal" width="266" height="55"/>
-        <image name="chatto_bg_normal" width="266" height="55"/>
+        <image name="chatfrom_bg_normal" width="32" height="55"/>
+        <image name="chatto_bg_normal" width="33" height="55"/>
         <image name="house" catalog="system" width="64" height="54"/>
         <image name="nav_back" width="21" height="21"/>
         <image name="person" catalog="system" width="64" height="58"/>

@@ -162,7 +162,7 @@ extension MavlMessage: MavlMessageClient {
         let topic = "\(appid)/201/\(localId)/\(gid)"
         mqtt?.publish(topic, withString: "")
     }
-//    05affb5dc604feDS
+ 
     func quitGroup(withGroupId gid: String) {
         let localId = nextMessageLocalID()
         let topic = "\(appid)/202/\(localId)/\(gid)"
