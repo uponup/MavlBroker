@@ -58,10 +58,6 @@ public protocol MavlMessageClient {
     func logout()
 }
 
-extension MavlMessageClient {
-    func addFriendSuccess(friendName name: String) {}
-}
-
 /**
     Status相关功能的协议
  */
