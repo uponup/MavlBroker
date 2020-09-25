@@ -43,6 +43,12 @@ class ChatViewController: UIViewController {
         }
     }
     
+    private var latestMessagesId: String {
+        guard let lastestMessage = messages.first else { return "0" }
+        
+        return lastestMessage.uuid
+    }
+    
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var statusView: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -89,7 +95,16 @@ class ChatViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50
         tableView.es.addPullToRefresh { [weak self] in
-            MavlMessage.shared.fetchMessages(msgId: "", from: (self?.session!.gid)!, type: "2")
+            
+            guard let session = self?.session else {
+                self?.tableView.es.stopPullToRefresh()
+                return
+            }
+            let type: FetchMessagesType = session.isGroup ? .more : .one
+
+            print("====>从\((self?.latestMessagesId).value)开始请求")
+
+            MavlMessage.shared.fetchMessages(msgId: (self?.latestMessagesId).value, from: session.gid, type: type, offset: 2)
         }
         
         animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
@@ -134,15 +149,28 @@ class ChatViewController: UIViewController {
     }
     
     @objc func receivedMessage(notification: NSNotification) {
-        let object = notification.object as! [String: [Mesg]]
-        let receivedMsgs = object["msg"]
+        tableView.es.stopPullToRefresh()
+        
+        let object = notification.object as! [String: Any]
+        let receivedMsgs = object["msg"] as? [Mesg]
+        let isLoadMore = object["isLoadMore"] as! Bool
         
         guard let msgs = receivedMsgs else { return }
-        messages.append(contentsOf: msgs.map{
-            ChatMessage(sender: $0.fromUid.capitalized, content: $0.text)
-        })
+        let sortedMsgs = msgs.map{
+            ChatMessage(sender: $0.fromUid.capitalized, content: $0.text, uuid:$0.serverId)
+        }
         
-        scrollToBottom()
+        for message in sortedMsgs {
+            print("====>\(message.sender) : \(message.uuid)")
+        }
+        
+        if isLoadMore {
+            messages.insert(contentsOf: sortedMsgs, at: 0)
+            scrollToTop()
+        }else {
+            messages.append(contentsOf: sortedMsgs)
+            scrollToBottom()
+        }
     }
     
     @objc func receivedStatusChanged(notification: NSNotification) {
@@ -158,6 +186,11 @@ class ChatViewController: UIViewController {
             let indexPath = IndexPath(row: count - 1, section: 0)
             tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
+    }
+    
+    func scrollToTop() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
 }
 

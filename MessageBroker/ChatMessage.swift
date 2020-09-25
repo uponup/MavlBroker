@@ -12,9 +12,11 @@ class ChatMessage {
     
     let sender: String
     let content: String
+    let uuid: String
     
-    init(sender: String, content: String) {
+    init(sender: String, content: String, uuid: String) {
         self.sender = sender
         self.content = content
+        self.uuid = uuid
     }
 }

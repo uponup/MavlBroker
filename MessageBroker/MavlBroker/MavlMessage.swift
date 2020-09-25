@@ -45,7 +45,7 @@ public protocol MavlMessageClient {
     func addFriend(withUserName: String)
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String)
     
-    func fetchMessages(msgId: String, from: String, type: String, offset: Int)
+    func fetchMessages(msgId: String, from: String, type: FetchMessagesType, offset: Int)
 }
 
 /**
@@ -66,13 +66,16 @@ public protocol MavlMessageClientConfig {
 protocol MavlMessageDelegate: class {
     func beginLogin()
     func loginSuccess()
+    func logout(withError: Error?)
+    
     func joinedChatRoom(groupId gid: String)
     func quitGroup(gid: String, error: Error?)
     func addFriendSuccess(friendName name: String)
-    func sendMessageSuccess()
-    func mavlDidReceived(message msg: Mesg)
-    func mavlDidReceived(messages msgs: [Mesg])
-    func logout(withError: Error?)
+    
+    func mavl(willSend: Mesg)
+    func mavl(didSend: Mesg, error: Error?)
+    func mavl(didRevceived messages: [Mesg], isLoadMore: Bool)
+    
     func friendStatus(_ status: String?, friendId: String)
 }
 
@@ -91,7 +94,7 @@ class MavlMessage {
     var passport: Passport? {
         return _passport
     }
-    private var appid: String {
+    var appid: String {
         guard let config = config else { return "" }
         return config.appid
     }
@@ -156,22 +159,26 @@ extension MavlMessage: MavlMessageClient {
         _ = mqtt.connect()
     }
     
+    func logout() {
+        guard let mqtt = mqtt else { return }
+            
+        mqtt.disconnect()
+    }
+    
     func createAGroup(withUsers users: [String]) {
         let payload = users.map{ "\(appid)_\($0.lowercased())" }.joined(separator: ",")
-        
-        createGroup(mesg: payload)
+        let operation = Operation.createGroup
+        _send(msg: payload, operation: operation)
     }
     
     func joinGroup(withGroupId gid: String) {
-        let localId = nextMessageLocalID()
-        let topic = "\(appid)/201/\(localId)/\(gid)"
-        mqtt?.publish(topic, withString: "")
+        let operation = Operation.joinGroup(gid)
+        _send(msg: "", operation: operation)
     }
  
     func quitGroup(withGroupId gid: String) {
-        let localId = nextMessageLocalID()
-        let topic = "\(appid)/202/\(localId)/\(gid)"
-        mqtt?.publish(topic, withString: "")
+        let operation = Operation.quitGroup(gid)
+        _send(msg: "", operation: operation)
     }
     
     func addFriend(withUserName: String) {
@@ -180,50 +187,23 @@ extension MavlMessage: MavlMessageClient {
     }
     
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String) {
+        var operation: Operation
         if isToGroup {
-            sendToGroup(msg: message, to: toId)
+            operation = .oneToMany(nextMessageLocalID() ,toId)
         }else {
-            send(msg: message, to: toId)
+            operation = .oneToOne(nextMessageLocalID(), toId)
         }
+        _send(msg: message, operation: operation)
     }
     
-    func logout() {
-        guard let mqtt = mqtt else { return }
-            
-        mqtt.disconnect()
+    func fetchMessages(msgId: String, from: String, type: FetchMessagesType, offset: Int = 20) {
+        let operation = Operation.fetchMsgs(from, type, msgId, offset)
+        _send(msg: "", operation: operation)
     }
     
-    func fetchMessages(msgId: String, from: String, type: String, offset: Int = 20) {
-        //历史信息  appid/401/clientmsgid/from/type/cursor/offset
-        let localId = nextMessageLocalID()
-        let topic = "\(appid)/401/\(localId)/\(from)/\(type)/\(type)/\(offset)"
-        mqtt?.publish(topic, withString: "")
-    }
-    
-    // 1v1
-    private func send(msg: String, to someone: String) {
-        let localId = nextMessageLocalID()
-        let msg_1v1 = Mesg_1v1(text: msg, localId: localId, to: someone)
-        _send(msg: msg_1v1)
-    }
-    
-    private func sendToGroup(msg: String, to group: String) {
-        let localId = nextMessageLocalID()
-        let msg_1vN = Mesg_1vN(text: msg, localId: localId, to: group)
-        _send(msg: msg_1vN)
-    }
-    
-    private func createGroup(mesg: String) {
-        let localId = nextMessageLocalID()
-        let msg_1vN = Mesg_1vN(text: mesg, localId: localId, operation: 0)
-        _send(msg: msg_1vN)
-    }
-    
-    private func _send(msg: MesgProtocol & MQTTMesgProtocol) {
-        let topic = "\(appid)\(msg.sufixTopic)"
-        
-        // 改版思路：直接扩展CocoaMQTTMessage，而不需要自己构建Mesg_1vN消息模型
-        mqtt?.publish(topic, withString: msg.text, qos: CocoaMQTTQOS(rawValue: UInt8(msg.qos))!, retained: msg.retained)
+    private func _send(msg: String, operation: Operation) {
+        let mqttMessage = CocoaMQTTMessage(topic: operation.topic, string: msg, qos: .qos0)
+        mqtt?.publish(mqttMessage)
     }
 }
 
@@ -271,6 +251,9 @@ extension MavlMessage: CocoaMQTTDelegate {
        
         if ack == .accept {
             delegate?.loginSuccess()
+            
+            // 成功建立连接，上传token
+            uploadToken()
         }
     }
 
@@ -280,11 +263,11 @@ extension MavlMessage: CocoaMQTTDelegate {
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
         TRACE("message pub: \(message.string.value), id: \(id)")
+//        delegate?.sendMessageSuccess()
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
        TRACE("id: \(id)")
-        delegate?.sendMessageSuccess()
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
@@ -294,7 +277,7 @@ extension MavlMessage: CocoaMQTTDelegate {
         
         if let topicModel = StatusTopicModel(topic) {
             delegate?.friendStatus(message.string, friendId: topicModel.friendId)
-        }else if let topicModel =  TopicModel(message.topic) {
+        }else if let topicModel = TopicModel(message.topic) {
             if topicModel.operation == 0 {
                 // create a group
                 delegate?.joinedChatRoom(groupId: topicModel.to)
@@ -309,10 +292,10 @@ extension MavlMessage: CocoaMQTTDelegate {
                 let msgs = message.string.value.components(separatedBy: "##").compactMap{
                     Mesg(payload: $0)
                 }
-                delegate?.mavlDidReceived(messages: msgs)
+                delegate?.mavl(didRevceived: msgs, isLoadMore: true)
             }else {
-                let msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970)
-                delegate?.mavlDidReceived(message: msg)
+                let msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
+                delegate?.mavl(didRevceived: [msg], isLoadMore: false)
             }
         }else {
             TRACE("收到的信息Topic不符合规范：\(topic)")
@@ -346,10 +329,10 @@ fileprivate extension MavlMessage {
     func TRACE(_ message: String = "", fun: String = #function) {
         let names = fun.components(separatedBy: ":")
         var prettyName: String
-        if names.count == 2 {
-            prettyName = names[0]
-        } else {
+        if names.count > 2 {
             prettyName = names[1]
+        } else {
+            prettyName = names[0]
         }
         
         if fun == "mqttDidDisconnect(_:withError:)" {

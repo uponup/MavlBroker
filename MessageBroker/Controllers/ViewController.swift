@@ -29,7 +29,6 @@ class ViewController: UIViewController {
                 loginView.isHidden = true
                 itemAdd.isEnabled = true
                 itemClose.isEnabled = true
-                username = tfUserName.text.value
                 
                 let passport = Passport(tfUserName.text.value, tfPassword.text.value)
                 UserCenter.center.login(passport: passport)
@@ -42,13 +41,10 @@ class ViewController: UIViewController {
                 loginView.isHidden = false
                 itemAdd.isEnabled = false
                 itemClose.isEnabled = false
-                username = ""
             }
         }
     }
-    
-    private var username: String?
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         isLogin = false
@@ -175,17 +171,16 @@ extension ViewController: MavlMessageDelegate {
         UserCenter.center.save(sessionList: sessions.map{$0.toDic()})
     }
     
-    func sendMessageSuccess() {
+    func mavl(willSend: Mesg) {
         
     }
     
-    func mavlDidReceived(message msg: Mesg) {
-        TRACE("收到信息msg：\(msg.text)")
-        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": [msg]])
+    func mavl(didSend: Mesg, error: Error?) {
+        
     }
     
-    func mavlDidReceived(messages msgs: [Mesg]) {
-        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": msgs])
+    func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {
+        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
     }
     
     func logout(withError: Error?) {
