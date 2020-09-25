@@ -8,15 +8,53 @@
 
 import Foundation
 
+enum SendingStatus {
+    case sending
+    case send
+    case sendfail
+}
+
 class ChatMessage {
     
-    let sender: String
-    let content: String
-    let uuid: String
+    private var mesg: Mesg?
+    var status: SendingStatus
     
-    init(sender: String, content: String, uuid: String) {
-        self.sender = sender
-        self.content = content
-        self.uuid = uuid
+    var sender: String {
+        guard let mesg = mesg else {
+            return ""
+        }
+        return mesg.fromUid.capitalized
+    }
+    var content: String {
+        guard let mesg = mesg else {
+            return ""
+        }
+        return mesg.text
+    }
+    
+    var uuid: String {
+        guard let mesg = mesg else {
+            return ""
+        }
+        return mesg.serverId
+    }
+    
+    var localId: String {
+        guard let mesg = mesg else {
+            return ""
+        }
+        return mesg.localId.value
+    }
+    
+    
+    init(status: SendingStatus = .send, mesg: Mesg? = nil) {
+        self.mesg = mesg
+        self.status = status
+    }
+}
+
+extension ChatMessage: Equatable {
+    static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
+        return lhs.uuid == rhs.uuid
     }
 }

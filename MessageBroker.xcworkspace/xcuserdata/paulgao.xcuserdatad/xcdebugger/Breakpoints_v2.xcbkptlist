@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2524376F-4EEF-41E0-BEA2-3F6F3047FD4B"
+            uuid = "CA1AE6E3-5BE6-4660-8A61-B6B5CBD10B96"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MessageBroker/AppDelegate.swift"
+            filePath = "MessageBroker/MavlBroker/MavlMessage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
+            landmarkName = "sendToChatRoom(message:isToGroup:toId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

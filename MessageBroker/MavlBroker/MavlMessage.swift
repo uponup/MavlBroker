@@ -63,6 +63,10 @@ public protocol MavlMessageClientConfig {
 }
 
 
+/**
+    SDK状态的回调
+    好友管理，群组管理，登录/登出
+ */
 protocol MavlMessageDelegate: class {
     func beginLogin()
     func loginSuccess()
@@ -72,16 +76,28 @@ protocol MavlMessageDelegate: class {
     func quitGroup(gid: String, error: Error?)
     func addFriendSuccess(friendName name: String)
     
-    func mavl(willSend: Mesg)
-    func mavl(didSend: Mesg, error: Error?)
-    func mavl(didRevceived messages: [Mesg], isLoadMore: Bool)
-    
     func friendStatus(_ status: String?, friendId: String)
 }
 
 extension MavlMessageDelegate {
     func friendStatus(_ status: String?, friendId: String) {}
     func quitGroup(gid: String, error: Error? = nil) { }
+}
+
+/**
+    SDK消息状态的回调
+    将要发送、发送成功、收到信息
+ */
+protocol MavlMessageStatusDelegate: class {
+    func mavl(willSend: Mesg)
+    func mavl(didSend: Mesg, error: Error?)
+    func mavl(didRevceived messages: [Mesg], isLoadMore: Bool)
+}
+
+extension MavlMessageStatusDelegate {
+    func mavl(willSend: Mesg) {}
+    func mavl(didSend: Mesg, error: Error?) {}
+    func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {}
 }
 
 struct MavlPassport {
@@ -100,6 +116,7 @@ class MavlMessage {
     }
     
     public weak var delegate: MavlMessageDelegate?
+    public weak var dataSource: MavlMessageStatusDelegate?
     
     private var config: MavlMessageConfiguration?
     private var _passport: Passport?
@@ -202,8 +219,9 @@ extension MavlMessage: MavlMessageClient {
             TRACE("Error，发送信息本地账户缺少uid")
             return
         }
-        let msg = Mesg(fromUid: passport.uid, toUid: toId, groupId: toId, serverId: "", text: message, timestamp: Date().timeIntervalSince1970, status: 0)
-        delegate?.mavl(willSend: msg)
+        var msg = Mesg(fromUid: passport.uid, toUid: toId, groupId: toId, serverId: "", text: message, timestamp: Date().timeIntervalSince1970, status: 0)
+        msg.localId = "\(localId)"
+        dataSource?.mavl(willSend: msg)
     }
     
     func fetchMessages(msgId: String, from: String, type: FetchMessagesType, offset: Int = 20) {
@@ -276,8 +294,9 @@ extension MavlMessage: CocoaMQTTDelegate {
         guard let topicModel = TopicModel(message.topic) else { return }
         
         if topicModel.operation == 1 || topicModel.operation == 2 {
-            let msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
-            delegate?.mavl(didSend: msg, error: nil)
+            var msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
+            msg.localId = topicModel.localId
+            dataSource?.mavl(didSend: msg, error: nil)
         }
     }
 
@@ -304,10 +323,11 @@ extension MavlMessage: CocoaMQTTDelegate {
                 let msgs = message.string.value.components(separatedBy: "##").compactMap{
                     Mesg(payload: $0)
                 }
-                delegate?.mavl(didRevceived: msgs, isLoadMore: true)
+                dataSource?.mavl(didRevceived: msgs, isLoadMore: true)
             }else {
-                let msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
-                delegate?.mavl(didRevceived: [msg], isLoadMore: false)
+                var msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
+                msg.localId = topicModel.localId
+                dataSource?.mavl(didRevceived: [msg], isLoadMore: false)
             }
         }else {
             TRACE("收到的信息Topic不符合规范：\(topic)")

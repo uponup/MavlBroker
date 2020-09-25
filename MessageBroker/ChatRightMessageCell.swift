@@ -16,6 +16,7 @@ class ChatRightMessageCell: UITableViewCell {
         }
     }
     @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var labelStatus: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

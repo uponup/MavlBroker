@@ -69,7 +69,6 @@ class ViewController: UIViewController {
         let history = sessionList.map{ ChatSession(dict: $0) }
         sessions.append(contentsOf: history)
         
-        print(sessions)
         tableView.reloadData()
     }
     
@@ -88,6 +87,7 @@ class ViewController: UIViewController {
         guard let username = tfUserName.text,
             let password = tfPassword.text else { return }
         MavlMessage.shared.delegate = self
+        MavlMessage.shared.dataSource = self
         MavlMessage.shared.login(userName: username, password: password)
     }
     
@@ -171,18 +171,6 @@ extension ViewController: MavlMessageDelegate {
         UserCenter.center.save(sessionList: sessions.map{$0.toDic()})
     }
     
-    func mavl(willSend: Mesg) {
-        
-    }
-    
-    func mavl(didSend: Mesg, error: Error?) {
-        
-    }
-    
-    func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {
-        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
-    }
-    
     func logout(withError: Error?) {
         isLogin = false
         
@@ -208,6 +196,24 @@ extension ViewController: MavlMessageDelegate {
         tableView.reloadData()
         
         UserCenter.center.save(sessionList: sessions.map{ $0.toDic() })
+    }
+}
+
+extension ViewController: MavlMessageStatusDelegate {
+    func mavl(willSend: Mesg) {
+        NotificationCenter.default.post(name: .willSendMesg, object: ["msg": willSend])
+    }
+    
+    func mavl(didSend: Mesg, error: Error?) {
+        if let err = error {
+            NotificationCenter.default.post(name: .didSendMesgFailed, object: ["msg": didSend, "err": err])
+        }else {
+            NotificationCenter.default.post(name: .didSendMesg, object: ["msg": didSend])
+        }
+    }
+    
+    func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {
+        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
     }
 }
 

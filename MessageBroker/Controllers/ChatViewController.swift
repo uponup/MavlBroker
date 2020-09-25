@@ -44,7 +44,7 @@ class ChatViewController: UIViewController {
     }
     
     private var latestMessagesId: String {
-        guard let lastestMessage = messages.first else { return "0" }
+        guard let lastestMessage = messages.first else { return "" }
         
         return lastestMessage.uuid
     }
@@ -117,9 +117,12 @@ class ChatViewController: UIViewController {
             statusLabel.isHidden = true
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedMessage(notification:)), name: .didReceiveMesg, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.keyboardChanged(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.receivedStatusChanged(notification:)), name: .friendStatusDidUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedMessage(notification:)), name: .didReceiveMesg, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardChanged(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedStatusChanged(notification:)), name: .friendStatusDidUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedWillSendMessage(notification:)), name: .willSendMesg, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveDidSendMessageFailed(notification:)), name: .didSendMesgFailed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveDidSendMessage(notification:)), name: .didSendMesg, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -148,6 +151,55 @@ class ChatViewController: UIViewController {
         view.layoutIfNeeded()
     }
     
+    @objc func receivedStatusChanged(notification: NSNotification) {
+        guard let session = session else { return }
+        guard let obj = notification.object as? [String: String], let status = obj[session.sessionName.lowercased()] else { return }
+        
+        self.status = status
+    }
+    
+    @objc func receivedWillSendMessage(notification: NSNotification) {
+        guard let object = notification.object as? [String: Mesg],
+            let msg = object["msg"] else { return }
+        
+        let message = ChatMessage(status: .sending, mesg: msg)
+        messages.append(message)
+        tableView.reloadData()
+        
+        print("将要发送:\(msg.text)")
+    }
+    
+    @objc func receiveDidSendMessage(notification: NSNotification) {
+        guard let object = notification.object as? [String: Mesg],
+            let msg = object["msg"] else { return }
+        messages = messages.map {
+            if $0.uuid == msg.serverId {
+                return ChatMessage(status: .send, mesg: msg)
+            }else {
+                return $0
+            }
+        }
+        
+        tableView.reloadData()
+        print("发送成功:\(msg.text)")
+    }
+    
+    @objc func receiveDidSendMessageFailed(notification: NSNotification) {
+        guard let object = notification.object as? [String: Any],
+            let _ = object["err"] as? Error,
+            let msg = object["msg"] as? Mesg else { return }
+        
+        messages = messages.map {
+            if $0.uuid == msg.serverId {
+                return ChatMessage(status: .sendfail, mesg: msg)
+            }else {
+                return $0
+            }
+        }
+        tableView.reloadData()
+        print("发送失败:\(msg.text)")
+    }
+    
     @objc func receivedMessage(notification: NSNotification) {
         tableView.es.stopPullToRefresh()
         
@@ -157,8 +209,8 @@ class ChatViewController: UIViewController {
         
         guard let msgs = receivedMsgs else { return }
         let sortedMsgs = msgs.map{
-            ChatMessage(sender: $0.fromUid.capitalized, content: $0.text, uuid:$0.serverId)
-        }
+            ChatMessage(status: .send, mesg: $0)
+        }.reversed()
         
         for message in sortedMsgs {
             print("====>\(message.sender) : \(message.uuid)")
@@ -169,15 +221,14 @@ class ChatViewController: UIViewController {
             scrollToTop()
         }else {
             messages.append(contentsOf: sortedMsgs)
+            var dict: [String: ChatMessage] = [:]
+            for message in messages {
+                dict[message.localId] = message
+            }
+            messages = Array(dict.values)
+            
             scrollToBottom()
         }
-    }
-    
-    @objc func receivedStatusChanged(notification: NSNotification) {
-        guard let session = session else { return }
-        guard let obj = notification.object as? [String: String], let status = obj[session.sessionName.lowercased()] else { return }
-        
-        self.status = status
     }
     
     func scrollToBottom() {
@@ -220,6 +271,18 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "rightMessageCell", for: indexPath) as! ChatRightMessageCell
             cell.contentLabel.text = messages[indexPath.row].content
             cell.avatarImageView.image = #imageLiteral(resourceName: "iv_chat_local")
+            if message.status == .sending {
+                cell.labelStatus.text = "Sending..."
+                cell.labelStatus.textColor = UIColor.gray
+            }else if message.status == .sendfail {
+                cell.labelStatus.text = "Send fail"
+                cell.labelStatus.textColor = UIColor.red
+            }else if message.status == .send {
+                cell.labelStatus.text = "Send success"
+                cell.labelStatus.textColor = UIColor.blue
+            }else {
+                cell.labelStatus.isHidden = true
+            }
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "leftMessageCell", for: indexPath) as! ChatLeftMessageCell

@@ -527,23 +527,32 @@
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fGQ-rB-a5e">
+                                                    <rect key="frame" x="254" y="50" width="12.5" height="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="AFG-6d-AuJ" firstAttribute="top" secondItem="woy-Se-2oF" secondAttribute="top" id="0vF-mj-e3O"/>
                                                 <constraint firstItem="woy-Se-2oF" firstAttribute="leading" secondItem="AFG-6d-AuJ" secondAttribute="trailing" constant="5" id="Ocu-kj-3lv"/>
                                                 <constraint firstItem="HCB-Zu-ewj" firstAttribute="bottom" secondItem="AFG-6d-AuJ" secondAttribute="bottom" constant="-8" id="SXT-oX-B2v"/>
                                                 <constraint firstItem="HCB-Zu-ewj" firstAttribute="top" secondItem="AFG-6d-AuJ" secondAttribute="top" constant="8" id="UxG-i4-rgq"/>
+                                                <constraint firstItem="AFG-6d-AuJ" firstAttribute="bottom" secondItem="fGQ-rB-a5e" secondAttribute="bottom" id="ahT-d3-nLU"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="HCB-Zu-ewj" secondAttribute="trailing" constant="74" id="d3V-gB-ZiR"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="woy-Se-2oF" secondAttribute="trailing" id="fH3-Li-RhU"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="HCB-Zu-ewj" secondAttribute="bottom" priority="250" constant="30" id="fva-Lu-bh8"/>
                                                 <constraint firstItem="HCB-Zu-ewj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="p9e-TA-rfL" secondAttribute="leadingMargin" priority="750" constant="30" id="iiq-wt-pO4"/>
                                                 <constraint firstAttribute="topMargin" secondItem="woy-Se-2oF" secondAttribute="top" id="lwF-d3-mCA"/>
                                                 <constraint firstItem="HCB-Zu-ewj" firstAttribute="leading" secondItem="AFG-6d-AuJ" secondAttribute="leading" constant="10" id="sUv-Sa-FgU"/>
+                                                <constraint firstItem="AFG-6d-AuJ" firstAttribute="leading" secondItem="fGQ-rB-a5e" secondAttribute="trailing" constant="8" id="xa5-HK-3Yf"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="avatarImageView" destination="woy-Se-2oF" id="Gjl-fq-CZn"/>
                                             <outlet property="contentLabel" destination="HCB-Zu-ewj" id="0GY-ht-Hh8"/>
+                                            <outlet property="labelStatus" destination="fGQ-rB-a5e" id="mtY-nN-F80"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
