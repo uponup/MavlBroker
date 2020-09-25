@@ -87,7 +87,6 @@ class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = true
         messageTextView.delegate = self
         status = "offline"
         tableView.delegate = self
@@ -125,9 +124,14 @@ class ChatViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(receiveDidSendMessage(notification:)), name: .didSendMesg, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+        super.viewWillAppear(animated)
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     deinit {
