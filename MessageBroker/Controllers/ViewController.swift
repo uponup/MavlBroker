@@ -52,6 +52,8 @@ class ViewController: UIViewController {
         view.bringSubviewToFront(loginView)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didSelectedContacts(noti:)), name: .selectedContacts, object: nil)
+        
+        launchAnimation()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -251,7 +253,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard session.isGroup  else { return UISwipeActionsConfiguration(actions: []) }
         
-        let actionDelete = UIContextualAction(style: .destructive, title: "Quit") { [unowned self] (action, view, block) in
+        let actionDelete = UIContextualAction(style: .destructive, title: "Quit") { (action, view, block) in
             MavlMessage.shared.quitGroup(withGroupId: session.gid)
         }
         
@@ -262,5 +264,28 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 extension ViewController {
     public func TRACE(_ msg: String) {
         print(">>>: \(msg)")
+    }
+}
+
+extension ViewController {
+    private func launchAnimation() {
+        let launchVc = UIStoryboard(name: "LaunchScreen", bundle: nil).instantiateViewController(withIdentifier: "launch")
+        
+        guard let keyWindow = UIApplication.shared.windows.last else {
+            TRACE("没有视图")
+            return
+        }
+        keyWindow.addSubview(launchVc.view)
+        
+        guard let label = launchVc.view.viewWithTag(101),
+           let _ = launchVc.view.viewWithTag(100) else { return }
+        
+        UIView.animate(withDuration: 1.5, animations: {
+            label.transform = CGAffineTransform(rotationAngle: .pi)
+            label.transform = .identity
+            launchVc.view.alpha = 0
+        }) { finished  in
+            launchVc.view.removeFromSuperview()
+        }
     }
 }

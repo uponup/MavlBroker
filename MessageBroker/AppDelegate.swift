@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = MavlMessageConfiguration(appid: GlobalConfig.xnAppId, appkey: GlobalConfig.xnAppKey)
         MavlMessage.shared.initializeSDK(config: config)
         
+        Thread.sleep(forTimeInterval: 1)
         return true
     }
 

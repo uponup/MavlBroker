@@ -142,6 +142,7 @@ class ChatViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    // MARK: Notification Action
     @objc func keyboardChanged(notification: NSNotification) {
         let userInfo = notification.userInfo as! [String: AnyObject]
         let keyboardValue = userInfo["UIKeyboardFrameEndUserInfoKey"]
@@ -230,7 +231,7 @@ class ChatViewController: UIViewController {
                 dict[message.localId] = message
             }
             messages = Array(dict.values).sorted(by: <)
-            
+            tableView.reloadData()
             scrollToBottom()
         }
     }

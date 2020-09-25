@@ -62,6 +62,6 @@ extension ChatMessage: Equatable {
         guard let lhsMesg = lhs.mesg, let rhsMesg = rhs.mesg else {
             return false
         }
-        return lhsMesg.timestamp < lhsMesg.timestamp
+        return lhsMesg.timestamp < rhsMesg.timestamp
     }
 }
