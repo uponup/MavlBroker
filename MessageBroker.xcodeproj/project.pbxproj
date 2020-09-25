@@ -110,6 +110,7 @@
 			children = (
 				397D441A25187FB3005CB2D3 /* MavlMessage.swift */,
 				397D441B25187FB3005CB2D3 /* Mesg.swift */,
+				39621B702519942D002833F5 /* TopicUtils.swift */,
 				3998D284251B243600818904 /* MavlMesgUserDefault.swift */,
 			);
 			path = MavlBroker;
@@ -154,7 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				397D442E25188EF6005CB2D3 /* Global.swift */,
-				39621B702519942D002833F5 /* TopicUtils.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";

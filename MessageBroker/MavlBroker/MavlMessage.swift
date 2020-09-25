@@ -187,13 +187,23 @@ extension MavlMessage: MavlMessageClient {
     }
     
     func sendToChatRoom(message: String, isToGroup: Bool, toId: String) {
+        let localId = nextMessageLocalID()
         var operation: Operation
+        
         if isToGroup {
-            operation = .oneToMany(nextMessageLocalID() ,toId)
+            operation = .oneToMany(localId ,toId)
         }else {
-            operation = .oneToOne(nextMessageLocalID(), toId)
+            operation = .oneToOne(localId, toId)
         }
+        
         _send(msg: message, operation: operation)
+
+        guard let passport = self.passport else {
+            TRACE("Error，发送信息本地账户缺少uid")
+            return
+        }
+        let msg = Mesg(fromUid: passport.uid, toUid: toId, groupId: toId, serverId: "", text: message, timestamp: Date().timeIntervalSince1970, status: 0)
+        delegate?.mavl(willSend: msg)
     }
     
     func fetchMessages(msgId: String, from: String, type: FetchMessagesType, offset: Int = 20) {
@@ -263,7 +273,12 @@ extension MavlMessage: CocoaMQTTDelegate {
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
         TRACE("message pub: \(message.string.value), id: \(id)")
-//        delegate?.sendMessageSuccess()
+        guard let topicModel = TopicModel(message.topic) else { return }
+        
+        if topicModel.operation == 1 || topicModel.operation == 2 {
+            let msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
+            delegate?.mavl(didSend: msg, error: nil)
+        }
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
@@ -282,13 +297,10 @@ extension MavlMessage: CocoaMQTTDelegate {
                 // create a group
                 delegate?.joinedChatRoom(groupId: topicModel.to)
             }else if topicModel.operation == 201 {
-                TRACE("加入群成功")
                 delegate?.joinedChatRoom(groupId: topicModel.to)
             }else if topicModel.operation == 202 {
-                TRACE("退出群聊成功")
                 delegate?.quitGroup(gid: topicModel.to, error: nil)
             }else if topicModel.operation == 401 {
-                TRACE("获取历史信息")
                 let msgs = message.string.value.components(separatedBy: "##").compactMap{
                     Mesg(payload: $0)
                 }
