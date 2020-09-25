@@ -57,4 +57,11 @@ extension ChatMessage: Equatable {
     static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
         return lhs.uuid == rhs.uuid
     }
+    
+    static func < (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
+        guard let lhsMesg = lhs.mesg, let rhsMesg = rhs.mesg else {
+            return false
+        }
+        return lhsMesg.timestamp < lhsMesg.timestamp
+    }
 }

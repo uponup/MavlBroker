@@ -225,7 +225,7 @@ class ChatViewController: UIViewController {
             for message in messages {
                 dict[message.localId] = message
             }
-            messages = Array(dict.values)
+            messages = Array(dict.values).sorted(by: <)
             
             scrollToBottom()
         }
