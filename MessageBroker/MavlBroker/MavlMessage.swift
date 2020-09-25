@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by 龙格 on 2020/9/9.
-//  Copyright © 2020 emqtt.io. All rights reserved.
+//  Copyright © 2020 Paul Gao. All rights reserved.
 //
 
 import Foundation
