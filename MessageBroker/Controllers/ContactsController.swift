@@ -44,7 +44,6 @@ class ContactsController: UITableViewController {
         let alert = UIAlertController(title: "What do you want to do?", message: nil, preferredStyle: .actionSheet)
         let actionAddFriend = UIAlertAction(title: "Add a friend", style: .default) { _  in
             guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
-            friendListVc.isChat1V1 = true
             self.present(friendListVc, animated: true, completion: nil)
         }
         alert.addAction(actionAddFriend)

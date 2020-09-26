@@ -168,10 +168,10 @@
 			isa = PBXGroup;
 			children = (
 				397D440925187ED1005CB2D3 /* ViewController.swift */,
-				397D443125189BC9005CB2D3 /* FriendListController.swift */,
+				39420D51251EC96C0009813A /* ContactsController.swift */,
 				397D441F2518845E005CB2D3 /* SettingController.swift */,
 				397D442225188687005CB2D3 /* ChatViewController.swift */,
-				39420D51251EC96C0009813A /* ContactsController.swift */,
+				397D443125189BC9005CB2D3 /* FriendListController.swift */,
 				397D442B2518869F005CB2D3 /* Model */,
 				397D442A2518868B005CB2D3 /* Views */,
 			);

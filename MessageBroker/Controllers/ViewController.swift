@@ -71,14 +71,8 @@ class ViewController: UIViewController {
     }
     
     @objc func didSelectedContacts(noti: Notification) {
-        guard let object = noti.object as? [String: Any], let contacts = object["contacts"] as? [String], let isChat1V1 = object["1v1"] as? Bool else { return }
-        
-        if isChat1V1 {
-            guard let friend = contacts.first else { return }
-            MavlMessage.shared.addFriend(withUserName: friend)
-        }else {
-            MavlMessage.shared.createAGroup(withUsers: contacts)
-        }
+        guard let object = noti.object as? [String: [String]], let contacts = object["contacts"] else { return }
+        MavlMessage.shared.createAGroup(withUsers: contacts)
     }
 
     @IBAction func loginAction(_ sender: Any) {
