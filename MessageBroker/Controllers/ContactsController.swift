@@ -10,24 +10,92 @@ import UIKit
 
 class ContactsController: UITableViewController {
 
-    lazy var contacts: [[ContactModel]] = {
-        [UserCenter.center.fetchGroupsList().map{ ContactModel(uid: $0, isGroup: true) },
-         UserCenter.center.fetchContactsList().map{ ContactModel(uid: $0) }].map{
-            $0.count == 0 ? nil : $0
-        }.compactMap{ $0 }
+    @IBOutlet weak var itemAdd: UIBarButtonItem!
+    
+    var dataArr: [[ContactModel]] {
+        [groups, contacts].filter{ $0.count > 0 }
+    }
+    
+    private lazy var groups: [ContactModel] = {
+        UserCenter.center.fetchGroupsList().map{ ContactModel(uid: $0, isGroup: true)}
     }()
+    private lazy var contacts: [ContactModel] = {
+        UserCenter.center.fetchContactsList().map{ ContactModel(uid: $0) }
+    }()
+    
+    
+    private var addGid: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.title = "Contacts"
+        checkStatus()
+        itemAdd.isEnabled = MavlMessage.shared.isLogin
+        MavlMessage.shared.delegateGroup = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveFriendStatusUpdate(noti:)), name: .friendStatusDidUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveLoginSuccess), name: .loginSuccess, object: nil)
-        checkStatus()
+        NotificationCenter.default.addObserver(self, selector: #selector(didLoginSuccess), name: .loginSuccess, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didLogoutSuccess), name: .logoutSuccess, object: nil)
+    }
+    
+    // MARK: BarItem Action
+    
+    @IBAction func addAction(_ sender: Any) {
+        let alert = UIAlertController(title: "What do you want to do?", message: nil, preferredStyle: .actionSheet)
+        let actionAddFriend = UIAlertAction(title: "Add a friend", style: .default) { _  in
+            guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
+            friendListVc.isChat1V1 = true
+            self.present(friendListVc, animated: true, completion: nil)
+        }
+        alert.addAction(actionAddFriend)
+        let actionCreateGroup = UIAlertAction(title: "Create a group chat", style: .default) { _ in
+            guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
+            
+            self.present(friendListVc, animated: true, completion: nil)
+        }
+        alert.addAction(actionCreateGroup)
+        let actionJoinGroup = UIAlertAction(title: "Join a group chat", style: .default) { [unowned self] _ in
+            self.joinGroupAction()
+        }
+        alert.addAction(actionJoinGroup)
+        
+        let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(actionCancel)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func joinGroupAction() {
+        let alert = UIAlertController(title: "Join In", message: "Please input group id you want to join", preferredStyle: .alert)
+        alert.addTextField { [unowned self] tf in
+            NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldDidChanged(noti:)), name: UITextField.textDidChangeNotification, object: nil)
+        };
+        
+        let ok = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
+            MavlMessage.shared.joinGroup(withGroupId: self.addGid)
+        }
+        alert.addAction(ok)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     // MARK: Notification Action
+    @objc func alertTextFieldDidChanged(noti: Notification) {
+        guard let alert = self.presentedViewController as? UIAlertController,
+        let textfield = alert.textFields?.first,
+        let text = textfield.text else { return }
+       
+        self.addGid = text
+    }
+       
+    @objc func didLoginSuccess() {
+        itemAdd.isEnabled = true
+    }
+    
+    @objc func didLogoutSuccess() {
+        itemAdd.isEnabled = false
+    }
+    
     @objc func didReceiveLoginSuccess(noti: Notification) {
         checkStatus()
     }
@@ -37,38 +105,77 @@ class ContactsController: UITableViewController {
             let uid = obj.keys.first,
             let status = obj.values.first else { return }
         
-        var s = [[ContactModel]]()
-        
-        for arr in contacts {
-            var tempArr = [ContactModel]()
-            for var model in arr {
-                if model.uid.lowercased() == uid {
-                    model.status = status
-                }
-                tempArr.append(model)
+        var s = [ContactModel]()
+        for var model in contacts {
+            if model.uid.lowercased() == uid {
+                model.status = status
             }
-            s.append(tempArr)
+            s.append(model)
         }
         contacts.removeAll()
         contacts.append(contentsOf: s)
         tableView.reloadData()
     }
     
+    // MARK: Private Method
+    private func checkStatus() {
+        for contact in contacts {
+            MavlMessage.shared.checkStatus(withUserName: contact.uid.lowercased())
+        }
+    }
+}
+
+extension ContactsController: MavlMessageGroupDelegate {
+    
+    func createGroupSuccess(groupId gid: String) {
+        
+    }
+    
+    func joinedGroup(groupId gid: String, isLauncher: Bool) {
+        if isLauncher {
+            print("您已经加入群聊")
+        }else {
+            print("您被拉进群聊")
+        }
+    }
+    
+    func quitGroup(gid: String, error: Error?) {
+        
+    }
+    
+    func addFriendSuccess(friendName name: String) {
+        
+    }
+    
+    func friendStatus(_ status: String?, friendId: String) {
+        
+    }
+    
+    
+    private func _addGroup(_ gid: String) {
+        let model = ContactModel(uid: gid)
+        groups.append(model)
+    }
+}
+
+
+extension ContactsController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return contacts.count
+        return dataArr.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contacts[section].count
+        return dataArr[section].count
     }
+    
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionView = UIView()
         sectionView.backgroundColor = UIColor(white: 0.9, alpha: 1)
         let label = UILabel(frame: CGRect(x: 12, y: 0, width: 200, height: 32))
-        label.text = contacts[section].first!.isGroup ? "Groups" : "Friends"
+        label.text = dataArr[section].first!.isGroup ? "Groups" : "Friends"
         sectionView.addSubview(label)
         return sectionView
     }
@@ -79,20 +186,12 @@ class ContactsController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "contactCell", for: indexPath) as! ContactCell
-        let contact = contacts[indexPath.section][indexPath.row]
+        let contact = dataArr[indexPath.section][indexPath.row]
         cell.updateData(contact)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72.0
-    }
-    
-    // MARK: Private Method
-    private func checkStatus() {
-        guard let friends = contacts.last else { return }
-        for contact in friends {
-            MavlMessage.shared.checkStatus(withUserName: contact.uid.lowercased())
-        }
     }
 }

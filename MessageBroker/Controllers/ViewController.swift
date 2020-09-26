@@ -13,21 +13,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var loginView: UIView!
     @IBOutlet weak var tfUserName: UITextField!
     @IBOutlet weak var tfPassword: UITextField!
-    @IBOutlet weak var itemAdd: UIBarButtonItem!
     @IBOutlet weak var itemClose: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     
     lazy var sessions: [ChatSession] = {
         []
     }()
-    var addGid: String = ""
     
     private var isLogin: Bool = false {
         didSet {
             if isLogin {
                 title = "Online"
                 loginView.isHidden = true
-                itemAdd.isEnabled = true
                 itemClose.isEnabled = true
                 
                 let passport = Passport(tfUserName.text.value, tfPassword.text.value)
@@ -39,7 +36,6 @@ class ViewController: UIViewController {
                 tfUserName.text = ""
                 tfPassword.text = "xxxxxx"
                 loginView.isHidden = false
-                itemAdd.isEnabled = false
                 itemClose.isEnabled = false
             }
         }
@@ -88,61 +84,13 @@ class ViewController: UIViewController {
     @IBAction func loginAction(_ sender: Any) {
         guard let username = tfUserName.text,
             let password = tfPassword.text else { return }
-        MavlMessage.shared.delegate = self
-        MavlMessage.shared.dataSource = self
+        MavlMessage.shared.delegateMsg = self
+        MavlMessage.shared.delegateLogin = self
         MavlMessage.shared.login(userName: username, password: password)
-    }
-    
-    @IBAction func addChatSession(_ sender: Any) {
-        let alert = UIAlertController(title: "What do you want to do?", message: nil, preferredStyle: .actionSheet)
-        let actionAddFriend = UIAlertAction(title: "Add a friend", style: .default) { _  in
-            guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
-            friendListVc.isChat1V1 = true
-            self.present(friendListVc, animated: true, completion: nil)
-        }
-        alert.addAction(actionAddFriend)
-        let actionCreateGroup = UIAlertAction(title: "Create a group chat", style: .default) { _ in
-            guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
-            
-            self.present(friendListVc, animated: true, completion: nil)
-        }
-        alert.addAction(actionCreateGroup)
-        let actionJoinGroup = UIAlertAction(title: "Join a group chat", style: .default) { [unowned self] _ in
-            self.joinGroupAction()
-        }
-        alert.addAction(actionJoinGroup)
-        
-        let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(actionCancel)
-        
-        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func logout(_ sender: Any) {
         MavlMessage.shared.logout()
-    }
-    
-    @objc func alertTextFieldDidChanged(noti: Notification) {
-        guard let alert = self.presentedViewController as? UIAlertController,
-        let textfield = alert.textFields?.first,
-        let text = textfield.text else { return }
-        
-         self.addGid = text
-    }
-    
-    private func joinGroupAction() {
-        let alert = UIAlertController(title: "Join In", message: "Please input group id you want to join", preferredStyle: .alert)
-        alert.addTextField { [unowned self] tf in
-            NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldDidChanged(noti:)), name: UITextField.textDidChangeNotification, object: nil)
-        };
-        
-        let ok = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
-            MavlMessage.shared.joinGroup(withGroupId: self.addGid)
-//            self.mavlMsgClient?.quitGroup(withGroupId: self.addGid)
-        }
-        alert.addAction(ok)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
     }
 }
 
@@ -158,23 +106,6 @@ extension ViewController: MavlMessageDelegate {
         NotificationCenter.default.post(name: .loginSuccess, object: nil)
     }
     
-    func joinedChatRoom(groupId gid: String) {
-        TRACE("新加入的是:\(gid)")
-        let session = ChatSession(gid: gid)
-        sessions.insert(session, at: 0)
-        tableView.reloadData()
-        
-        UserCenter.center.save(sessionList: sessions.map{$0.toDic()})
-    }
-    
-    func addFriendSuccess(friendName name: String) {
-        let session = ChatSession(gid: name, sessionName: name, isGroup: false)
-        sessions.append(session)
-        tableView.reloadData()
-        
-        UserCenter.center.save(sessionList: sessions.map{$0.toDic()})
-    }
-    
     func logout(withError: Error?) {
         isLogin = false
         
@@ -183,23 +114,6 @@ extension ViewController: MavlMessageDelegate {
         let alert = UIAlertController(title: "Warning", message: err.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ok", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    func friendStatus(_ status: String?, friendId: String) {
-        guard let status = status else {  return }
-        NotificationCenter.default.post(name: .friendStatusDidUpdated, object: [friendId: status])
-    }
-    
-    func quitGroup(gid: String, error: Error? = nil) {
-        if let err = error {
-            TRACE("退出圈子失败: \(err.localizedDescription)")
-            return
-        }
-        
-        sessions = sessions.filter{ $0.gid != gid }
-        tableView.reloadData()
-        
-        UserCenter.center.save(sessionList: sessions.map{ $0.toDic() })
     }
 }
 
@@ -220,6 +134,7 @@ extension ViewController: MavlMessageStatusDelegate {
         NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
     }
 }
+
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

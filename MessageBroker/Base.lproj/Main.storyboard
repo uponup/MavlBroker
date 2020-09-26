@@ -165,14 +165,8 @@
                                 <action selector="logout:" destination="BYZ-38-t0r" id="4so-jb-TgW"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Moz-iU-kJR">
-                            <connections>
-                                <action selector="addChatSession:" destination="BYZ-38-t0r" id="pBA-6I-RQ2"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="itemAdd" destination="Moz-iU-kJR" id="wLa-xJ-mgy"/>
                         <outlet property="itemClose" destination="ehl-TI-dF4" id="Bf7-gi-m4a"/>
                         <outlet property="loginView" destination="ouI-Is-zwC" id="H4Z-2z-bYg"/>
                         <outlet property="tableView" destination="AYo-z3-8HM" id="nht-1c-uTy"/>
@@ -200,7 +194,7 @@
             </objects>
             <point key="canvasLocation" x="1958" y="1687"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Contacts-->
         <scene sceneID="rrC-6d-1Hq">
             <objects>
                 <tableViewController storyboardIdentifier="ContactsController" id="kB0-HE-yo8" customClass="ContactsController" customModule="小牛Mesg" customModuleProvider="target" sceneMemberID="viewController">
@@ -288,7 +282,16 @@
                             <outlet property="delegate" destination="kB0-HE-yo8" id="cZW-Cj-Lad"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="kfE-F5-n22"/>
+                    <navigationItem key="navigationItem" title="Contacts" id="kfE-F5-n22">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="haK-u8-Qeu">
+                            <connections>
+                                <action selector="addAction:" destination="kB0-HE-yo8" id="Wub-DG-suz"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="itemAdd" destination="haK-u8-Qeu" id="g1H-zn-wUP"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UPa-0s-oD0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
