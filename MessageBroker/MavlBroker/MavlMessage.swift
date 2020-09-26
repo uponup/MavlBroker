@@ -211,7 +211,7 @@ extension MavlMessage: MavlMessageClient {
     }
     
     func addFriend(withUserName: String) {
-        // TODO: 目前没有好友管理，addFriend其实是直接向对方发起1v1的聊天
+        // TODO: 目前没有好友管理，只要输入userID就可以加为好友
         delegateGroup?.addFriendSuccess(friendName: withUserName)
     }
     

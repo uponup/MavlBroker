@@ -25,6 +25,11 @@ class ContactsController: UITableViewController {
     
     
     private var addGid: String = ""
+    private var isLogin: Bool? {
+        didSet {
+            itemAdd.isEnabled = isLogin ?? false
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +58,7 @@ class ContactsController: UITableViewController {
         }
         alert.addAction(actionCreateGroup)
         let actionJoinGroup = UIAlertAction(title: "Join a group chat", style: .default) { [unowned self] _ in
-            self.showTextFieldAlert(type: false)
+            self.showTextFieldAlert(isAddFriend: false)
         }
         alert.addAction(actionJoinGroup)
         
@@ -63,17 +68,17 @@ class ContactsController: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func showTextFieldAlert(type isAddFriend: Bool = true) {
-        let title = isAddFriend ? "Join a group" : "Friend someone"
+    private func showTextFieldAlert(isAddFriend type: Bool = true) {
+        let title = type ? "Join a group" : "Friend someone"
     
-        let alert = UIAlertController(title: title, message: "Please input \(isAddFriend ? " UserID" : "GroupID") you want", preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: "Please input \(type ? " UserID" : "GroupID") you want", preferredStyle: .alert)
         alert.addTextField { [unowned self] tf in
             NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldDidChanged(noti:)), name: UITextField.textDidChangeNotification, object: nil)
         };
         
         let ok = UIAlertAction(title: "OK", style: .cancel) { [unowned self] _ in
             guard self.addGid.count > 0 else { return }
-            if isAddFriend {
+            if type {
                 MavlMessage.shared.addFriend(withUserName: self.addGid)
             }else {
                 MavlMessage.shared.joinGroup(withGroupId: self.addGid)
@@ -94,11 +99,11 @@ class ContactsController: UITableViewController {
     }
        
     @objc func didLoginSuccess() {
-        itemAdd.isEnabled = true
+        isLogin = true
     }
     
     @objc func didLogoutSuccess() {
-        itemAdd.isEnabled = false
+        isLogin = false
     }
     
     @objc func didReceiveLoginSuccess(noti: Notification) {

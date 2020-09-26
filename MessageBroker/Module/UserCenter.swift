@@ -74,8 +74,7 @@ class UserCenter {
         guard let passport = passport else { return defaultContacts}
         let contactsKey = "\(passport.uid)_contactsList"
         
-        guard var contacts =  UserDefaults.object(forKey: contactsKey) as? [String] else { return defaultContacts }
-        contacts.append(contentsOf: defaultContacts)
+        guard let contacts =  UserDefaults.object(forKey: contactsKey) as? [String] else { return defaultContacts }
         return contacts
     }
     
