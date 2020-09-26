@@ -61,6 +61,36 @@ class UserCenter {
         return UserDefaults.object(forKey: sessionKey)
     }
     
+    
+    func save(contactsList contacts: [String]) {
+        guard let passport = passport else { return }
+        let contactsKey = "\(passport.uid)_contactsList"
+        UserDefaults.set(contacts, forKey: contactsKey)
+    }
+    
+    func fetchContactsList() -> [String] {
+        let defaultContacts = ["Sheep", "Pig", "Horse"]
+        
+        guard let passport = passport else { return defaultContacts}
+        let contactsKey = "\(passport.uid)_contactsList"
+        
+        guard var contacts =  UserDefaults.object(forKey: contactsKey) as? [String] else { return defaultContacts }
+        contacts.append(contentsOf: defaultContacts)
+        return contacts
+    }
+    
+    func save(groupList gourps: [String]) {
+        guard let passport = passport else { return }
+        let groupsKey = "\(passport.uid)_groupsList"
+        UserDefaults.set(gourps, forKey: groupsKey)
+    }
+    
+    func fetchGroupsList() -> [String] {
+        guard let passport = passport else { return [] }
+        let groupsKey = "\(passport.uid)_groupsList"
+        return UserDefaults.object(forKey: groupsKey) as? [String] ?? [] 
+    }
+    
     private func storePassport() {
         if let passport = _passport {
             UserDefaults.standard.set(passport.toDic(), forKey: key)

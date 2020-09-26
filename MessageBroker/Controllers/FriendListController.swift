@@ -16,11 +16,9 @@ class FriendListController: UIViewController {
     var isChat1V1 = false
     
     // 默认的几个好友
-    var contacts: [String] = ["Sheep", "Pig", "Horse"] {
-        didSet {
-            tableView.reloadData()
-        }
-    }
+    lazy var contacts: [ContactModel] = {
+        UserCenter.center.fetchContactsList().map{ ContactModel(uid: $0) }
+    }()
     
     var btnConfirmEnable: Bool {
         getSelectedContacts().count > 0
@@ -45,7 +43,7 @@ class FriendListController: UIViewController {
             let indexPath = IndexPath(row: index, section: 0)
             let cell = tableView.cellForRow(at: indexPath)
             return cell?.isSelected ?? false
-        }.map{ $1 }
+        }.map{ $1.uid }
     }
 }
 

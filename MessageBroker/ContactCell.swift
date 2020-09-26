@@ -13,7 +13,20 @@ class ContactCell: UITableViewCell {
     @IBOutlet weak var ivAvatar: UIImageView!
     @IBOutlet weak var labelName: UILabel!
     @IBOutlet weak var labelDetail: UILabel!
+    @IBOutlet weak var statusView: UIView!
+    @IBOutlet weak var labelStatus: UILabel!
     
+    private var status: String? {
+        didSet {
+            if status == "online" {
+                statusView.backgroundColor = UIColor.green
+                labelStatus.text = "online"
+            }else {
+                statusView.backgroundColor = UIColor.darkGray
+                labelStatus.text = "offline"
+            }
+        }
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,9 +37,15 @@ class ContactCell: UITableViewCell {
         
     }
 
-    func updateData(_ contact: String) {
-        ivAvatar.image = UIImage(named: contact.capitalized)
-        labelName.text = contact
+    func updateData(_ contact: ContactModel) {
+        ivAvatar.image = UIImage(named: contact.uid.capitalized) ?? #imageLiteral(resourceName: "avatar_default")
+        labelName.text = contact.uid
         labelDetail.text = ""   //defail msg, just like signature, slogan, online status; default is “”
+        if !contact.isGroup {
+            status = contact.status
+        }else {
+            self.labelStatus.isHidden = true
+            self.statusView.isHidden = true
+        }
     }
 }

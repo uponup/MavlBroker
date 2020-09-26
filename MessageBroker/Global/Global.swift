@@ -14,6 +14,7 @@ enum GlobalConfig {
 }
 
 extension Notification.Name {
+    static let loginSuccess = Notification.Name("loginSuccess")
     static let selectedContacts = Notification.Name("selectedContacts")
     static let didReceiveMesg = Notification.Name(rawValue: "didReceiveMesg")
     static let willSendMesg = Notification.Name("willSendMesg")

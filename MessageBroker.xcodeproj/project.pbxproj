@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39420D52251EC96C0009813A /* ContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D51251EC96C0009813A /* ContactsController.swift */; };
+		39420D54251ECA5B0009813A /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D53251ECA5B0009813A /* ContactModel.swift */; };
 		39621B712519942D002833F5 /* TopicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39621B702519942D002833F5 /* TopicUtils.swift */; };
 		397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440525187ED1005CB2D3 /* AppDelegate.swift */; };
 		397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440725187ED1005CB2D3 /* SceneDelegate.swift */; };
@@ -35,6 +37,8 @@
 /* Begin PBXFileReference section */
 		0F70690A3BDFAC6B1728D662 /* Pods-MessageBroker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageBroker.release.xcconfig"; path = "Target Support Files/Pods-MessageBroker/Pods-MessageBroker.release.xcconfig"; sourceTree = "<group>"; };
 		1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessageBroker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		39420D51251EC96C0009813A /* ContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsController.swift; sourceTree = "<group>"; };
+		39420D53251ECA5B0009813A /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
 		39621B702519942D002833F5 /* TopicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicUtils.swift; sourceTree = "<group>"; };
 		397D440225187ED1005CB2D3 /* 小牛Mesg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "小牛Mesg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		397D440525187ED1005CB2D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 			children = (
 				397D442425188687005CB2D3 /* ChatMessage.swift */,
 				397D44372518B676005CB2D3 /* ChatSession.swift */,
+				39420D53251ECA5B0009813A /* ContactModel.swift */,
 			);
 			name = Model;
 			path = ..;
@@ -166,6 +171,7 @@
 				397D443125189BC9005CB2D3 /* FriendListController.swift */,
 				397D441F2518845E005CB2D3 /* SettingController.swift */,
 				397D442225188687005CB2D3 /* ChatViewController.swift */,
+				39420D51251EC96C0009813A /* ContactsController.swift */,
 				397D442B2518869F005CB2D3 /* Model */,
 				397D442A2518868B005CB2D3 /* Views */,
 			);
@@ -326,10 +332,12 @@
 				397D44382518B676005CB2D3 /* ChatSession.swift in Sources */,
 				397D44202518845E005CB2D3 /* SettingController.swift in Sources */,
 				3998D287251B409C00818904 /* UserCenter.swift in Sources */,
+				39420D52251EC96C0009813A /* ContactsController.swift in Sources */,
 				397D440A25187ED1005CB2D3 /* ViewController.swift in Sources */,
 				397D443425189E83005CB2D3 /* ContactCell.swift in Sources */,
 				397D441C25187FB3005CB2D3 /* MavlMessage.swift in Sources */,
 				397D442625188687005CB2D3 /* ChatViewController.swift in Sources */,
+				39420D54251ECA5B0009813A /* ContactModel.swift in Sources */,
 				397D443225189BC9005CB2D3 /* FriendListController.swift in Sources */,
 				397D442725188687005CB2D3 /* ChatLeftMessageCell.swift in Sources */,
 				397D442F25188EF6005CB2D3 /* Global.swift in Sources */,

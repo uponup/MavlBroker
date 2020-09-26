@@ -154,6 +154,8 @@ extension ViewController: MavlMessageDelegate {
     func loginSuccess() {
         TRACE("login success")
         isLogin = true
+        
+        NotificationCenter.default.post(name: .loginSuccess, object: nil)
     }
     
     func joinedChatRoom(groupId gid: String) {

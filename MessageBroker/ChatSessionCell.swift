@@ -26,7 +26,7 @@ class ChatSessionCell: UITableViewCell {
     }
 
     func updateData(session: ChatSession) {
-        ivSessionIcon.image = #imageLiteral(resourceName: "chatroom_default")
+        ivSessionIcon.image = session.isGroup ? #imageLiteral(resourceName: "chatroom_default") : #imageLiteral(resourceName: "avatar_default")
         labelName.text = session.gid
         labelDetail.text = "last msg"    // last msg, default is ""
     }
