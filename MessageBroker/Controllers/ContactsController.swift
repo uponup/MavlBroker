@@ -42,9 +42,8 @@ class ContactsController: UITableViewController {
     
     @IBAction func addAction(_ sender: Any) {
         let alert = UIAlertController(title: "What do you want to do?", message: nil, preferredStyle: .actionSheet)
-        let actionAddFriend = UIAlertAction(title: "Add a friend", style: .default) { _  in
-            guard let friendListVc = self.storyboard?.instantiateViewController(identifier: "FriendListController") as? FriendListController else { return }
-            self.present(friendListVc, animated: true, completion: nil)
+        let actionAddFriend = UIAlertAction(title: "Add a friend", style: .default) { [unowned self] _  in
+            self.showTextFieldAlert()
         }
         alert.addAction(actionAddFriend)
         let actionCreateGroup = UIAlertAction(title: "Create a group chat", style: .default) { _ in
@@ -54,7 +53,7 @@ class ContactsController: UITableViewController {
         }
         alert.addAction(actionCreateGroup)
         let actionJoinGroup = UIAlertAction(title: "Join a group chat", style: .default) { [unowned self] _ in
-            self.joinGroupAction()
+            self.showTextFieldAlert(type: false)
         }
         alert.addAction(actionJoinGroup)
         
@@ -64,17 +63,24 @@ class ContactsController: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func joinGroupAction() {
-        let alert = UIAlertController(title: "Join In", message: "Please input group id you want to join", preferredStyle: .alert)
+    private func showTextFieldAlert(type isAddFriend: Bool = true) {
+        let title = isAddFriend ? "Join a group" : "Friend someone"
+    
+        let alert = UIAlertController(title: title, message: "Please input \(isAddFriend ? " UserID" : "GroupID") you want", preferredStyle: .alert)
         alert.addTextField { [unowned self] tf in
             NotificationCenter.default.addObserver(self, selector: #selector(self.alertTextFieldDidChanged(noti:)), name: UITextField.textDidChangeNotification, object: nil)
         };
         
-        let ok = UIAlertAction(title: "OK", style: .default) { [unowned self] _ in
-            MavlMessage.shared.joinGroup(withGroupId: self.addGid)
+        let ok = UIAlertAction(title: "OK", style: .cancel) { [unowned self] _ in
+            guard self.addGid.count > 0 else { return }
+            if isAddFriend {
+                MavlMessage.shared.addFriend(withUserName: self.addGid)
+            }else {
+                MavlMessage.shared.joinGroup(withGroupId: self.addGid)
+            }
         }
         alert.addAction(ok)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -127,14 +133,16 @@ class ContactsController: UITableViewController {
 extension ContactsController: MavlMessageGroupDelegate {
     
     func createGroupSuccess(groupId gid: String) {
-        
+        _addGroup(gid)
     }
     
     func joinedGroup(groupId gid: String, isLauncher: Bool) {
+        _addGroup(gid)
         if isLauncher {
             print("您已经加入群聊")
         }else {
             print("您被拉进群聊")
+            
         }
     }
     
@@ -154,6 +162,7 @@ extension ContactsController: MavlMessageGroupDelegate {
     private func _addGroup(_ gid: String) {
         let model = ContactModel(uid: gid)
         groups.append(model)
+        tableView.reloadData()
     }
 }
 
