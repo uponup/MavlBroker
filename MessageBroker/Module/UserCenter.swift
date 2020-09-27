@@ -13,12 +13,12 @@ struct Passport {
     var pwd: String
     
     init(_ uid: String, _ pwd: String) {
-        self.uid = uid
+        self.uid = uid.lowercased()
         self.pwd = pwd
     }
     
     init(dict: [String: String]) {
-        self.uid = dict["uid"] ?? ""
+        self.uid = (dict["uid"] ?? "").lowercased()
         self.pwd = dict["pwd"] ?? ""
     }
     
@@ -104,7 +104,7 @@ class UserCenter {
 extension UserCenter {
     static func isMe(uid: String) -> Bool {
         guard let passport = UserCenter.center.passport else { return false }
-        return passport.uid.lowercased() == uid
+        return passport.uid == uid
     }
 }
 

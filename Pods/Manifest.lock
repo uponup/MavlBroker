@@ -3,30 +3,34 @@ PODS:
   - CocoaMQTT (1.2.5):
     - CocoaAsyncSocket (~> 7.6.3)
   - ESPullToRefresh (2.9.3)
-  - QuickLayout (3.0.0)
-  - SwiftEntryKit (1.2.6):
-    - QuickLayout (= 3.0.0)
+  - MarqueeLabel (4.0.2)
+  - NotificationBannerSwift (3.0.2):
+    - MarqueeLabel (~> 4.0.0)
+    - SnapKit (~> 5.0.0)
+  - SnapKit (5.0.1)
 
 DEPENDENCIES:
   - CocoaMQTT
   - ESPullToRefresh
-  - SwiftEntryKit (~> 1.2.6)
+  - NotificationBannerSwift (~> 3.0.0)
 
 SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
     - CocoaMQTT
     - ESPullToRefresh
-    - QuickLayout
-    - SwiftEntryKit
+    - MarqueeLabel
+    - NotificationBannerSwift
+    - SnapKit
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   ESPullToRefresh: 0d68daa602b343c81753a1b95e09fd0bfcddfd40
-  QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
-  SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
+  MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
+  NotificationBannerSwift: 713e20f21b6105f4a36a00e5d9fa414a930d3d8e
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: adcc7b44f6e3768b9cfd7bb2a76f7133b3e94a03
+PODFILE CHECKSUM: 129616633cb09a5c596133127ba864aa09d330ff
 
 COCOAPODS: 1.8.4

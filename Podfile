@@ -8,6 +8,6 @@ target 'MessageBroker' do
   # Pods for MessageBroker
   pod 'CocoaMQTT'
   pod "ESPullToRefresh"
-  pod 'SwiftEntryKit', '~> 1.2.6'
+  pod 'NotificationBannerSwift', '~> 3.0.0'
   
 end

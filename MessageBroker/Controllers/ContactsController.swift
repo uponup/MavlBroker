@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NotificationBannerSwift
 
 class ContactsController: UITableViewController {
 
@@ -146,18 +147,18 @@ extension ContactsController: MavlMessageGroupDelegate {
         _addGroup(gid)
         
         if isLauncher {
-            showHud("您已经创建好群聊")
+            showHudSuccess(title: "创建成功", msg: "您已经创建好群聊")
         }else {
-            showHud("您被邀请进群聊")
+            showHudSuccess(title: "收到邀请", msg: "您被邀请进群聊")
         }
     }
     
     func joinedGroup(groupId gid: String, someone: String) {
         if someone == MavlMessage.shared.passport?.uid {
-            showHud("加入新群成功")
+            showHudSuccess(title: "加入成功", msg: "加入新群成功")
             _addGroup(gid)
         }else {
-            showHud("\(someone)加入了群")
+            showHudInfo(title: "群成员变化", msg: "\(someone)加入了群")
         }
     }
     
@@ -166,7 +167,7 @@ extension ContactsController: MavlMessageGroupDelegate {
         tableView.reloadData()
         
         UserCenter.center.save(groupList: groups.map{ $0.uid })
-        showHud("已退出群：\(gid)")
+        showHudFailed(title: "提醒", msg: "已退出群：\(gid)")
     }
     
     func addFriendSuccess(friendName name: String) {
@@ -268,5 +269,34 @@ extension ContactsController {
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
+    }
+}
+
+extension ContactsController {
+    func showHudSuccess(title: String, msg: String) {
+        let banner = NotificationBanner(title: title, subtitle: msg, leftView: nil, rightView: nil, style: .success, colors: self)
+        banner.show()
+    }
+    
+    func showHudFailed(title: String, msg: String) {
+        let banner = NotificationBanner(title: title, subtitle: msg, leftView: nil, rightView: nil, style: .danger, colors: self)
+        banner.show()
+    }
+    
+    func showHudInfo(title: String, msg: String) {
+        let banner = NotificationBanner(title: title, subtitle: msg, leftView: nil, rightView: nil, style: .info, colors: self)
+        banner.show()
+    }
+}
+
+extension ContactsController: BannerColorsProtocol {
+    public func color(for style: BannerStyle) -> UIColor {
+        switch style {
+        case .danger: return .red
+        case .info: return .darkGray   // Your custom .info color
+        case .customView:  return .black  // Your custom .customView color
+        case .success: return .green   // Your custom .success color
+        case .warning: return .yellow    // Your custom .warning color
+        }
     }
 }
