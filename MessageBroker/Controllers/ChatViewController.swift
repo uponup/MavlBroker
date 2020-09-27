@@ -106,7 +106,7 @@ class ChatViewController: UIViewController {
             MavlMessage.shared.fetchMessages(msgId: (self?.latestMessagesId).value, from: session.gid, type: type, offset: 2)
         }
         
-        animalAvatarImageView.image = #imageLiteral(resourceName: "chatroom_default")
+        animalAvatarImageView.image = (session?.isGroup ?? false) ?  #imageLiteral(resourceName: "chatroom_default") : #imageLiteral(resourceName: "avatar_default")
         sloganLabel.text = slogan
         
         if let session = session, !session.isGroup {

@@ -16,9 +16,23 @@ class ViewController: UIViewController {
     @IBOutlet weak var itemClose: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     
-    lazy var sessions: [ChatSession] = {
-        []
-    }()
+    private var _sessions: [ChatSession]?
+    var sessions: [ChatSession] {
+        get {
+            if _sessions == nil {
+                guard let sessionList = UserCenter.center.fetchSessionList() as? [[String: Any]] else {
+                    TRACE("获取缓存信息失败")
+                    _sessions = nil
+                    return []
+                }
+                _sessions = sessionList.map{ ChatSession(dict: $0) }
+            }
+            return _sessions!
+        }
+        set {
+            _sessions = newValue
+        }
+    }
     
     private var isLogin: Bool = false {
         didSet {
@@ -30,7 +44,7 @@ class ViewController: UIViewController {
                 let passport = Passport(tfUserName.text.value, tfPassword.text.value)
                 UserCenter.center.login(passport: passport)
                 
-                loadData()
+                tableView.reloadData()
             }else {
                 title = "Offline"
                 tfUserName.text = ""
@@ -54,20 +68,6 @@ class ViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
-    }
-    
-    
-    // 刷新数据
-    func loadData() {
-        guard let sessionList = UserCenter.center.fetchSessionList() as? [[String: Any]] else {
-            TRACE("获取缓存信息失败")
-            return
-        }
-        sessions.removeAll()
-        let history = sessionList.map{ ChatSession(dict: $0) }
-        sessions.append(contentsOf: history)
-        
-        tableView.reloadData()
     }
     
     @objc func didSelectedContacts(noti: Notification) {
