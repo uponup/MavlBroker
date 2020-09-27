@@ -169,8 +169,8 @@
 		397D443025189658005CB2D3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				39420D51251EC96C0009813A /* ContactsController.swift */,
 				397D440925187ED1005CB2D3 /* ViewController.swift */,
+				39420D51251EC96C0009813A /* ContactsController.swift */,
 				397D441F2518845E005CB2D3 /* SettingController.swift */,
 				397D442225188687005CB2D3 /* ChatViewController.swift */,
 				397D443125189BC9005CB2D3 /* FriendListController.swift */,

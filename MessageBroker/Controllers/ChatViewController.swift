@@ -12,6 +12,7 @@ import ESPullToRefresh
 
 class ChatViewController: UIViewController {
     var session: ChatSession?
+    var currentStatus: String?
     
     private var _messages: [ChatMessage]?
     var messages: [ChatMessage] {
@@ -102,7 +103,12 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         messageTextView.delegate = self
-        status = "offline"
+        guard let currentStatus = currentStatus, currentStatus.count > 0 else {
+            status = "offline"
+            return
+        }
+        status = currentStatus
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
@@ -124,7 +130,7 @@ class ChatViewController: UIViewController {
         sloganLabel.text = slogan
         
         if let session = session, !session.isGroup {
-            MavlMessage.shared.checkStatus(withUserName: session.sessionName.lowercased())
+            // TODO：订阅status通知
         }else {
             statusView.isHidden = true
             statusLabel.isHidden = true
@@ -172,9 +178,14 @@ class ChatViewController: UIViewController {
     
     @objc func receivedStatusChanged(notification: NSNotification) {
         guard let session = session else { return }
-        guard let obj = notification.object as? [String: String], let status = obj[session.sessionName.lowercased()] else { return }
+        guard let obj = notification.object as? [String: String],
+            let status = obj["status"],
+            let uid = obj["uid"]
+            else { return }
         
-        self.status = status
+        if session.gid.lowercased() == uid {
+            self.status = status
+        }
     }
     
     @objc func receivedWillSendMessage(notification: NSNotification) {

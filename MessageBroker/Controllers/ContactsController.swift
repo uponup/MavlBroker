@@ -261,8 +261,9 @@ extension ContactsController {
         let actionChat = UIContextualAction(style: .normal, title: "Chat") { [unowned self] (action, view, block) in
             guard let chatVc = self.storyboard?.instantiateViewController(identifier: "ChatViewController") as? ChatViewController else { return }
             chatVc.hidesBottomBarWhenPushed = true
-            chatVc.session = ChatSession(gid: contactModel.uid)
-            self.navigationController?.pushViewController(chatVc, animated: true)
+            chatVc.session = ChatSession(gid: contactModel.uid, sessionName: contactModel.uid, isGroup: contactModel.isGroup)
+            chatVc.currentStatus = contactModel.status
+            self.navigationController?.pushViewController(chatVc, animated: true )
         }
         return UISwipeActionsConfiguration(actions: [actionChat])
     }
