@@ -51,6 +51,8 @@ class ViewController: UIViewController {
                 tfPassword.text = "xxxxxx"
                 loginView.isHidden = false
                 itemClose.isEnabled = false
+                
+                UserCenter.center.logout()
             }
         }
     }
@@ -103,7 +105,10 @@ extension ViewController: MavlMessageDelegate {
     func logout(withError: Error?) {
         isLogin = false
         
-        guard let err = withError else { return }
+        guard let err = withError else {
+            NotificationCenter.default.post(name: .logoutSuccess, object: nil)
+            return
+        }
         // 如果有err，说明是异常断开连接
         let alert = UIAlertController(title: "Warning", message: err.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ok", style: .default, handler: nil))

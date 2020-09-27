@@ -47,6 +47,7 @@ class UserCenter {
     
     func logout() {
         // todo清除用户数据?
+        _passport = nil
     }
     
     func save(sessionList list:[[String: Any]]) {

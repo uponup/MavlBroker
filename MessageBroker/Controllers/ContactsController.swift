@@ -51,7 +51,10 @@ class ContactsController: UITableViewController {
             _groups = nil
             
             tableView.reloadData()
-            checkStatus()
+            
+            if isLogin == true {
+                checkStatus()
+            }
         }
     }
     
@@ -249,9 +252,7 @@ extension ContactsController {
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let contactModel = self.dataArr[indexPath.section][indexPath.row]
-        
-        guard contactModel.isGroup  else { return UISwipeActionsConfiguration(actions: []) }
-        
+                
         let actionChat = UIContextualAction(style: .normal, title: "Chat") { [unowned self] (action, view, block) in
             guard let chatVc = self.storyboard?.instantiateViewController(identifier: "ChatViewController") as? ChatViewController else { return }
             chatVc.hidesBottomBarWhenPushed = true

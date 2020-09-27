@@ -45,11 +45,12 @@ class ContactCell: UITableViewCell {
         }
         labelName.text = contact.uid
         labelDetail.text = ""   //defail msg, just like signature, slogan, online status; default is “”
+        
+        self.labelStatus.isHidden = contact.isGroup
+        self.statusView.isHidden = contact.isGroup
+        
         if !contact.isGroup {
             status = contact.status
-        }else {
-            self.labelStatus.isHidden = true
-            self.statusView.isHidden = true
         }
     }
 }
