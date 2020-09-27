@@ -17,7 +17,11 @@ class ChatViewController: UIViewController {
     var messages: [ChatMessage] {
         get {
             if _messages == nil {
-                _messages = [ChatMessage(status: .send, mesg: MesgDao.fetch(forTo: session?.gid ?? ""))]
+                if let mesg = MesgDao.fetch(forTo: session?.gid ?? "") {
+                    _messages = [ChatMessage(status: .send, mesg: mesg)]
+                }else {
+                    _messages = []
+                }
             }
             return _messages!
         }

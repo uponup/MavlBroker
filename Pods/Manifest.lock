@@ -3,22 +3,30 @@ PODS:
   - CocoaMQTT (1.2.5):
     - CocoaAsyncSocket (~> 7.6.3)
   - ESPullToRefresh (2.9.3)
+  - QuickLayout (3.0.0)
+  - SwiftEntryKit (1.2.6):
+    - QuickLayout (= 3.0.0)
 
 DEPENDENCIES:
   - CocoaMQTT
   - ESPullToRefresh
+  - SwiftEntryKit (~> 1.2.6)
 
 SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
     - CocoaMQTT
     - ESPullToRefresh
+    - QuickLayout
+    - SwiftEntryKit
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   ESPullToRefresh: 0d68daa602b343c81753a1b95e09fd0bfcddfd40
+  QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
+  SwiftEntryKit: 96a2fa90b2631bbbfac50d18449e9ca3d0635f13
 
-PODFILE CHECKSUM: 984df0242bfd7eb23c47f2cc124e39711b729505
+PODFILE CHECKSUM: adcc7b44f6e3768b9cfd7bb2a76f7133b3e94a03
 
 COCOAPODS: 1.8.4

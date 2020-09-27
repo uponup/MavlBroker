@@ -138,7 +138,10 @@ extension ViewController: MavlMessageStatusDelegate {
     }
     
     func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {
-        guard let msg = messages.last else { return }
+        guard let msg = messages.last else {
+            tableView.es.stopPullToRefresh()
+            return
+        }
         // 保存最后一条收到的信息
         if isLoadMore == false {
             var item: ChatSession
@@ -198,8 +201,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard session.isGroup  else { return UISwipeActionsConfiguration(actions: []) }
         
-        let actionDelete = UIContextualAction(style: .destructive, title: "Quit") { (action, view, block) in
-            MavlMessage.shared.quitGroup(withGroupId: session.gid)
+        let actionDelete = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] (action, view, block) in
+            self.sessions.remove(at: indexPath.row)
+            self.refreshData()
+            
+            UserCenter.center.save(sessionList: self.sessions)
         }
         
         return UISwipeActionsConfiguration(actions: [actionDelete])

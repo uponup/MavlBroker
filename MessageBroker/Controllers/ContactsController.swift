@@ -238,6 +238,10 @@ extension ContactsController {
         return 72.0
     }
     
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 1.0
+    }
+    
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let contactModel = self.dataArr[indexPath.section][indexPath.row]
         
