@@ -83,7 +83,7 @@ protocol MavlMessageGroupDelegate: class {
     
     
     func addFriendSuccess(friendName name: String)
-    func friendStatus(_ status: String?, friendId: String)
+    func friendStatus(_ status: String, friendId: String)
 }
 
 /**
@@ -323,7 +323,7 @@ extension MavlMessage: CocoaMQTTDelegate {
         let topic = message.topic
         
         if let topicModel = StatusTopicModel(topic) {
-            delegateGroup?.friendStatus(message.string, friendId: topicModel.friendId)
+            delegateGroup?.friendStatus(message.string ?? "offline", friendId: topicModel.friendId)
         }else if let topicModel = TopicModel(message.topic) {
             if topicModel.operation == 0 {
                 // create a group

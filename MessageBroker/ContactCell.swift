@@ -38,7 +38,11 @@ class ContactCell: UITableViewCell {
     }
 
     func updateData(_ contact: ContactModel) {
-        ivAvatar.image = UIImage(named: contact.uid.capitalized) ?? #imageLiteral(resourceName: "avatar_default")
+        if contact.isGroup {
+            ivAvatar.image = #imageLiteral(resourceName: "chatroom_default")
+        }else {
+            ivAvatar.image = UIImage(named: contact.uid.capitalized) ?? #imageLiteral(resourceName: "avatar_default")
+        }
         labelName.text = contact.uid
         labelDetail.text = ""   //defail msg, just like signature, slogan, online status; default is “”
         if !contact.isGroup {

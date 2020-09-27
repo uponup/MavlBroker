@@ -16,18 +16,39 @@ class ContactsController: UITableViewController {
         [groups, contacts].filter{ $0.count > 0 }
     }
     
-    private lazy var groups: [ContactModel] = {
-        UserCenter.center.fetchGroupsList().map{ ContactModel(uid: $0, isGroup: true)}
-    }()
-    private lazy var contacts: [ContactModel] = {
-        UserCenter.center.fetchContactsList().map{ ContactModel(uid: $0) }
-    }()
+    private var _groups: [ContactModel]?
+    private var groups: [ContactModel] {
+        get {
+            if _groups == nil {
+                _groups =  UserCenter.center.fetchGroupsList().map{ ContactModel(uid: $0, isGroup: true)}
+            }
+            return _groups!
+        }
+        set {
+            _groups = newValue
+        }
+    }
+    
+    private var _contacts: [ContactModel]?
+    private var contacts: [ContactModel] {
+        get {
+            if _contacts == nil {
+                _contacts = UserCenter.center.fetchContactsList().map{ ContactModel(uid: $0) }
+            }
+            return _contacts!
+        }
+        set {
+            _contacts = newValue
+        }
+    }
     
     
     private var addGid: String = ""
     private var isLogin: Bool? {
         didSet {
             itemAdd.isEnabled = isLogin ?? false
+            _contacts = nil
+            _groups = nil
         }
     }
     
@@ -37,7 +58,6 @@ class ContactsController: UITableViewController {
         itemAdd.isEnabled = MavlMessage.shared.isLogin
         MavlMessage.shared.delegateGroup = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveFriendStatusUpdate(noti:)), name: .friendStatusDidUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveLoginSuccess), name: .loginSuccess, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didLoginSuccess), name: .loginSuccess, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didLogoutSuccess), name: .logoutSuccess, object: nil)
@@ -110,23 +130,6 @@ class ContactsController: UITableViewController {
         checkStatus()
     }
     
-    @objc func didReceiveFriendStatusUpdate(noti: Notification) {
-        guard let obj = noti.object as? [String: String],
-            let uid = obj.keys.first,
-            let status = obj.values.first else { return }
-        
-        var s = [ContactModel]()
-        for var model in contacts {
-            if model.uid.lowercased() == uid {
-                model.status = status
-            }
-            s.append(model)
-        }
-        contacts.removeAll()
-        contacts.append(contentsOf: s)
-        tableView.reloadData()
-    }
-    
     // MARK: Private Method
     private func checkStatus() {
         for contact in contacts {
@@ -135,6 +138,7 @@ class ContactsController: UITableViewController {
     }
 }
 
+// MARK: - MavlMessageGroupDelegate
 extension ContactsController: MavlMessageGroupDelegate {
     
     func createGroupSuccess(groupId gid: String) {
@@ -144,36 +148,55 @@ extension ContactsController: MavlMessageGroupDelegate {
     func joinedGroup(groupId gid: String, isLauncher: Bool) {
         _addGroup(gid)
         if isLauncher {
-            print("您已经加入群聊")
+            showHud("您已经加入群聊")
         }else {
-            print("您被拉进群聊")
-            
+            showHud("您被邀请进群聊")
         }
     }
     
     func quitGroup(gid: String, error: Error?) {
+        groups = groups.filter{ $0.uid != gid }
+        tableView.reloadData()
         
+        UserCenter.center.save(groupList: groups.map{ $0.uid })
+        showHud("已退出群：\(gid)")
     }
     
     func addFriendSuccess(friendName name: String) {
+        let model = ContactModel(uid: name)
+        contacts.append(model)
+        tableView.reloadData()
         
+        // 添加成功后，需要监听好友状态
+        MavlMessage.shared.checkStatus(withUserName: name.lowercased())
+        UserCenter.center.save(contactsList: contacts.map{ $0.uid })
     }
     
-    func friendStatus(_ status: String?, friendId: String) {
+    func friendStatus(_ status: String, friendId: String) {
+        contacts = contacts.map { m in
+            var model = m
+            if model.uid.lowercased() == friendId {
+                model.status = status
+            }
+            return model
+        }
+        tableView.reloadData()
         
+        NotificationCenter.default.post(name: .friendStatusDidUpdated, object: ["status": status, "uid": friendId])
     }
     
     
     private func _addGroup(_ gid: String) {
-        let model = ContactModel(uid: gid)
+        let model = ContactModel(uid: gid, isGroup: true)
         groups.append(model)
         tableView.reloadData()
+        
+        UserCenter.center.save(groupList: groups.map{ $0.uid })
     }
 }
 
-
+// MARK: - Table view data source
 extension ContactsController {
-    // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return dataArr.count
@@ -206,5 +229,28 @@ extension ContactsController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72.0
+    }
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let contactModel = self.dataArr[indexPath.section][indexPath.row]
+        
+        guard contactModel.isGroup  else { return UISwipeActionsConfiguration(actions: []) }
+        
+        let actionDelete = UIContextualAction(style: .destructive, title: "Quit") { (action, view, block) in
+            MavlMessage.shared.quitGroup(withGroupId: contactModel.uid)
+        }
+        
+        let actionChat = UIContextualAction(style: .normal, title: "Chat") { [unowned self] (action, view, block) in
+            guard let chatVc = self.storyboard?.instantiateViewController(identifier: "ChatViewController") as? ChatViewController else { return }
+            chatVc.hidesBottomBarWhenPushed = true
+            chatVc.session = ChatSession(gid: contactModel.uid)
+            self.navigationController?.pushViewController(chatVc, animated: true)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [actionDelete, actionChat])
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
 }

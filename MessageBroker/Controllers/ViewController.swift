@@ -191,9 +191,8 @@ extension ViewController {
         guard let label = launchVc.view.viewWithTag(101),
            let _ = launchVc.view.viewWithTag(100) else { return }
         
-        UIView.animate(withDuration: 1.5, animations: {
-            label.transform = CGAffineTransform(rotationAngle: .pi)
-            label.transform = .identity
+        UIView.animate(withDuration: 1.0, animations: {
+            label.transform = CGAffineTransform(scaleX: 5,y: 5)
             launchVc.view.alpha = 0
         }) { finished  in
             launchVc.view.removeFromSuperview()

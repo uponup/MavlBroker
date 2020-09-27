@@ -22,4 +22,9 @@ extension Notification.Name {
     static let didSendMesg = Notification.Name("didSendMesg")
     static let didSendMesgFailed = Notification.Name("didSendMesgFailed")
     static let friendStatusDidUpdated = Notification.Name("friendStatusDidUpdated")
+    static let quitGroupSuccess = Notification.Name("quitGroupSuccess")
+}
+
+func showHud(_ msg: String) {
+    print(msg)
 }

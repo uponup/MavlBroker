@@ -13,5 +13,4 @@ struct ContactModel {
     var uid: String
     var status: String = "offline"
     var isGroup: Bool = false
-    
 }
