@@ -103,12 +103,7 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         messageTextView.delegate = self
-        guard let currentStatus = currentStatus, currentStatus.count > 0 else {
-            status = "offline"
-            return
-        }
-        status = currentStatus
-        
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
@@ -142,6 +137,12 @@ class ChatViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(receivedWillSendMessage(notification:)), name: .willSendMesg, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(receiveDidSendMessageFailed(notification:)), name: .didSendMesgFailed, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(receiveDidSendMessage(notification:)), name: .didSendMesg, object: nil)
+        
+        guard let currentStatus = currentStatus, currentStatus.count > 0 else {
+            status = "offline"
+            return
+        }
+        status = currentStatus
     }
     
     override func viewWillAppear(_ animated: Bool) {
