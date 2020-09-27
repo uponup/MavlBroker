@@ -33,3 +33,23 @@ struct ChatSession {
         ]
     }
 }
+
+extension ChatSession: Equatable {
+    static func < (lhs: ChatSession, rhs: ChatSession) -> Bool {
+        guard let lhsMesg = MesgDao.fetch(forTo: lhs.gid),
+            let rhsMesg = MesgDao.fetch(forTo: rhs.gid) else {
+            return false
+        }
+
+        return lhsMesg.timestamp < rhsMesg.timestamp
+    }
+    
+    static func > (lhs: ChatSession, rhs: ChatSession) -> Bool {
+        guard let lhsMesg = MesgDao.fetch(forTo: lhs.gid),
+            let rhsMesg = MesgDao.fetch(forTo: rhs.gid) else {
+            return true
+        }
+
+        return lhsMesg.timestamp > rhsMesg.timestamp
+    }
+}

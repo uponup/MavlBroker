@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		39420D52251EC96C0009813A /* ContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D51251EC96C0009813A /* ContactsController.swift */; };
 		39420D54251ECA5B0009813A /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D53251ECA5B0009813A /* ContactModel.swift */; };
+		39420D5625206AF80009813A /* MesgDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D5525206AF80009813A /* MesgDao.swift */; };
 		39621B712519942D002833F5 /* TopicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39621B702519942D002833F5 /* TopicUtils.swift */; };
 		397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440525187ED1005CB2D3 /* AppDelegate.swift */; };
 		397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440725187ED1005CB2D3 /* SceneDelegate.swift */; };
@@ -39,6 +40,7 @@
 		1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessageBroker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		39420D51251EC96C0009813A /* ContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsController.swift; sourceTree = "<group>"; };
 		39420D53251ECA5B0009813A /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
+		39420D5525206AF80009813A /* MesgDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesgDao.swift; sourceTree = "<group>"; };
 		39621B702519942D002833F5 /* TopicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicUtils.swift; sourceTree = "<group>"; };
 		397D440225187ED1005CB2D3 /* 小牛Mesg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "小牛Mesg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		397D440525187ED1005CB2D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				3998D286251B409C00818904 /* UserCenter.swift */,
+				39420D5525206AF80009813A /* MesgDao.swift */,
 			);
 			path = Module;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				397D442725188687005CB2D3 /* ChatLeftMessageCell.swift in Sources */,
 				397D442F25188EF6005CB2D3 /* Global.swift in Sources */,
 				39621B712519942D002833F5 /* TopicUtils.swift in Sources */,
+				39420D5625206AF80009813A /* MesgDao.swift in Sources */,
 				397D442925188687005CB2D3 /* ChatRightMessageCell.swift in Sources */,
 				397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */,
 				397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */,

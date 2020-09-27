@@ -13,8 +13,18 @@ import ESPullToRefresh
 class ChatViewController: UIViewController {
     var session: ChatSession?
     
-    var messages: [ChatMessage] = [] {
-        didSet {
+    private var _messages: [ChatMessage]?
+    var messages: [ChatMessage] {
+        get {
+            if _messages == nil {
+                _messages = [ChatMessage(status: .send, mesg: MesgDao.fetch(forTo: session?.gid ?? ""))]
+            }
+            return _messages!
+        }
+        
+        set {
+            _messages = newValue
+        
             tableView.reloadData()
             scrollToBottom()
         }
@@ -22,7 +32,7 @@ class ChatViewController: UIViewController {
     
     private var slogan: String {
         guard let session = session else {
-            return "进入聊天室错误"
+            return "Error: No Session To Match"
         }
         if session.isGroup {
             return "Gid: \(session.gid)";

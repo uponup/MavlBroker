@@ -20,6 +20,6 @@ class SettingController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.navigationItem.title = MavlMessage.shared.passport?.uid
+        navigationItem.title = MavlMessage.shared.passport?.uid
     }
 }

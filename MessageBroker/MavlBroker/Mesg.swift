@@ -50,8 +50,36 @@ struct Mesg {
     }
 }
 
+// MARK: - Mesg数模转化
+extension Mesg {
+    
+    func toDict() -> [String: Any] {
+        return [
+            "fromUid": fromUid,
+            "toUid": toUid,
+            "groupId": groupId,
+            "serverId": serverId,
+            "text": text,
+            "status": status,
+            "timestamp": timestamp,
+            "localId": localId ?? ""
+        ]
+    }
+    
+    init(dict: [String: Any]) {
+        self.fromUid = dict["fromUid"] as! String
+        self.toUid = dict["toUid"] as! String
+        self.groupId = dict["groupId"] as! String
+        self.serverId = dict["serverId"] as! String
+        self.text = dict["text"] as! String
+        self.status = dict["status"] as! Int
+        self.timestamp = dict["timestamp"]  as! TimeInterval
+        self.localId = dict["localId"] as? String
+    }
+}
 
 
+// MARK: - Operation
 public enum FetchMessagesType: Int {
     case one = 1
     case more

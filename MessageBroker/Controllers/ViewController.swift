@@ -20,12 +20,12 @@ class ViewController: UIViewController {
     var sessions: [ChatSession] {
         get {
             if _sessions == nil {
-                guard let sessionList = UserCenter.center.fetchSessionList() as? [[String: Any]] else {
+                guard let sessionList = UserCenter.center.fetchSessionList() else {
                     TRACE("获取缓存信息失败")
                     _sessions = nil
                     return []
                 }
-                _sessions = sessionList.map{ ChatSession(dict: $0) }
+                _sessions = sessionList
             }
             return _sessions!
         }
@@ -37,16 +37,17 @@ class ViewController: UIViewController {
     private var isLogin: Bool = false {
         didSet {
             if isLogin {
-                title = "Online"
+                navigationItem.title = "Online"
                 loginView.isHidden = true
                 itemClose.isEnabled = true
+                _sessions = nil
                 
                 let passport = Passport(tfUserName.text.value, tfPassword.text.value)
                 UserCenter.center.login(passport: passport)
                 
-                tableView.reloadData()
+                refreshData()
             }else {
-                title = "Offline"
+                navigationItem.title = "Offline"
                 tfUserName.text = ""
                 tfPassword.text = "xxxxxx"
                 loginView.isHidden = false
@@ -66,6 +67,13 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(didSelectedContacts(noti:)), name: .selectedContacts, object: nil)
         
         launchAnimation()
+    }
+    
+    func refreshData() {
+        let sortedSessions = sessions.sorted(by: >)
+        sessions = sortedSessions
+        
+        tableView.reloadData()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -130,6 +138,25 @@ extension ViewController: MavlMessageStatusDelegate {
     }
     
     func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {
+        guard let msg = messages.last else { return }
+        // 保存最后一条收到的信息
+        if isLoadMore == false {
+            var item: ChatSession
+            if msg.fromUid == msg.groupId {
+                item = ChatSession(gid: msg.groupId, sessionName: msg.fromUid, isGroup: false)
+            }else {
+                item = ChatSession(gid: msg.groupId)
+            }
+            
+            if !(sessions.map{ $0.gid }.contains(item.gid)) {
+                sessions.append(item)
+            }
+            UserCenter.center.save(sessionList: sessions)
+            
+            MesgDao.save(latestMesg: msg)
+        }
+        
+        refreshData()
         NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
     }
 }

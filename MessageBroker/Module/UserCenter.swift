@@ -50,16 +50,19 @@ class UserCenter {
         _passport = nil
     }
     
-    func save(sessionList list:[[String: Any]]) {
+    func save(sessionList list: [ChatSession]) {
         guard let passport = passport else { return }
         let sessionKey = "\(passport.uid)_sessionList"
-        UserDefaults.set(list, forKey: sessionKey)
+        UserDefaults.set(list.map{ $0.toDic() }, forKey: sessionKey)
     }
     
-    func fetchSessionList() -> Any? {
+    func fetchSessionList() -> [ChatSession]? {
         guard let passport = passport else { return nil }
         let sessionKey = "\(passport.uid)_sessionList"
-        return UserDefaults.object(forKey: sessionKey)
+        guard let items = UserDefaults.object(forKey: sessionKey) as? [[String: Any]] else {
+            return nil
+        }
+        return items.map{ ChatSession(dict: $0) }
     }
     
     
@@ -95,6 +98,13 @@ class UserCenter {
         if let passport = _passport {
             UserDefaults.standard.set(passport.toDic(), forKey: key)
         }
+    }
+}
+
+extension UserCenter {
+    static func isMe(uid: String) -> Bool {
+        guard let passport = UserCenter.center.passport else { return false }
+        return passport.uid.lowercased() == uid
     }
 }
 

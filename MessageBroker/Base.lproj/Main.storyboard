@@ -119,6 +119,12 @@
                                                     <color key="textColor" red="0.57414853570000002" green="0.57416242360000003" blue="0.57415497299999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkD-fY-hDK">
+                                                    <rect key="frame" x="388.5" y="8" width="12.5" height="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="fXy-hk-Z95" secondAttribute="trailing" constant="56" id="1iI-CJ-ULP"/>
@@ -127,14 +133,17 @@
                                                 <constraint firstItem="Rya-Ks-Rn7" firstAttribute="leading" secondItem="LHb-GC-8YL" secondAttribute="leading" constant="20" id="4WW-qV-i47"/>
                                                 <constraint firstItem="UMf-RI-hHs" firstAttribute="top" secondItem="Rya-Ks-Rn7" secondAttribute="top" id="Ghm-4f-AOI"/>
                                                 <constraint firstItem="fXy-hk-Z95" firstAttribute="bottom" secondItem="Rya-Ks-Rn7" secondAttribute="bottom" id="Qgv-tf-Mau"/>
+                                                <constraint firstAttribute="trailing" secondItem="gkD-fY-hDK" secondAttribute="trailing" constant="13" id="SG0-vJ-9ms"/>
                                                 <constraint firstItem="Rya-Ks-Rn7" firstAttribute="top" secondItem="LHb-GC-8YL" secondAttribute="top" constant="11" id="g3S-Mu-Cfg"/>
                                                 <constraint firstItem="fXy-hk-Z95" firstAttribute="leading" secondItem="UMf-RI-hHs" secondAttribute="leading" id="kx3-m9-wlU"/>
+                                                <constraint firstItem="gkD-fY-hDK" firstAttribute="top" secondItem="LHb-GC-8YL" secondAttribute="top" constant="8" id="nZg-kD-YWg"/>
                                                 <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="UMf-RI-hHs" secondAttribute="trailing" constant="64" id="w5i-PV-VUX"/>
                                                 <constraint firstItem="UMf-RI-hHs" firstAttribute="leading" secondItem="Rya-Ks-Rn7" secondAttribute="trailing" constant="12" id="zaD-0m-AVo"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="ivSessionIcon" destination="Rya-Ks-Rn7" id="igJ-hO-m3D"/>
+                                            <outlet property="labelDate" destination="gkD-fY-hDK" id="wJF-sJ-agC"/>
                                             <outlet property="labelDetail" destination="fXy-hk-Z95" id="Rsg-aj-oJ3"/>
                                             <outlet property="labelName" destination="UMf-RI-hHs" id="gUv-Ql-IS2"/>
                                         </connections>
