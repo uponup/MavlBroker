@@ -138,6 +138,8 @@ extension ViewController: MavlMessageStatusDelegate {
     }
     
     func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {
+        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
+
         guard let msg = messages.last else {
             tableView.es.stopPullToRefresh()
             return
@@ -160,7 +162,6 @@ extension ViewController: MavlMessageStatusDelegate {
         }
         
         refreshData()
-        NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
     }
 }
 

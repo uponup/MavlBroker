@@ -263,14 +263,15 @@ class ChatViewController: UIViewController {
     }
     
     func scrollToBottom() {
-        let count = messages.count
-        if count > 3 {
-            let indexPath = IndexPath(row: count - 1, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-        }
+        guard messages.count > 3 else { return }
+        
+        let indexPath = IndexPath(row: messages.count - 1, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
     }
     
     func scrollToTop() {
+        guard messages.count > 0 else { return }
+        
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
