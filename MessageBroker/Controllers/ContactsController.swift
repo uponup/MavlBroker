@@ -49,6 +49,9 @@ class ContactsController: UITableViewController {
             itemAdd.isEnabled = isLogin ?? false
             _contacts = nil
             _groups = nil
+            
+            tableView.reloadData()
+            checkStatus()
         }
     }
     
@@ -58,7 +61,6 @@ class ContactsController: UITableViewController {
         itemAdd.isEnabled = MavlMessage.shared.isLogin
         MavlMessage.shared.delegateGroup = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveLoginSuccess), name: .loginSuccess, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didLoginSuccess), name: .loginSuccess, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didLogoutSuccess), name: .logoutSuccess, object: nil)
     }
@@ -126,10 +128,6 @@ class ContactsController: UITableViewController {
         isLogin = false
     }
     
-    @objc func didReceiveLoginSuccess(noti: Notification) {
-        checkStatus()
-    }
-    
     // MARK: Private Method
     private func checkStatus() {
         for contact in contacts {
@@ -141,16 +139,22 @@ class ContactsController: UITableViewController {
 // MARK: - MavlMessageGroupDelegate
 extension ContactsController: MavlMessageGroupDelegate {
     
-    func createGroupSuccess(groupId gid: String) {
+    func createGroupSuccess(groupId gid: String, isLauncher: Bool) {
         _addGroup(gid)
-    }
-    
-    func joinedGroup(groupId gid: String, isLauncher: Bool) {
-        _addGroup(gid)
+        
         if isLauncher {
-            showHud("您已经加入群聊")
+            showHud("您已经创建好群聊")
         }else {
             showHud("您被邀请进群聊")
+        }
+    }
+    
+    func joinedGroup(groupId gid: String, someone: String) {
+        if someone == MavlMessage.shared.passport?.uid {
+            showHud("加入新群成功")
+            _addGroup(gid)
+        }else {
+            showHud("\(someone)加入了群")
         }
     }
     
@@ -240,14 +244,21 @@ extension ContactsController {
             MavlMessage.shared.quitGroup(withGroupId: contactModel.uid)
         }
         
+        return UISwipeActionsConfiguration(actions: [actionDelete])
+    }
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let contactModel = self.dataArr[indexPath.section][indexPath.row]
+        
+        guard contactModel.isGroup  else { return UISwipeActionsConfiguration(actions: []) }
+        
         let actionChat = UIContextualAction(style: .normal, title: "Chat") { [unowned self] (action, view, block) in
             guard let chatVc = self.storyboard?.instantiateViewController(identifier: "ChatViewController") as? ChatViewController else { return }
             chatVc.hidesBottomBarWhenPushed = true
             chatVc.session = ChatSession(gid: contactModel.uid)
             self.navigationController?.pushViewController(chatVc, animated: true)
         }
-        
-        return UISwipeActionsConfiguration(actions: [actionDelete, actionChat])
+        return UISwipeActionsConfiguration(actions: [actionChat])
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

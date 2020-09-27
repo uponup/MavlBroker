@@ -77,8 +77,8 @@ protocol MavlMessageDelegate: class {
     1、群组管理，2、好友管理
  */
 protocol MavlMessageGroupDelegate: class {
-    func createGroupSuccess(groupId gid: String)
-    func joinedGroup(groupId gid: String, isLauncher: Bool)
+    func createGroupSuccess(groupId gid: String, isLauncher: Bool)
+    func joinedGroup(groupId gid: String, someone: String)
     func quitGroup(gid: String, error: Error?)
     
     
@@ -327,11 +327,12 @@ extension MavlMessage: CocoaMQTTDelegate {
         }else if let topicModel = TopicModel(message.topic) {
             if topicModel.operation == 0 {
                 // create a group
-                delegateGroup?.createGroupSuccess(groupId: topicModel.to)
-            }else if topicModel.operation == 201 {
                 guard let passport = passport else { return }
-                let isLauncher = passport.uid == passport.uid
-                delegateGroup?.joinedGroup(groupId: topicModel.to, isLauncher: isLauncher)
+                
+                let isLauncher = passport.uid == topicModel.from
+                delegateGroup?.createGroupSuccess(groupId: topicModel.to, isLauncher: isLauncher)
+            }else if topicModel.operation == 201 {
+                delegateGroup?.joinedGroup(groupId: topicModel.to, someone: topicModel.from)
             }else if topicModel.operation == 202 {
                 delegateGroup?.quitGroup(gid: topicModel.to, error: nil)
             }else if topicModel.operation == 401 {
