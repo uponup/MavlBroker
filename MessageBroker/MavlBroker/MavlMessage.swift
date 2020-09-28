@@ -163,6 +163,7 @@ class MavlMessage {
         mqtt.keepAlive = 60
         mqtt.delegate = self
         mqtt.enableSSL = true
+        mqtt.autoReconnect = true
         mqtt.allowUntrustCACertificate = true
     }
     
@@ -227,14 +228,6 @@ extension MavlMessage: MavlMessageClient {
         }
         
         _send(msg: message, operation: operation)
-
-        guard let passport = self.passport else {
-            TRACE("Error，发送信息本地账户缺少uid")
-            return
-        }
-        var msg = Mesg(fromUid: passport.uid, toUid: toId, groupId: toId, serverId: "", text: message, timestamp: Date().timeIntervalSince1970, status: 0)
-        msg.localId = "\(localId)"
-        delegateMsg?.mavl(willSend: msg)
     }
     
     func fetchMessages(msgId: String, from: String, type: FetchMessagesType, offset: Int = 20) {
@@ -243,12 +236,22 @@ extension MavlMessage: MavlMessageClient {
     }
     
     private func _send(msg: String, operation: Operation) {
-        let mqttMessage = CocoaMQTTMessage(topic: operation.topic, string: msg, qos: .qos0)
-        mqtt?.publish(mqttMessage)
         
-        guard operation.localId != "0" else { return }
-        let sendingTimer = MavlTimer.after(3) {
-//            self.mqtt?.disconnect()
+        if mqtt?.connState != .connected {
+            let _ = mqtt?.connect()
+        }
+        let message = CocoaMQTTMessage(topic: operation.topic, string: msg, qos: .qos0)
+        mqtt?.publish(message)
+        
+        guard operation.localId != "0",
+            let topicModel = SendingTopicModel(operation.topic),
+            let passport = passport else { return }
+        let sendingTimer = MavlTimer.after(3) { [unowned self] in
+            var msg = Mesg(fromUid: passport.uid, toUid: topicModel.to, groupId: topicModel.gid, serverId: "", text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
+            msg.localId = operation.localId
+            self.delegateMsg?.mavl(didSend: msg, error: MavlMessageError.sendFailed)
+            
+            self.mqtt?.disconnect()
         }
         _sendingMessages[operation.localId] = sendingTimer
     }
@@ -317,11 +320,7 @@ extension MavlMessage: CocoaMQTTDelegate {
         if topicModel.operation == 1 || topicModel.operation == 2 {
             var msg = Mesg(fromUid: passport.uid, toUid: topicModel.to, groupId: topicModel.gid, serverId: "", text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
             msg.localId = topicModel.localId
-            delegateMsg?.mavl(didSend: msg, error: nil)
-            
-            let sendingTimer = _sendingMessages[topicModel.localId]
-            sendingTimer?.suspend()
-            _sendingMessages.removeValue(forKey: topicModel.localId)
+            delegateMsg?.mavl(willSend: msg)
         }
     }
 
@@ -356,6 +355,10 @@ extension MavlMessage: CocoaMQTTDelegate {
                 var msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
                 msg.localId = topicModel.localId
                 delegateMsg?.mavl(didRevceived: [msg], isLoadMore: false)
+                
+                let sendingTimer = _sendingMessages[topicModel.localId]
+                sendingTimer?.suspend()
+                _sendingMessages.removeValue(forKey: topicModel.localId)
             }
         }else {
             TRACE("收到的信息Topic不符合规范：\(topic)")
@@ -380,6 +383,8 @@ extension MavlMessage: CocoaMQTTDelegate {
 
     func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
         TRACE("\(err?.localizedDescription ?? "")")
+        guard let err = err else { return }
+        
         delegateLogin?.logout(withError: err)
         _isLogin = false
     }
@@ -401,5 +406,16 @@ fileprivate extension MavlMessage {
         }
 
         print("[TRACE] [\(prettyName)]: \(message)")
+    }
+}
+
+enum MavlMessageError: Error, CustomStringConvertible {
+    case sendFailed
+    
+    var description: String {
+        switch self {
+        case .sendFailed:
+            return "send failed"
+        }
     }
 }

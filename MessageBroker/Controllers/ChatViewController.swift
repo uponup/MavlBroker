@@ -30,8 +30,10 @@ class ChatViewController: UIViewController {
         set {
             _messages = newValue
         
-            tableView.reloadData()
-            scrollToBottom()
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+                self?.scrollToBottom()
+            }
         }
     }
     
@@ -204,7 +206,7 @@ class ChatViewController: UIViewController {
         guard let object = notification.object as? [String: Mesg],
             let msg = object["msg"] else { return }
         messages = messages.map {
-            if $0.uuid == msg.serverId {
+            if $0.localId == msg.localId.value {
 //                return ChatMessage(status: .send, mesg: msg)
                 return $0
             }else {
@@ -222,14 +224,12 @@ class ChatViewController: UIViewController {
             let msg = object["msg"] as? Mesg else { return }
         
         messages = messages.map {
-            if $0.uuid == msg.serverId {
+            if $0.localId == msg.localId.value {
                 return ChatMessage(status: .sendfail, mesg: msg)
             }else {
                 return $0
             }
         }
-        tableView.reloadData()
-        print("发送失败:\(msg.text)")
     }
     
     @objc func receivedMessage(notification: NSNotification) {
