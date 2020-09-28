@@ -10,8 +10,9 @@ import Foundation
 
 enum SendingStatus {
     case sending
-    case send
+    case send           // 已发出
     case sendfail
+    case sendSuccess    // 发送成功
 }
 
 class ChatMessage {

@@ -7,18 +7,14 @@
 //
 
 import Foundation
-
-//发送 appid/0/localid/gid            create group
-//    appid/1/localid/toid           1v1
-//    appid/2/clientmsgid/togid      1vN
-
+   
 //收到 appid/0/localid/togid/serverid/fromid
 //    appid/1/localid/touid/serverid/fromuid
 //    appid/2/localid/togid/serverid/fromuid
 
-//用户状态  appid/userstatus/uid/online
-    
-
+/**
+    接收的Topic模型
+ */
 struct TopicModel {
     var appid: String
     var operation: Int
@@ -47,6 +43,46 @@ struct TopicModel {
     }
 }
 
+
+//发送 appid/0/localid/gid            create group
+//    appid/1/localid/toid           1v1
+//    appid/2/clientmsgid/togid      1vN
+
+/**
+    发送的Topic模型
+ */
+
+struct SendingTopicModel {
+    var appid: String
+    var operation: Int
+    var localId: String
+    var to: String
+    var isGroupMsg: Bool {
+        operation == 2 || operation == 1
+    }
+    var gid: String {
+        return isGroupMsg ? to : ""
+    }
+    
+    
+    init?(_ topic: String) {
+        let segments = topic.components(separatedBy: "/")
+        guard segments.count >= 4, let op = Int(segments[1]) else { return nil }
+        
+        appid = segments[0]
+        operation = op
+        localId = segments[2]
+        to = segments[3].replacingOccurrences(of: "\(appid)_", with: "")
+    }
+}
+
+
+
+//用户状态  appid/userstatus/uid/online
+
+/**
+    用户状态Topic模型
+ */
 struct StatusTopicModel {
     var appid: String
     var friendId: String
@@ -168,7 +204,7 @@ enum Operation {
         }
     }
     
-    private var localId: String {
+    var localId: String {
         switch self {
         case .createGroup, .vitualGroup, .joinGroup, .quitGroup, .uploadToken, .fetchMsgs:
             return "0"

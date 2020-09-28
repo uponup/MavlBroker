@@ -135,6 +135,7 @@ class MavlMessage {
     private var mqtt: CocoaMQTT?
     
     private var _localMsgId: UInt16 = 0
+    private var _sendingMessages: [String: MavlTimer] = [:]
     
     func initializeSDK(config: MavlMessageConfiguration) {
         self.config = config
@@ -244,6 +245,12 @@ extension MavlMessage: MavlMessageClient {
     private func _send(msg: String, operation: Operation) {
         let mqttMessage = CocoaMQTTMessage(topic: operation.topic, string: msg, qos: .qos0)
         mqtt?.publish(mqttMessage)
+        
+        guard operation.localId != "0" else { return }
+        let sendingTimer = MavlTimer.after(3) {
+//            self.mqtt?.disconnect()
+        }
+        _sendingMessages[operation.localId] = sendingTimer
     }
 }
 
@@ -304,17 +311,22 @@ extension MavlMessage: CocoaMQTTDelegate {
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
         TRACE("message pub: \(message.string.value), id: \(id)")
-        guard let topicModel = TopicModel(message.topic) else { return }
+        guard let topicModel = SendingTopicModel(message.topic) else { return }
+        guard let passport = passport else { return }
         
         if topicModel.operation == 1 || topicModel.operation == 2 {
-            var msg = Mesg(fromUid: topicModel.from, toUid: topicModel.to, groupId: topicModel.gid, serverId: topicModel.serverId, text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
+            var msg = Mesg(fromUid: passport.uid, toUid: topicModel.to, groupId: topicModel.gid, serverId: "", text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
             msg.localId = topicModel.localId
             delegateMsg?.mavl(didSend: msg, error: nil)
+            
+            let sendingTimer = _sendingMessages[topicModel.localId]
+            sendingTimer?.suspend()
+            _sendingMessages.removeValue(forKey: topicModel.localId)
         }
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
-       TRACE("id: \(id)")
+        TRACE("id: \(id)")
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {

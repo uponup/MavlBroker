@@ -19,7 +19,7 @@ class ChatViewController: UIViewController {
         get {
             if _messages == nil {
                 if let mesg = MesgDao.fetch(forTo: session?.gid ?? "") {
-                    _messages = [ChatMessage(status: .send, mesg: mesg)]
+                    _messages = [ChatMessage(status: .sendSuccess, mesg: mesg)]
                 }else {
                     _messages = []
                 }
@@ -205,7 +205,8 @@ class ChatViewController: UIViewController {
             let msg = object["msg"] else { return }
         messages = messages.map {
             if $0.uuid == msg.serverId {
-                return ChatMessage(status: .send, mesg: msg)
+//                return ChatMessage(status: .send, mesg: msg)
+                return $0
             }else {
                 return $0
             }
@@ -240,7 +241,7 @@ class ChatViewController: UIViewController {
         
         guard let msgs = receivedMsgs else { return }
         let sortedMsgs = msgs.map{
-            ChatMessage(status: .send, mesg: $0)
+            ChatMessage(status: .sendSuccess, mesg: $0)
         }.reversed()
         
         if isLoadMore {
@@ -303,9 +304,12 @@ extension ChatViewController: UITableViewDataSource, UITableViewDelegate {
             }else if message.status == .sendfail {
                 cell.labelStatus.text = "Send fail"
                 cell.labelStatus.textColor = UIColor.red
-            }else if message.status == .send {
+            }else if message.status == .sendSuccess {
                 cell.labelStatus.text = "Send success"
                 cell.labelStatus.textColor = UIColor.blue
+            }else if message.status == .send {
+                cell.labelStatus.text = "Send"
+                cell.labelStatus.textColor = UIColor.black
             }else {
                 cell.labelStatus.isHidden = true
             }

@@ -10,6 +10,7 @@
 		39420D52251EC96C0009813A /* ContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D51251EC96C0009813A /* ContactsController.swift */; };
 		39420D54251ECA5B0009813A /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D53251ECA5B0009813A /* ContactModel.swift */; };
 		39420D5625206AF80009813A /* MesgDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D5525206AF80009813A /* MesgDao.swift */; };
+		39420D5A2521EF4A0009813A /* MavlTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D592521EF4A0009813A /* MavlTimer.swift */; };
 		39621B712519942D002833F5 /* TopicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39621B702519942D002833F5 /* TopicUtils.swift */; };
 		397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440525187ED1005CB2D3 /* AppDelegate.swift */; };
 		397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440725187ED1005CB2D3 /* SceneDelegate.swift */; };
@@ -41,6 +42,7 @@
 		39420D51251EC96C0009813A /* ContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsController.swift; sourceTree = "<group>"; };
 		39420D53251ECA5B0009813A /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
 		39420D5525206AF80009813A /* MesgDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesgDao.swift; sourceTree = "<group>"; };
+		39420D592521EF4A0009813A /* MavlTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MavlTimer.swift; sourceTree = "<group>"; };
 		39621B702519942D002833F5 /* TopicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicUtils.swift; sourceTree = "<group>"; };
 		397D440225187ED1005CB2D3 /* 小牛Mesg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "小牛Mesg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		397D440525187ED1005CB2D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				397D441A25187FB3005CB2D3 /* MavlMessage.swift */,
 				397D441B25187FB3005CB2D3 /* Mesg.swift */,
 				39621B702519942D002833F5 /* TopicUtils.swift */,
+				39420D592521EF4A0009813A /* MavlTimer.swift */,
 				3998D284251B243600818904 /* MavlMesgUserDefault.swift */,
 			);
 			path = MavlBroker;
@@ -347,6 +350,7 @@
 				39621B712519942D002833F5 /* TopicUtils.swift in Sources */,
 				39420D5625206AF80009813A /* MesgDao.swift in Sources */,
 				397D442925188687005CB2D3 /* ChatRightMessageCell.swift in Sources */,
+				39420D5A2521EF4A0009813A /* MavlTimer.swift in Sources */,
 				397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */,
 				397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */,
 				397D441D25187FB3005CB2D3 /* Mesg.swift in Sources */,
