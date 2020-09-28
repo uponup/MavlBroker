@@ -243,10 +243,6 @@ class ChatViewController: UIViewController {
             ChatMessage(status: .send, mesg: $0)
         }.reversed()
         
-        for message in sortedMsgs {
-            print("====>\(message.sender) : \(message.uuid)")
-        }
-        
         if isLoadMore {
             messages.insert(contentsOf: sortedMsgs, at: 0)
             scrollToTop()
@@ -257,8 +253,6 @@ class ChatViewController: UIViewController {
                 dict[message.localId] = message
             }
             messages = Array(dict.values).sorted(by: <)
-            tableView.reloadData()
-            scrollToBottom()
         }
     }
     
