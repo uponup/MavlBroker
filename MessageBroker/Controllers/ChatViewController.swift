@@ -118,7 +118,7 @@ class ChatViewController: UIViewController {
 
             print("====>从\((self?.latestMessagesId).value)开始请求")
 
-            MavlMessage.shared.fetchMessages(msgId: (self?.latestMessagesId).value, from: session.gid, type: type, offset: 2)
+            MavlMessage.shared.fetchMessages(msgId: (self?.latestMessagesId).value, from: session.gid, type: type, offset: 10)
         }
         
         animalAvatarImageView.image = (session?.isGroup ?? false) ?  #imageLiteral(resourceName: "chatroom_default") : #imageLiteral(resourceName: "avatar_default")
