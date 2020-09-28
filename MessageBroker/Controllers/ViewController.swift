@@ -140,10 +140,7 @@ extension ViewController: MavlMessageStatusDelegate {
     func mavl(didRevceived messages: [Mesg], isLoadMore: Bool) {
         NotificationCenter.default.post(name: .didReceiveMesg, object: ["msg": messages, "isLoadMore": isLoadMore])
 
-        guard let msg = messages.last else {
-            tableView.es.stopPullToRefresh()
-            return
-        }
+        guard let msg = messages.last else { return }
         // 保存最后一条收到的信息
         if isLoadMore == false {
             var item: ChatSession
