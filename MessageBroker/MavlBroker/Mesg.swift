@@ -21,6 +21,9 @@ struct Mesg {
     var timestamp: TimeInterval
     var localId: String?
     
+    var isGroup: Bool {
+        fromUid == groupId
+    }
     
 //    56_peter,56_peter,05aff857d249c2DS,1600935023224, 2,   1600935023,9090##
 //    Fromuid，Touid，   Gid，            Servermsgid，Status，Timestamp， Msg

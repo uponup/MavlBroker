@@ -36,6 +36,7 @@ class ViewController: UIViewController {
     
     private var isLogin: Bool = false {
         didSet {
+            view.endEditing(true)
             if isLogin {
                 navigationItem.title = "Online"
                 loginView.isHidden = true
@@ -144,10 +145,10 @@ extension ViewController: MavlMessageStatusDelegate {
         // 保存最后一条收到的信息
         if isLoadMore == false {
             var item: ChatSession
-            if msg.fromUid == msg.groupId {
-                item = ChatSession(gid: msg.groupId, sessionName: msg.fromUid, isGroup: false)
-            }else {
+            if msg.isGroup {
                 item = ChatSession(gid: msg.groupId)
+            }else {
+                item = ChatSession(gid: msg.fromUid, sessionName: msg.fromUid, isGroup: false)
             }
             
             if !(sessions.map{ $0.gid }.contains(item.gid)) {
@@ -229,9 +230,9 @@ extension ViewController {
         guard let label = launchVc.view.viewWithTag(101),
            let _ = launchVc.view.viewWithTag(100) else { return }
         
-        UIView.animate(withDuration: 1.0, animations: {
-            label.transform = CGAffineTransform(scaleX: 5,y: 5)
-            launchVc.view.alpha = 0
+        UIView.animate(withDuration: 0.8, animations: {
+            label.transform = CGAffineTransform(scaleX: 1.2,y: 1.2)
+            launchVc.view.alpha = 0.3
         }) { finished  in
             launchVc.view.removeFromSuperview()
         }

@@ -224,7 +224,8 @@ extension MavlMessage: MavlMessageClient {
         if isToGroup {
             operation = .oneToMany(localId ,toId)
         }else {
-            operation = .oneToOne(localId, toId)
+            let uid = "\(appid)_\(toId.lowercased())"
+            operation = .oneToOne(localId, uid)
         }
         
         _send(msg: message, operation: operation)
@@ -237,9 +238,6 @@ extension MavlMessage: MavlMessageClient {
     
     private func _send(msg: String, operation: Operation) {
         
-        if mqtt?.connState != .connected {
-            let _ = mqtt?.connect()
-        }
         let message = CocoaMQTTMessage(topic: operation.topic, string: msg, qos: .qos0)
         mqtt?.publish(message)
         
@@ -250,8 +248,6 @@ extension MavlMessage: MavlMessageClient {
             var msg = Mesg(fromUid: passport.uid, toUid: topicModel.to, groupId: topicModel.gid, serverId: "", text: message.string.value, timestamp: Date().timeIntervalSince1970, status: 2)
             msg.localId = operation.localId
             self.delegateMsg?.mavl(didSend: msg, error: MavlMessageError.sendFailed)
-            
-            self.mqtt?.disconnect()
         }
         _sendingMessages[operation.localId] = sendingTimer
     }
@@ -309,7 +305,10 @@ extension MavlMessage: CocoaMQTTDelegate {
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-       TRACE("new state: \(state)")
+        TRACE("new state: \(state)")
+        if state == .initial {
+            TRACE("正常断开连接")
+        }
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
@@ -383,7 +382,6 @@ extension MavlMessage: CocoaMQTTDelegate {
 
     func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
         TRACE("\(err?.localizedDescription ?? "")")
-        guard let err = err else { return }
         
         delegateLogin?.logout(withError: err)
         _isLogin = false

@@ -93,7 +93,7 @@ class ChatViewController: UIViewController {
         if session.isGroup {
             MavlMessage.shared.sendToChatRoom(message: message, isToGroup: true, toId: session.gid)
         }else {
-            MavlMessage.shared.sendToChatRoom(message: message, isToGroup: false, toId: "56_\(session.gid.lowercased())")
+            MavlMessage.shared.sendToChatRoom(message: message, isToGroup: false, toId: session.gid)
         }
         messageTextView.text = ""
         sendMessageButton.isEnabled = false
@@ -233,11 +233,14 @@ class ChatViewController: UIViewController {
     }
     
     @objc func receivedMessage(notification: NSNotification) {
-        tableView.es.stopPullToRefresh()
         
         let object = notification.object as! [String: Any]
         let receivedMsgs = object["msg"] as? [Mesg]
         let isLoadMore = object["isLoadMore"] as! Bool
+        
+        if isLoadMore {
+            tableView.es.stopPullToRefresh()
+        }
         
         guard let msgs = receivedMsgs else { return }
         let sortedMsgs = msgs.map{
