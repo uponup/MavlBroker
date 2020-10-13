@@ -1,42 +1,28 @@
 PODS:
-  - CocoaAsyncSocket (7.6.4)
-  - CocoaMQTT (1.2.5):
-    - CocoaAsyncSocket (~> 7.6.3)
   - ESPullToRefresh (2.9.3)
   - MarqueeLabel (4.0.2)
-  - MessageBroker (0.1.0):
-    - CocoaMQTT (~> 1.2.5)
   - NotificationBannerSwift (3.0.2):
     - MarqueeLabel (~> 4.0.0)
     - SnapKit (~> 5.0.0)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
-  - CocoaMQTT
   - ESPullToRefresh
-  - MessageBroker
   - NotificationBannerSwift (~> 3.0.0)
 
 SPEC REPOS:
-  "git@github.com:uponup/JPSpec.git":
-    - MessageBroker
   trunk:
-    - CocoaAsyncSocket
-    - CocoaMQTT
     - ESPullToRefresh
     - MarqueeLabel
     - NotificationBannerSwift
     - SnapKit
 
 SPEC CHECKSUMS:
-  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
-  CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   ESPullToRefresh: 0d68daa602b343c81753a1b95e09fd0bfcddfd40
   MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
-  MessageBroker: a3adc635f084ea89a05dcc1234f11fa84f011df8
   NotificationBannerSwift: 713e20f21b6105f4a36a00e5d9fa414a930d3d8e
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: db25d61179bfc5c7e6a1b2c9d96df100a3b6915b
+PODFILE CHECKSUM: 078275210d13a01265745262b1f76f3e40ed8026
 
 COCOAPODS: 1.8.4

@@ -11,8 +11,6 @@ import MessageBroker
 
 struct MesgDao {
     
-    
-    
     static func save(latestMesg mesg: Mesg) {
         guard let passport = MavlMessage.shared.passport else { return }
         let key = "\(passport.uid)_\(mesg.toUid)_latestMesg"
