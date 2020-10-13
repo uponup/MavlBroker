@@ -10,16 +10,12 @@
 		39420D52251EC96C0009813A /* ContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D51251EC96C0009813A /* ContactsController.swift */; };
 		39420D54251ECA5B0009813A /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D53251ECA5B0009813A /* ContactModel.swift */; };
 		39420D5625206AF80009813A /* MesgDao.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D5525206AF80009813A /* MesgDao.swift */; };
-		39420D5A2521EF4A0009813A /* MavlTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39420D592521EF4A0009813A /* MavlTimer.swift */; };
-		39621B712519942D002833F5 /* TopicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39621B702519942D002833F5 /* TopicUtils.swift */; };
 		397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440525187ED1005CB2D3 /* AppDelegate.swift */; };
 		397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440725187ED1005CB2D3 /* SceneDelegate.swift */; };
 		397D440A25187ED1005CB2D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D440925187ED1005CB2D3 /* ViewController.swift */; };
 		397D440D25187ED1005CB2D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 397D440B25187ED1005CB2D3 /* Main.storyboard */; };
 		397D440F25187ED3005CB2D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 397D440E25187ED3005CB2D3 /* Assets.xcassets */; };
 		397D441225187ED3005CB2D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 397D441025187ED3005CB2D3 /* LaunchScreen.storyboard */; };
-		397D441C25187FB3005CB2D3 /* MavlMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D441A25187FB3005CB2D3 /* MavlMessage.swift */; };
-		397D441D25187FB3005CB2D3 /* Mesg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D441B25187FB3005CB2D3 /* Mesg.swift */; };
 		397D44202518845E005CB2D3 /* SettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D441F2518845E005CB2D3 /* SettingController.swift */; };
 		397D442625188687005CB2D3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D442225188687005CB2D3 /* ChatViewController.swift */; };
 		397D442725188687005CB2D3 /* ChatLeftMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D442325188687005CB2D3 /* ChatLeftMessageCell.swift */; };
@@ -30,7 +26,6 @@
 		397D443425189E83005CB2D3 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D443325189E83005CB2D3 /* ContactCell.swift */; };
 		397D44362518B3D1005CB2D3 /* ChatSessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D44352518B3D1005CB2D3 /* ChatSessionCell.swift */; };
 		397D44382518B676005CB2D3 /* ChatSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397D44372518B676005CB2D3 /* ChatSession.swift */; };
-		3998D285251B243600818904 /* MavlMesgUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D284251B243600818904 /* MavlMesgUserDefault.swift */; };
 		3998D287251B409C00818904 /* UserCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D286251B409C00818904 /* UserCenter.swift */; };
 		3998D28B251B8B0D00818904 /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998D28A251B8B0D00818904 /* UIScreenExtension.swift */; };
 		ADE6D74A157C5F93B69476CA /* Pods_MessageBroker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1331F62E44CCB933C3F40B14 /* Pods_MessageBroker.framework */; };
@@ -42,8 +37,6 @@
 		39420D51251EC96C0009813A /* ContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsController.swift; sourceTree = "<group>"; };
 		39420D53251ECA5B0009813A /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
 		39420D5525206AF80009813A /* MesgDao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesgDao.swift; sourceTree = "<group>"; };
-		39420D592521EF4A0009813A /* MavlTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MavlTimer.swift; sourceTree = "<group>"; };
-		39621B702519942D002833F5 /* TopicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicUtils.swift; sourceTree = "<group>"; };
 		397D440225187ED1005CB2D3 /* 小牛Mesg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "小牛Mesg.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		397D440525187ED1005CB2D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		397D440725187ED1005CB2D3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,8 +45,6 @@
 		397D440E25187ED3005CB2D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		397D441125187ED3005CB2D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		397D441325187ED3005CB2D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		397D441A25187FB3005CB2D3 /* MavlMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MavlMessage.swift; sourceTree = "<group>"; };
-		397D441B25187FB3005CB2D3 /* Mesg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesg.swift; sourceTree = "<group>"; };
 		397D441F2518845E005CB2D3 /* SettingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingController.swift; sourceTree = "<group>"; };
 		397D442225188687005CB2D3 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		397D442325188687005CB2D3 /* ChatLeftMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatLeftMessageCell.swift; sourceTree = "<group>"; };
@@ -64,7 +55,6 @@
 		397D443325189E83005CB2D3 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		397D44352518B3D1005CB2D3 /* ChatSessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSessionCell.swift; sourceTree = "<group>"; };
 		397D44372518B676005CB2D3 /* ChatSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSession.swift; sourceTree = "<group>"; };
-		3998D284251B243600818904 /* MavlMesgUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MavlMesgUserDefault.swift; sourceTree = "<group>"; };
 		3998D286251B409C00818904 /* UserCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCenter.swift; sourceTree = "<group>"; };
 		3998D28A251B8B0D00818904 /* UIScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtension.swift; sourceTree = "<group>"; };
 		C2C566991AC8E9868E25050C /* Pods-MessageBroker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessageBroker.debug.xcconfig"; path = "Target Support Files/Pods-MessageBroker/Pods-MessageBroker.debug.xcconfig"; sourceTree = "<group>"; };
@@ -106,23 +96,10 @@
 				3998D289251B8AE300818904 /* MavUIKit */,
 				3998D288251B40C500818904 /* Module */,
 				397D442D25188EE1005CB2D3 /* Global */,
-				397D441925187F92005CB2D3 /* MavlBroker */,
 				397D443025189658005CB2D3 /* Controllers */,
 				397D441E25188412005CB2D3 /* Supporting Files */,
 			);
 			path = MessageBroker;
-			sourceTree = "<group>";
-		};
-		397D441925187F92005CB2D3 /* MavlBroker */ = {
-			isa = PBXGroup;
-			children = (
-				397D441A25187FB3005CB2D3 /* MavlMessage.swift */,
-				397D441B25187FB3005CB2D3 /* Mesg.swift */,
-				39621B702519942D002833F5 /* TopicUtils.swift */,
-				39420D592521EF4A0009813A /* MavlTimer.swift */,
-				3998D284251B243600818904 /* MavlMesgUserDefault.swift */,
-			);
-			path = MavlBroker;
 			sourceTree = "<group>";
 		};
 		397D441E25188412005CB2D3 /* Supporting Files */ = {
@@ -332,7 +309,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3998D285251B243600818904 /* MavlMesgUserDefault.swift in Sources */,
 				397D44362518B3D1005CB2D3 /* ChatSessionCell.swift in Sources */,
 				397D442825188687005CB2D3 /* ChatMessage.swift in Sources */,
 				397D44382518B676005CB2D3 /* ChatSession.swift in Sources */,
@@ -341,19 +317,15 @@
 				39420D52251EC96C0009813A /* ContactsController.swift in Sources */,
 				397D440A25187ED1005CB2D3 /* ViewController.swift in Sources */,
 				397D443425189E83005CB2D3 /* ContactCell.swift in Sources */,
-				397D441C25187FB3005CB2D3 /* MavlMessage.swift in Sources */,
 				397D442625188687005CB2D3 /* ChatViewController.swift in Sources */,
 				39420D54251ECA5B0009813A /* ContactModel.swift in Sources */,
 				397D443225189BC9005CB2D3 /* FriendListController.swift in Sources */,
 				397D442725188687005CB2D3 /* ChatLeftMessageCell.swift in Sources */,
 				397D442F25188EF6005CB2D3 /* Global.swift in Sources */,
-				39621B712519942D002833F5 /* TopicUtils.swift in Sources */,
 				39420D5625206AF80009813A /* MesgDao.swift in Sources */,
 				397D442925188687005CB2D3 /* ChatRightMessageCell.swift in Sources */,
-				39420D5A2521EF4A0009813A /* MavlTimer.swift in Sources */,
 				397D440625187ED1005CB2D3 /* AppDelegate.swift in Sources */,
 				397D440825187ED1005CB2D3 /* SceneDelegate.swift in Sources */,
-				397D441D25187FB3005CB2D3 /* Mesg.swift in Sources */,
 				3998D28B251B8B0D00818904 /* UIScreenExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

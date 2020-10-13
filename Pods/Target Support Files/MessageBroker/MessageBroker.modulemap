@@ -1,0 +1,6 @@
+framework module MessageBroker {
+  umbrella header "MessageBroker-umbrella.h"
+
+  export *
+  module * { export * }
+}
